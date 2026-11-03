@@ -470,7 +470,7 @@ public partial class MainWindow : Window
 
     private void OpenSettings()
     {
-        var settingsVm = new SettingsViewModel(_settingsService, _ => SetupHotkeys(), _viewModel.GoogleDriveSyncService, _viewModel.UpdateService, _viewModel.PrayerService, _viewModel.LocationService, _viewModel.BmkgService);
+        var settingsVm = new SettingsViewModel(_settingsService, _ => SetupHotkeys(), _viewModel.GoogleDriveSyncService, _viewModel.UpdateService, _viewModel.PrayerService, _viewModel.LocationService, _viewModel.BmkgService, _viewModel.WellnessService);
         settingsVm.PropertyChanged += (s, ev) =>
         {
             if (ev.PropertyName == nameof(SettingsViewModel.NotchHorizontalOffsetPercent))

@@ -5,6 +5,7 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/). Ba
 ## [Belum dirilis]
 
 ### Ditambahkan
+- Pengingat kesehatan (opt-in) di Pengaturan: pengingat gerak (bawaan tiap 45 menit) dan minum (bawaan tiap 60 menit, target 8 gelas x 230 ml dengan penghitung harian). Hanya pada jam kerja, tidak saat Anda sedang pergi (tanpa input >= 2 menit dihitung jeda gerak), pengingat minum berhenti setelah target tercapai. Tampil sebagai banner island dengan aksi "Sudah bergerak/minum", tunda 10 menit, dan tutup.
 - Mode idle baru: kapsul ramping menempel di tepi atas layar dengan tepi biru muda neon bercahaya dan animasi dua mata yang berkedip dan melirik (berhenti otomatis saat tidak terlihat atau animasi sistem dimatikan).
 - Pengaturan posisi horizontal notch (-50% sampai +50% lebar layar) dengan tombol kembali ke tengah.
 - Pengaturan ukuran mata saat idle (24 sampai 48 px).

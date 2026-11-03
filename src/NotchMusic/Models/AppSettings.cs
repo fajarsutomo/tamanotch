@@ -9,6 +9,19 @@ public class AppSettings
     public double PanelTop { get; set; } = -1;
     public double NotchHorizontalOffsetPercent { get; set; } = 0;
     public double IdleIconSize { get; set; } = 34;
+
+    // Pengingat kesehatan (opt-in): gerak dan minum selama jam kerja.
+    public bool MoveReminderEnabled { get; set; } = false;
+    public int MoveReminderMinutes { get; set; } = 45;
+    public bool DrinkReminderEnabled { get; set; } = false;
+    public int DrinkReminderMinutes { get; set; } = 60;
+    public int DrinkGlassMl { get; set; } = 230;
+    public int DrinkDailyGoalGlasses { get; set; } = 8;
+    public string ReminderWorkStart { get; set; } = "08:00";
+    public string ReminderWorkEnd { get; set; } = "17:00";
+    public bool ReminderSoundEnabled { get; set; } = true;
+    public int DrinkCountToday { get; set; } = 0;
+    public string DrinkCountDate { get; set; } = string.Empty;
     public double LyricsLeft { get; set; } = -1;
     public double LyricsTop { get; set; } = -1;
     public double LyricsWidth { get; set; } = 480;

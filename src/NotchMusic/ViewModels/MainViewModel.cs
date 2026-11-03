@@ -19,6 +19,7 @@ using NotchMusic.Services.Settings;
 using NotchMusic.Services.Sync;
 using NotchMusic.Services.Todo;
 using NotchMusic.Services.Update;
+using NotchMusic.Services.Wellness;
 
 namespace NotchMusic.ViewModels;
 
@@ -70,6 +71,9 @@ public class MainViewModel : ViewModelBase
     private int _customDeadlineMinute = 0;
     private TodoNotificationEvent? _activeTodoNotification;
     private DispatcherTimer? _todoNotificationDismissTimer;
+    private readonly IWellnessReminderService _wellnessService;
+    private WellnessNotificationEvent? _activeWellnessNotification;
+    private DispatcherTimer? _wellnessDismissTimer;
     private readonly DispatcherTimer _todoDeadlineTimer;
 
     // Radio Online Fields (Komponen ke-5)
@@ -1626,6 +1630,41 @@ public class MainViewModel : ViewModelBase
         }
     }
 
+    public IWellnessReminderService WellnessService => _wellnessService;
+    public bool HasActiveWellnessNotification => _activeWellnessNotification != null;
+    public string WellnessAccentColor => _activeWellnessNotification?.Kind == WellnessReminderKind.Drink ? "#4FC3F7" : "#7BE495";
+
+    public WellnessNotificationEvent? ActiveWellnessNotification
+    {
+        get => _activeWellnessNotification;
+        private set
+        {
+            if (!SetProperty(ref _activeWellnessNotification, value)) return;
+
+            OnPropertyChanged(nameof(HasActiveWellnessNotification));
+            OnPropertyChanged(nameof(WellnessAccentColor));
+            _wellnessDismissTimer?.Stop();
+            if (value == null) return;
+
+            _wellnessDismissTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(40) };
+            _wellnessDismissTimer.Tick += (s, e) =>
+            {
+                _wellnessDismissTimer?.Stop();
+                ActiveWellnessNotification = null;
+            };
+            _wellnessDismissTimer.Start();
+        }
+    }
+
+    private void OnWellnessReminder(WellnessNotificationEvent evt)
+    {
+        ActiveWellnessNotification = evt;
+        if (Settings.ReminderSoundEnabled)
+        {
+            try { System.Media.SystemSounds.Asterisk.Play(); } catch { }
+        }
+    }
+
     public int PendingTodosCount => Todos.Count(t => !t.IsCompleted);
     public int CompletedTodosCount => Todos.Count(t => t.IsCompleted);
     public int TotalTodosCount => Todos.Count;
@@ -1902,6 +1941,9 @@ public class MainViewModel : ViewModelBase
     public ICommand ApplyCustomDeadlineCommand { get; }
     public ICommand ClearNewTodoDueDateCommand { get; }
     public ICommand DismissTodoNotificationCommand { get; }
+    public ICommand WellnessPrimaryActionCommand { get; }
+    public ICommand WellnessSnoozeCommand { get; }
+    public ICommand DismissWellnessNotificationCommand { get; }
     public ICommand CompleteTodoNotificationCommand { get; }
     public ICommand ClearCompletedTodosCommand { get; }
     public ICommand SetTodoFilterCommand { get; }
@@ -2024,7 +2066,8 @@ public ICommand TogglePrayerPanelCommand { get; }
         IRadioService? radioService = null,
         ILiveTvService? liveTvService = null,
         IBmkgService? bmkgService = null,
-        ILocationService? locationService = null)
+        ILocationService? locationService = null,
+        IWellnessReminderService? wellnessService = null)
     {
         _mediaService = mediaService;
         _lyricsService = lyricsService;
@@ -2043,6 +2086,8 @@ public ICommand TogglePrayerPanelCommand { get; }
         _bmkgService = bmkgService ?? new BmkgService(settingsService);
         _locationService = locationService ?? new LocationService(settingsService, _prayerService, _prayerReminderService);
         _locationService.LocationChanged += OnLocationChanged;
+        _wellnessService = wellnessService ?? new WellnessReminderService(settingsService);
+        _wellnessService.ReminderTriggered += OnWellnessReminder;
         PropertyChanged += (s, e) =>
         {
             if (e.PropertyName == nameof(ShowComponentIcons)) RaiseCenterIconChanged();
@@ -2171,6 +2216,21 @@ public ICommand TogglePrayerPanelCommand { get; }
             _todoNotificationDismissTimer?.Stop();
             ActiveTodoNotification = null;
         });
+        WellnessPrimaryActionCommand = new RelayCommand(() =>
+        {
+            var active = ActiveWellnessNotification;
+            if (active == null) return;
+            if (active.Kind == WellnessReminderKind.Drink) _wellnessService.LogDrink(); else _wellnessService.MarkMoved();
+            ActiveWellnessNotification = null;
+        });
+        WellnessSnoozeCommand = new RelayCommand(() =>
+        {
+            var active = ActiveWellnessNotification;
+            if (active == null) return;
+            _wellnessService.Snooze(active.Kind, 10);
+            ActiveWellnessNotification = null;
+        });
+        DismissWellnessNotificationCommand = new RelayCommand(() => ActiveWellnessNotification = null);
         CompleteTodoNotificationCommand = new RelayCommand(() =>
         {
             if (ActiveTodoNotification != null)
@@ -3637,6 +3697,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
     {
         await _mediaService.InitializeAsync();
         _prayerReminderService.Start();
+        _wellnessService.Start();
         if (Settings.EnableBmkg)
         {
             _bmkgService.Start();

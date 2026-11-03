@@ -276,6 +276,58 @@
                     </StackPanel>
                 </Border>
 
+                <!-- Pengingat Kesehatan -->
+                <Border Background="#202026" CornerRadius="8" Padding="14" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Pengingat Kesehatan" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="0,0,0,8"/>
+                        <TextBlock Text="Pengingat hanya muncul pada jam kerja, dan tidak saat Anda sedang pergi dari komputer. Pergi lebih dari 2 menit dihitung sebagai jeda gerak."
+                                   TextWrapping="Wrap" FontSize="11" Foreground="#999999" Margin="0,0,0,8"/>
+
+                        <!-- Gerak -->
+                        <CheckBox Content="Ingatkan saya untuk bergerak (berdiri, jalan, peregangan)" IsChecked="{Binding MoveReminderEnabled}"/>
+                        <StackPanel Orientation="Horizontal" Margin="22,2,0,10">
+                            <TextBlock Text="Setiap" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding MoveIntervalOptions}" SelectedItem="{Binding MoveReminderMinutes}"
+                                      ItemStringFormat="{}{0} menit" Width="110" Height="26"/>
+                        </StackPanel>
+
+                        <!-- Minum -->
+                        <CheckBox Content="Ingatkan saya untuk minum" IsChecked="{Binding DrinkReminderEnabled}"/>
+                        <StackPanel Orientation="Horizontal" Margin="22,2,0,4">
+                            <TextBlock Text="Setiap" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding DrinkIntervalOptions}" SelectedItem="{Binding DrinkReminderMinutes}"
+                                      ItemStringFormat="{}{0} menit" Width="110" Height="26" Margin="0,0,14,0"/>
+                            <TextBlock Text="Ukuran gelas" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding GlassSizeOptions}" SelectedItem="{Binding DrinkGlassMl}"
+                                      ItemStringFormat="{}{0} ml" Width="90" Height="26"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="22,4,0,4">
+                            <TextBlock Text="Target harian" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding GlassGoalOptions}" SelectedItem="{Binding DrinkDailyGoalGlasses}"
+                                      ItemStringFormat="{}{0} gelas" Width="110" Height="26"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="22,4,0,10">
+                            <TextBlock Text="{Binding DrinkProgressText}" Foreground="#8FD0A5" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                            <Button Content="+ Catat 1 gelas" Command="{Binding LogDrinkCommand}"
+                                    Background="#25252C" Foreground="#FFFFFF" BorderThickness="0" Padding="10,4" Margin="0,0,6,0" Cursor="Hand"/>
+                            <Button Content="Reset" Command="{Binding ResetDrinkCountCommand}"
+                                    Background="#25252C" Foreground="#FFFFFF" BorderThickness="0" Padding="10,4" Cursor="Hand"/>
+                        </StackPanel>
+
+                        <!-- Jam kerja & suara -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                            <TextBlock Text="Jam kerja" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding WorkTimeOptions}" SelectedItem="{Binding ReminderWorkStart}" Width="80" Height="26"/>
+                            <TextBlock Text="sampai" VerticalAlignment="Center" Margin="8,0"/>
+                            <ComboBox ItemsSource="{Binding WorkTimeOptions}" SelectedItem="{Binding ReminderWorkEnd}" Width="80" Height="26"/>
+                        </StackPanel>
+                        <CheckBox Content="Bunyikan nada notifikasi" IsChecked="{Binding ReminderSoundEnabled}"/>
+
+                        <TextBlock Text="Interval bawaan (gerak 45 menit, minum 60 menit, 8 gelas x 230 ml) adalah titik awal yang wajar, bukan anjuran medis. Kebutuhan air berbeda tiap orang; bila Anda memiliki pembatasan cairan, ikuti arahan dokter."
+                                   TextWrapping="Wrap" FontSize="10.5" Foreground="#888888" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
                 <!-- Tentang -->
                 <Border Background="#202026" CornerRadius="8" Padding="14" Margin="0,0,0,12">
                     <StackPanel>

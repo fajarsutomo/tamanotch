@@ -2513,6 +2513,74 @@
                     </Grid>
                 </Border>
 
+                <!-- ================= FLOATING ISLAND WELLNESS (GERAK / MINUM) REMINDER BANNER ================= -->
+                <Border Grid.Row="0" Visibility="{Binding HasActiveWellnessNotification, Converter={StaticResource BoolToVis}}"
+                        Background="#0D1114" BorderBrush="{Binding WellnessAccentColor}" BorderThickness="1.5" CornerRadius="22"
+                        Padding="12,6" Margin="4,2" VerticalAlignment="Center">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Icon: jalan (gerak) atau tetes air (minum) -->
+                        <Border Grid.Column="0" Width="34" Height="34" CornerRadius="17" Background="#16222A" Margin="0,0,10,0">
+                            <Grid>
+                                <Path Width="17" Height="17" Stretch="Uniform" Fill="#7BE495" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Data="M13.5,5.5 C14.6,5.5 15.5,4.6 15.5,3.5 C15.5,2.4 14.6,1.5 13.5,1.5 C12.4,1.5 11.5,2.4 11.5,3.5 C11.5,4.6 12.4,5.5 13.5,5.5 Z M9.8,8.9 L7,23 L9.1,23 L10.9,15 L13,17 L13,23 L15,23 L15,15.5 L12.9,13.5 L13.5,10.5 C14.8,12 16.8,13 19,13 L19,11 C17.1,11 15.5,10 14.7,8.6 L13.7,7 C13.3,6.4 12.7,6 12,6 C11.7,6 11.5,6.1 11.2,6.1 L6,8.3 L6,13 L8,13 L8,9.6 L9.8,8.9 Z">
+                                    <Path.Style>
+                                        <Style TargetType="Path">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ActiveWellnessNotification.Kind}" Value="Drink">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Path.Style>
+                                </Path>
+                                <Path Width="15" Height="15" Stretch="Uniform" Fill="#4FC3F7" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Data="M12,2 C12,2 5,10 5,15 C5,18.9 8.1,22 12,22 C15.9,22 19,18.9 19,15 C19,10 12,2 12,2 Z">
+                                    <Path.Style>
+                                        <Style TargetType="Path">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ActiveWellnessNotification.Kind}" Value="Drink">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Path.Style>
+                                </Path>
+                            </Grid>
+                        </Border>
+
+                        <!-- Info -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,8,0" MaxWidth="300">
+                            <TextBlock Text="{Binding ActiveWellnessNotification.Title}" Foreground="{Binding WellnessAccentColor}" FontWeight="Bold" FontSize="12" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding ActiveWellnessNotification.Message}" Foreground="#EAEAEA" FontSize="10.5" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <!-- Aksi utama (Sudah bergerak / Sudah minum) -->
+                        <Button Grid.Column="2" Command="{Binding WellnessPrimaryActionCommand}"
+                                Style="{StaticResource SmallPillButton}" Content="{Binding ActiveWellnessNotification.PrimaryActionText}"
+                                Background="#1A3820" Foreground="#4CD964" BorderBrush="#2A5C32"
+                                Height="24" Padding="8,0" Margin="0,0,6,0" VerticalAlignment="Center"/>
+
+                        <!-- Tunda 10 menit -->
+                        <Button Grid.Column="3" Command="{Binding WellnessSnoozeCommand}"
+                                Style="{StaticResource SmallPillButton}" Content="Tunda 10 mnt" ToolTip="Ingatkan lagi 10 menit lagi"
+                                Height="24" Padding="8,0" Margin="0,0,6,0" VerticalAlignment="Center"/>
+
+                        <!-- Tutup -->
+                        <Button Grid.Column="4" Command="{Binding DismissWellnessNotificationCommand}"
+                                Style="{StaticResource SmallPillButton}" Content="&#x2715;" ToolTip="Tutup"
+                                Width="24" Height="24" Padding="0" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
                 <!-- ================= FLOATING ISLAND BMKG EARTHQUAKE & WEATHER ALERT BANNER ================= -->
                 <Border Grid.Row="0" Visibility="{Binding HasActiveBmkgNotification, Converter={StaticResource BoolToVis}}"
                         Background="#1A1014" BorderBrush="#FF6B8B" BorderThickness="1.5" CornerRadius="22"

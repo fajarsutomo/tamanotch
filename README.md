@@ -25,6 +25,7 @@ TAMANOTCH adalah widget *Dynamic Island* di bagian atas layar Windows. Saat idle
 | **Cuaca & gempa BMKG** | Prakiraan 3 hari dan informasi gempa dari data terbuka BMKG, lokasi presisi tingkat kelurahan/desa, peringatan dini |
 | **To-do** | Kategori bercabang, drag and drop, deadline dengan pengingat, jendela lepas, sinkronisasi Google Drive |
 | **Browser mengambang** | Jendela web bebas dengan fullscreen dalam jendela, preset ukuran, selalu di atas |
+| **Pengingat kesehatan** | Pengingat gerak dan minum selama jam kerja (interval, target gelas, jam kerja bisa diatur), penghitung gelas harian, jeda otomatis saat Anda pergi dari komputer |
 | **Pengaturan notch** | Geser posisi kiri/kanan, ukuran mata idle, hotkey, pilihan komponen |
 
 Pintasan bawaan: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd> tampil/sembunyi panel, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>L</kbd> mode lirik.

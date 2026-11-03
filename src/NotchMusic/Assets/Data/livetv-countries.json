@@ -1,0 +1,94 @@
+[
+  {
+    "code": "ALL",
+    "name": "Semua Negara"
+  },
+  {
+    "code": "id",
+    "name": "Indonesia"
+  },
+  {
+    "code": "my",
+    "name": "Malaysia"
+  },
+  {
+    "code": "sg",
+    "name": "Singapura"
+  },
+  {
+    "code": "sa",
+    "name": "Arab Saudi"
+  },
+  {
+    "code": "ae",
+    "name": "Uni Emirat Arab"
+  },
+  {
+    "code": "qa",
+    "name": "Qatar"
+  },
+  {
+    "code": "tr",
+    "name": "Turki"
+  },
+  {
+    "code": "jp",
+    "name": "Jepang"
+  },
+  {
+    "code": "kr",
+    "name": "Korea Selatan"
+  },
+  {
+    "code": "cn",
+    "name": "Tiongkok"
+  },
+  {
+    "code": "in",
+    "name": "India"
+  },
+  {
+    "code": "au",
+    "name": "Australia"
+  },
+  {
+    "code": "gb",
+    "name": "Inggris (UK)"
+  },
+  {
+    "code": "us",
+    "name": "Amerika Serikat"
+  },
+  {
+    "code": "de",
+    "name": "Jerman"
+  },
+  {
+    "code": "fr",
+    "name": "Prancis"
+  },
+  {
+    "code": "it",
+    "name": "Italia"
+  },
+  {
+    "code": "es",
+    "name": "Spanyol"
+  },
+  {
+    "code": "nl",
+    "name": "Belanda"
+  },
+  {
+    "code": "ru",
+    "name": "Rusia"
+  },
+  {
+    "code": "br",
+    "name": "Brasil"
+  },
+  {
+    "code": "ca",
+    "name": "Kanada"
+  }
+]

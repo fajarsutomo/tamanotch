@@ -17,7 +17,9 @@ public class LiveTvCountryOption
 {
     public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    [JsonIgnore]
     public string Flag => LiveTvChannel.GetFlagEmoji(Code);
+    [JsonIgnore]
     public string DisplayName => string.IsNullOrEmpty(Flag) ? Name : $"{Flag} {Name}";
     public override string ToString() => DisplayName;
 }

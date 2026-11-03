@@ -1,0 +1,317 @@
+[
+  {
+    "id": "id-prambors",
+    "name": "Prambors FM 102.2",
+    "category": "Indonesia",
+    "streamUrl": "https://stream.rcs.revma.com/h77wwp48kxcwv",
+    "fallbackUrls": [
+      "https://stream.zeno.fm/wvq442iwm6ztv",
+      "https://svara-stream.radioddns.net/bandung_dahliafm"
+    ],
+    "cityOrCountry": "Jakarta",
+    "genre": "Top 40 & Hits Anak Muda",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-hardrock",
+    "name": "Hard Rock FM 87.6",
+    "category": "Indonesia",
+    "streamUrl": "https://stream.radiojar.com/7csmg90fuqruv",
+    "fallbackUrls": [
+      "http://stream.radiojar.com/7csmg90fuqruv",
+      "https://stream.denger.in/"
+    ],
+    "cityOrCountry": "Jakarta",
+    "genre": "Lifestyle, Pop & Rock",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-iradio",
+    "name": "I-Radio FM 89.6",
+    "category": "Indonesia",
+    "streamUrl": "https://stream.radiojar.com/4ywdgup3bnzuv",
+    "fallbackUrls": [
+      "http://stream.radiojar.com/4ywdgup3bnzuv",
+      "https://stream.denger.in/"
+    ],
+    "cityOrCountry": "Jakarta",
+    "genre": "100% Musik Indonesia",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-sonora",
+    "name": "Sonora FM 92.0",
+    "category": "Indonesia",
+    "streamUrl": "https://sonora-radio.arenastreaming.com/8130/stream",
+    "fallbackUrls": [
+      "https://stream-ssl.arenastreaming.com:8066/stream"
+    ],
+    "cityOrCountry": "Jakarta",
+    "genre": "News, Musik & Informasi",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-elshinta",
+    "name": "Elshinta News 90.0 FM",
+    "category": "Indonesia",
+    "streamUrl": "https://stream-ssl.arenastreaming.com:8000/jakarta",
+    "fallbackUrls": [
+      "https://sonora-radio.arenastreaming.com/8130/stream"
+    ],
+    "cityOrCountry": "Jakarta",
+    "genre": "Berita & Informasi Terkini",
+    "bitrate": 64,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-deltafm",
+    "name": "Delta FM 99.1",
+    "category": "Indonesia",
+    "streamUrl": "https://stream.rcs.revma.com/k02rmq48kxcwv",
+    "fallbackUrls": [
+      "https://stream.zeno.fm/wvq442iwm6ztv"
+    ],
+    "cityOrCountry": "Jakarta",
+    "genre": "Lagu Enak & Nostalgia",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-mustang",
+    "name": "Mustang 88.0 FM",
+    "category": "Indonesia",
+    "streamUrl": "https://ic.mari.co.id:8443/mustangfm",
+    "fallbackUrls": [
+      "http://103.246.184.62:1935/noice_mustangfm/mustangfm/chunklist.m3u8"
+    ],
+    "cityOrCountry": "Jakarta",
+    "genre": "Top Hits & Pop Urban",
+    "bitrate": 64,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-kisfm",
+    "name": "Kis FM 95.1",
+    "category": "Indonesia",
+    "streamUrl": "https://ic.mari.co.id:8443/kisfm",
+    "fallbackUrls": [
+      "https://stream.radiokis.id/kisfm2"
+    ],
+    "cityOrCountry": "Jakarta",
+    "genre": "Love, Life & Pop Hits",
+    "bitrate": 64,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-suarasurabaya",
+    "name": "Suara Surabaya 100 FM",
+    "category": "Indonesia",
+    "streamUrl": "https://c5.siar.us/proxy/ssfm/stream",
+    "fallbackUrls": [
+      "https://svara-stream.radioddns.net/bandung_dahliafm"
+    ],
+    "cityOrCountry": "Surabaya",
+    "genre": "News, Interaktif & Musik",
+    "bitrate": 64,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "id-rripro3",
+    "name": "RRI Pro 2 Nasional",
+    "category": "Indonesia",
+    "streamUrl": "https://stream-node2.rri.co.id/streaming/21/9221/rritjpinangpro2.mp3",
+    "fallbackUrls": [
+      "https://i.klikhost.com/9006/stream"
+    ],
+    "cityOrCountry": "Nasional",
+    "genre": "Musik, Budaya & Informasi",
+    "bitrate": 64,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "rel-rodja",
+    "name": "Radio Rodja 756 AM",
+    "category": "Religi",
+    "streamUrl": "https://radioislamindonesia.com/rodja.mp3",
+    "fallbackUrls": [
+      "https://stream.zeno.fm/us5bsznu3rptv"
+    ],
+    "cityOrCountry": "Bogor / Indonesia",
+    "genre": "Dakwah Sunnah & Tilawah",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "rel-quran-mishary",
+    "name": "Murottal Al-Qur'an 24 Jam",
+    "category": "Religi",
+    "streamUrl": "https://backup.qurango.net/radio/mishary_alafasi",
+    "fallbackUrls": [
+      "https://qurango.net/radio/mishary_alafasi"
+    ],
+    "cityOrCountry": "Internasional",
+    "genre": "Syaikh Mishary Rashid Alafasy",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "rel-quran-sudais",
+    "name": "Al-Qur'an Syaikh As-Sudais",
+    "category": "Religi",
+    "streamUrl": "https://backup.qurango.net/radio/abdulrahman_alsudaes",
+    "fallbackUrls": [
+      "https://qurango.net/radio/abdulrahman_alsudaes"
+    ],
+    "cityOrCountry": "Makkah",
+    "genre": "Tilawah Imam Masjidil Haram",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "rel-muslimjogja",
+    "name": "Radio Muslim & Sholawat",
+    "category": "Religi",
+    "streamUrl": "https://stream.zeno.fm/us5bsznu3rptv",
+    "fallbackUrls": [
+      "https://radioislamindonesia.com/rodja.mp3"
+    ],
+    "cityOrCountry": "Indonesia",
+    "genre": "Kajian Islam, Sholawat & Murottal",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "lofi-chill",
+    "name": "Lofi Beats 24/7 Radio",
+    "category": "Musik & Lofi",
+    "streamUrl": "https://play.streamafrica.net/lofiradio",
+    "fallbackUrls": [
+      "https://0nlineradio.radioho.st/0r-lo-fi",
+      "http://usa9.fastcast4u.com/proxy/jamz?mp=/1"
+    ],
+    "cityOrCountry": "Global",
+    "genre": "Chillhop, Study & Focus Beats",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "lofi-groovesalad",
+    "name": "Chillhop & Relax Lofi",
+    "category": "Musik & Lofi",
+    "streamUrl": "https://0nlineradio.radioho.st/0r-lo-fi",
+    "fallbackUrls": [
+      "http://usa9.fastcast4u.com/proxy/jamz?mp=/1",
+      "https://play.streamafrica.net/lofiradio"
+    ],
+    "cityOrCountry": "Global",
+    "genre": "Ambient, Downtempo & Chill",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "lofi-nightride",
+    "name": "Synthwave & Retrowave FM",
+    "category": "Musik & Lofi",
+    "streamUrl": "https://stream.synthwaveradio.eu/listen/synthwaveradio.eu/radio.mp3",
+    "fallbackUrls": [
+      "https://a5.asurahosting.com:7920/radio.mp3"
+    ],
+    "cityOrCountry": "Global",
+    "genre": "Retrowave, Cyber & Outrun",
+    "bitrate": 192,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "music-jazz",
+    "name": "Smooth Jazz 24/7",
+    "category": "Musik & Lofi",
+    "streamUrl": "http://jking.cdnstream1.com/b22139_128mp3",
+    "fallbackUrls": [
+      "https://streaming.klcbsofficial.com/listen/newage/klcbs-newage",
+      "https://0nlineradio.radioho.st/lounge-ibiza-chillout-lounge"
+    ],
+    "cityOrCountry": "Global",
+    "genre": "Instrumental Jazz & Lounge",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "music-classical",
+    "name": "Classical Orchestral FM",
+    "category": "Musik & Lofi",
+    "streamUrl": "http://relax.stream.publicradio.org/relax.mp3",
+    "fallbackUrls": [
+      "http://59.120.88.155:8000/live.mp3"
+    ],
+    "cityOrCountry": "Global",
+    "genre": "Piano, Symphony & Klasik",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "intl-bbc",
+    "name": "BBC World Service",
+    "category": "Internasional",
+    "streamUrl": "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service",
+    "fallbackUrls": [
+      "http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
+    ],
+    "cityOrCountry": "London, UK",
+    "genre": "World News & Global Talk",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "intl-jpop",
+    "name": "Asia DREAM J-Pop & Anime",
+    "category": "Internasional",
+    "streamUrl": "https://quincy.torontocast.com:2070/stream.mp3",
+    "fallbackUrls": [
+      "http://quincy.torontocast.com:2070/stream.mp3"
+    ],
+    "cityOrCountry": "Tokyo, Japan",
+    "genre": "J-Pop, Anime & Japanese Hits",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  },
+  {
+    "id": "intl-kpop",
+    "name": "K-Pop Hits Radio",
+    "category": "Internasional",
+    "streamUrl": "https://0n-kpop.radionetz.de/0n-kpop.mp3",
+    "fallbackUrls": [
+      "https://kpop.onlyhit.us/play",
+      "https://lux.radio.tvstitch.com/k-pop-sd"
+    ],
+    "cityOrCountry": "Seoul, Korea",
+    "genre": "K-Pop Chart & Korean Idol Hits",
+    "bitrate": 128,
+    "isFavorite": false,
+    "isCustom": false
+  }
+]

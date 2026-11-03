@@ -14,6 +14,7 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/). Ba
 - `LICENSE` (MIT, atribusi ke penulis DRANOTCH) dan README baru.
 
 ### Diubah
+- Daftar bawaan stasiun radio, saluran TV, negara Live TV, dan kota kini berkas JSON di `Assets/Data` (dapat diubah tanpa kompilasi ulang); berkas yang hilang atau rusak tidak membuat aplikasi gagal.
 - Proyek diganti nama dari DRANOTCH menjadi TAMANOTCH (kode, installer, skrip, dokumentasi, URL repo). Folder data pengguna menjadi `%LOCALAPPDATA%\TAMANOTCH`; nama mutex, pipe, entri autostart, dan folder Google Drive ikut berganti.
 - Klik ikon tengah notch kini membuka Pengaturan.
 - Fallback sampul album memakai ikon nada musik.

@@ -1,0 +1,346 @@
+[
+  {
+    "name": "Jakarta",
+    "province": "DKI Jakarta",
+    "latitude": -6.2088,
+    "longitude": 106.8456,
+    "timezone": 7,
+    "bmkgAdm4Code": "31.71.01.1001"
+  },
+  {
+    "name": "Surabaya",
+    "province": "Jawa Timur",
+    "latitude": -7.2575,
+    "longitude": 112.7521,
+    "timezone": 7,
+    "bmkgAdm4Code": "35.78.01.1001"
+  },
+  {
+    "name": "Bandung",
+    "province": "Jawa Barat",
+    "latitude": -6.9175,
+    "longitude": 107.6191,
+    "timezone": 7,
+    "bmkgAdm4Code": "32.73.01.1001"
+  },
+  {
+    "name": "Medan",
+    "province": "Sumatera Utara",
+    "latitude": 3.5952,
+    "longitude": 98.6722,
+    "timezone": 7,
+    "bmkgAdm4Code": "12.71.01.1001"
+  },
+  {
+    "name": "Semarang",
+    "province": "Jawa Tengah",
+    "latitude": -6.9667,
+    "longitude": 110.4167,
+    "timezone": 7,
+    "bmkgAdm4Code": "33.74.01.1001"
+  },
+  {
+    "name": "Makassar",
+    "province": "Sulawesi Selatan",
+    "latitude": -5.1477,
+    "longitude": 119.4327,
+    "timezone": 8,
+    "bmkgAdm4Code": "73.71.01.1001"
+  },
+  {
+    "name": "Palembang",
+    "province": "Sumatera Selatan",
+    "latitude": -2.9909,
+    "longitude": 104.7565,
+    "timezone": 7,
+    "bmkgAdm4Code": "16.71.01.1001"
+  },
+  {
+    "name": "Tangerang",
+    "province": "Banten",
+    "latitude": -6.1783,
+    "longitude": 106.6319,
+    "timezone": 7,
+    "bmkgAdm4Code": "36.71.01.1001"
+  },
+  {
+    "name": "Depok",
+    "province": "Jawa Barat",
+    "latitude": -6.4025,
+    "longitude": 106.7942,
+    "timezone": 7,
+    "bmkgAdm4Code": "32.76.06.1001"
+  },
+  {
+    "name": "Bekasi",
+    "province": "Jawa Barat",
+    "latitude": -6.2383,
+    "longitude": 106.9756,
+    "timezone": 7,
+    "bmkgAdm4Code": "32.75.01.1001"
+  },
+  {
+    "name": "Bogor",
+    "province": "Jawa Barat",
+    "latitude": -6.5971,
+    "longitude": 106.806,
+    "timezone": 7,
+    "bmkgAdm4Code": "32.71.01.1001"
+  },
+  {
+    "name": "Yogyakarta",
+    "province": "DI Yogyakarta",
+    "latitude": -7.7956,
+    "longitude": 110.3695,
+    "timezone": 7,
+    "bmkgAdm4Code": "34.71.01.1001"
+  },
+  {
+    "name": "Surakarta (Solo)",
+    "province": "Jawa Tengah",
+    "latitude": -7.5755,
+    "longitude": 110.8243,
+    "timezone": 7,
+    "bmkgAdm4Code": "33.72.01.1001"
+  },
+  {
+    "name": "Malang",
+    "province": "Jawa Timur",
+    "latitude": -7.9666,
+    "longitude": 112.6326,
+    "timezone": 7,
+    "bmkgAdm4Code": "35.73.01.1001"
+  },
+  {
+    "name": "Cirebon",
+    "province": "Jawa Barat",
+    "latitude": -6.732,
+    "longitude": 108.5523,
+    "timezone": 7,
+    "bmkgAdm4Code": "32.74.01.1001"
+  },
+  {
+    "name": "Serang",
+    "province": "Banten",
+    "latitude": -6.1104,
+    "longitude": 106.164,
+    "timezone": 7,
+    "bmkgAdm4Code": "36.73.01.1001"
+  },
+  {
+    "name": "Denpasar",
+    "province": "Bali",
+    "latitude": -8.6705,
+    "longitude": 115.2126,
+    "timezone": 8,
+    "bmkgAdm4Code": "51.71.01.1001"
+  },
+  {
+    "name": "Mataram (Lombok)",
+    "province": "NTB",
+    "latitude": -8.5833,
+    "longitude": 116.1167,
+    "timezone": 8,
+    "bmkgAdm4Code": "52.71.02.1001"
+  },
+  {
+    "name": "Kupang",
+    "province": "NTT",
+    "latitude": -10.1772,
+    "longitude": 123.607,
+    "timezone": 8,
+    "bmkgAdm4Code": "53.71.01.1001"
+  },
+  {
+    "name": "Balikpapan",
+    "province": "Kalimantan Timur",
+    "latitude": -1.2379,
+    "longitude": 116.8289,
+    "timezone": 8,
+    "bmkgAdm4Code": "64.71.01.1001"
+  },
+  {
+    "name": "Samarinda",
+    "province": "Kalimantan Timur",
+    "latitude": -0.5022,
+    "longitude": 117.1536,
+    "timezone": 8,
+    "bmkgAdm4Code": "64.72.01.1001"
+  },
+  {
+    "name": "Banjarmasin",
+    "province": "Kalimantan Selatan",
+    "latitude": -3.3167,
+    "longitude": 114.59,
+    "timezone": 8,
+    "bmkgAdm4Code": "63.71.01.1001"
+  },
+  {
+    "name": "Pontianak",
+    "province": "Kalimantan Barat",
+    "latitude": -0.0263,
+    "longitude": 109.3425,
+    "timezone": 7,
+    "bmkgAdm4Code": "61.71.01.1002"
+  },
+  {
+    "name": "Palangka Raya",
+    "province": "Kalimantan Tengah",
+    "latitude": -2.2161,
+    "longitude": 113.9139,
+    "timezone": 7,
+    "bmkgAdm4Code": "62.71.01.1001"
+  },
+  {
+    "name": "Tarakan",
+    "province": "Kalimantan Utara",
+    "latitude": 3.327,
+    "longitude": 117.5925,
+    "timezone": 8,
+    "bmkgAdm4Code": "65.71.01.1001"
+  },
+  {
+    "name": "Bandar Lampung",
+    "province": "Lampung",
+    "latitude": -5.45,
+    "longitude": 105.2667,
+    "timezone": 7,
+    "bmkgAdm4Code": "18.71.06.1001"
+  },
+  {
+    "name": "Padang",
+    "province": "Sumatera Barat",
+    "latitude": -0.9471,
+    "longitude": 100.4172,
+    "timezone": 7,
+    "bmkgAdm4Code": "13.71.01.1001"
+  },
+  {
+    "name": "Pekanbaru",
+    "province": "Riau",
+    "latitude": 0.5071,
+    "longitude": 101.4478,
+    "timezone": 7,
+    "bmkgAdm4Code": "14.71.01.1002"
+  },
+  {
+    "name": "Batam",
+    "province": "Kepulauan Riau",
+    "latitude": 1.1301,
+    "longitude": 104.0529,
+    "timezone": 7,
+    "bmkgAdm4Code": "21.71.10.1001"
+  },
+  {
+    "name": "Jambi",
+    "province": "Jambi",
+    "latitude": -1.6101,
+    "longitude": 103.6131,
+    "timezone": 7,
+    "bmkgAdm4Code": "15.71.01.1001"
+  },
+  {
+    "name": "Bengkulu",
+    "province": "Bengkulu",
+    "latitude": -3.8004,
+    "longitude": 102.2655,
+    "timezone": 7,
+    "bmkgAdm4Code": "17.71.01.1001"
+  },
+  {
+    "name": "Pangkal Pinang",
+    "province": "Bangka Belitung",
+    "latitude": -2.129,
+    "longitude": 106.1139,
+    "timezone": 7,
+    "bmkgAdm4Code": "19.71.02.1001"
+  },
+  {
+    "name": "Banda Aceh",
+    "province": "Aceh",
+    "latitude": 5.5483,
+    "longitude": 95.3238,
+    "timezone": 7,
+    "bmkgAdm4Code": "11.71.01.2001"
+  },
+  {
+    "name": "Manado",
+    "province": "Sulawesi Utara",
+    "latitude": 1.4748,
+    "longitude": 124.8421,
+    "timezone": 8,
+    "bmkgAdm4Code": "71.71.01.1001"
+  },
+  {
+    "name": "Palu",
+    "province": "Sulawesi Tengah",
+    "latitude": -0.9003,
+    "longitude": 119.8779,
+    "timezone": 8,
+    "bmkgAdm4Code": "72.71.03.1001"
+  },
+  {
+    "name": "Kendari",
+    "province": "Sulawesi Tenggara",
+    "latitude": -3.9985,
+    "longitude": 122.5126,
+    "timezone": 8,
+    "bmkgAdm4Code": "74.71.05.1001"
+  },
+  {
+    "name": "Gorontalo",
+    "province": "Gorontalo",
+    "latitude": 0.5435,
+    "longitude": 123.0568,
+    "timezone": 8,
+    "bmkgAdm4Code": "75.71.01.1001"
+  },
+  {
+    "name": "Mamuju",
+    "province": "Sulawesi Barat",
+    "latitude": -2.677,
+    "longitude": 118.8895,
+    "timezone": 8,
+    "bmkgAdm4Code": "76.02.01.1002"
+  },
+  {
+    "name": "Ambon",
+    "province": "Maluku",
+    "latitude": -3.6954,
+    "longitude": 128.1814,
+    "timezone": 9,
+    "bmkgAdm4Code": "81.71.02.2001"
+  },
+  {
+    "name": "Ternate",
+    "province": "Maluku Utara",
+    "latitude": 0.7904,
+    "longitude": 127.3809,
+    "timezone": 9,
+    "bmkgAdm4Code": "82.71.01.1001"
+  },
+  {
+    "name": "Jayapura",
+    "province": "Papua",
+    "latitude": -2.5916,
+    "longitude": 140.669,
+    "timezone": 9,
+    "bmkgAdm4Code": "91.71.01.1001"
+  },
+  {
+    "name": "Sorong",
+    "province": "Papua Barat Daya",
+    "latitude": -0.8762,
+    "longitude": 131.2558,
+    "timezone": 9,
+    "bmkgAdm4Code": "96.71.01.1001"
+  },
+  {
+    "name": "Manokwari",
+    "province": "Papua Barat",
+    "latitude": -0.8615,
+    "longitude": 134.062,
+    "timezone": 9,
+    "bmkgAdm4Code": "92.02.12.1001"
+  }
+]

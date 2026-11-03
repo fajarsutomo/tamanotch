@@ -4,16 +4,17 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/).
 
 ## Penomoran versi
 
-TAMANOTCH memakai versi `0.x.y`:
+TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
-- **x** naik untuk fitur atau elemen baru yang cukup signifikan.
-- **y** naik untuk perbaikan bug (fitur lama maupun baru) dan kembali ke 0 setiap x naik.
+- **x** (angka tengah) naik untuk fitur atau elemen baru yang cukup signifikan.
+- **y** (angka akhir) naik untuk perbaikan bug (fitur lama maupun baru) dan kembali ke 0 setiap x naik.
 
-Contoh: `0.1.0` → `0.1.1` (perbaikan bug) → `0.2.0` (fitur baru) → `0.2.1`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
+Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`). Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
-## [0.1.0] - belum dirilis
+## [Belum dirilis] (versi pengembangan 0.1.0)
 
 ### Ditambahkan
+- Ikon aplikasi baru (taskbar, tray, installer, dan jendela): kotak gelap bertepi neon dengan dua mata menyala, turunan dari notch idle. Dibuat dari kode oleh `scripts/make-icon.ps1` sehingga dapat dibuat ulang dengan warna lain.
 - Pilihan ukuran HP di menu ukuran (ikon 📐) jendela YouTube Music dan Spotify: iPhone SE, Galaxy S, iPhone 14/15, Pixel 7, iPhone Pro Max, serta tombol putar (tukar lebar dan tinggi). Area web dibuat seukuran layar HP, dan ukuran diperkecil otomatis bila melebihi layar.
 - Kustomisasi notch di Pengaturan: warna mata dan warna frame saat idle dari 11 preset neon, bentuk frame idle (panjang, lebar, dan radius sudut kiri-bawah dan kanan-bawah, atau otomatis mengikuti ukuran mata), serta warna frame island dan warna cincin ikon saat disorot kursor (dengan opsi "Samakan dengan notch idle" dan pilihan kembali ke tampilan bawaan).
 - Pengingat kesehatan (opt-in) di Pengaturan: pengingat gerak (bawaan tiap 45 menit) dan minum (bawaan tiap 60 menit, target 8 gelas x 230 ml dengan penghitung harian). Hanya pada jam kerja, tidak saat Anda sedang pergi (tanpa input >= 2 menit dihitung jeda gerak), pengingat minum berhenti setelah target tercapai. Tampil sebagai banner island dengan aksi "Sudah bergerak/minum", tunda 10 menit, dan tutup.

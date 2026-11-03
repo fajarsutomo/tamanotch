@@ -80,6 +80,8 @@
         </LinearGradientBrush>
 
         <SolidColorBrush x:Key="NotchPillBorderBrush" Color="#2C2C3A"/>
+        <SolidColorBrush x:Key="NotchPillHoverBorderBrush" Color="#50506E"/>
+        <SolidColorBrush x:Key="NotchBadgeHoverBorderBrush" Color="#80FFFFFF"/>
         <LinearGradientBrush x:Key="MetallicIconBadgeBorderBrush" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#4AFFFFFF" Offset="0.0"/>
             <GradientStop Color="#1CFFFFFF" Offset="0.5"/>
@@ -400,13 +402,13 @@
         <!-- Style untuk Badge 5 Ikon Notch saat Hover -->
         <Style x:Key="NotchIconBadgeStyle" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource MetallicIconBadgeBgBrush}"/>
-            <Setter Property="BorderBrush" Value="{Binding HoverRingBrush, TargetNullValue={StaticResource MetallicIconBadgeBorderBrush}, FallbackValue={StaticResource MetallicIconBadgeBorderBrush}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource MetallicIconBadgeBorderBrush}"/>
             <Setter Property="BorderThickness" Value="1.2"/>
             <Setter Property="CornerRadius" Value="11"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#2D2D3D"/>
-                    <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+                    <Setter Property="BorderBrush" Value="{Binding HoverRingBrush, TargetNullValue={StaticResource NotchBadgeHoverBorderBrush}, FallbackValue={StaticResource NotchBadgeHoverBorderBrush}}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -414,13 +416,13 @@
         <!-- Style untuk Pill Waktu Sholat di Bawah saat Hover -->
         <Style x:Key="NotchPrayerPillStyle" TargetType="Border">
             <Setter Property="Background" Value="#121218"/>
-            <Setter Property="BorderBrush" Value="{Binding HoverRingBrush, TargetNullValue={StaticResource NotchPillBorderBrush}, FallbackValue={StaticResource NotchPillBorderBrush}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource NotchPillBorderBrush}"/>
             <Setter Property="BorderThickness" Value="1.2"/>
             <Setter Property="CornerRadius" Value="13"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#1A1A24"/>
-                    <Setter Property="BorderBrush" Value="#50506E"/>
+                    <Setter Property="BorderBrush" Value="{Binding HoverRingBrush, TargetNullValue={StaticResource NotchPillHoverBorderBrush}, FallbackValue={StaticResource NotchPillHoverBorderBrush}}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>

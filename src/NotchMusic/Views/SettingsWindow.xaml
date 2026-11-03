@@ -396,7 +396,7 @@
                         <TextBlock Text="Warna frame" FontSize="11.5" Foreground="#CCCCCC" Margin="0,6,0,4"/>
                         <ListBox Style="{StaticResource SwatchListBox}" ItemsSource="{Binding HoverPalette}" SelectedValue="{Binding HoverFrameColor, Mode=TwoWay}"
                                  IsEnabled="{Binding IsHoverColorEditable}"/>
-                        <TextBlock Text="Warna cincin ikon luar" FontSize="11.5" Foreground="#CCCCCC" Margin="0,6,0,4"/>
+                        <TextBlock Text="Warna cincin ikon saat disorot kursor" FontSize="11.5" Foreground="#CCCCCC" Margin="0,6,0,4"/>
                         <ListBox Style="{StaticResource SwatchListBox}" ItemsSource="{Binding HoverPalette}" SelectedValue="{Binding HoverRingColor, Mode=TwoWay}"
                                  IsEnabled="{Binding IsHoverColorEditable}"/>
                         <TextBlock Text="Ikon &#x21BA; = tampilan bawaan." FontSize="10.5" Foreground="#888888" Margin="0,2,0,0"/>

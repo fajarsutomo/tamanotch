@@ -41,6 +41,7 @@ public partial class MainWindow : Window
 
         _viewModel = new MainViewModel(mediaService, lyricsService, _settingsService);
         DataContext = _viewModel;
+        WindowHelper.HorizontalOffsetPercent = _settingsService.CurrentSettings.NotchHorizontalOffsetPercent;
 
         _viewModel.RequestExpand += () => _viewModel.CurrentMode = PanelMode.Expanded;
         _viewModel.RequestCollapse += () => _viewModel.CurrentMode = PanelMode.Compact;
@@ -493,11 +494,25 @@ public partial class MainWindow : Window
         _aboutWindow.Activate();
     }
 
+    private void ApplyNotchHorizontalOffset()
+    {
+        WindowHelper.HorizontalOffsetPercent = _settingsService.CurrentSettings.NotchHorizontalOffsetPercent;
+        WindowHelper.CenterAtTopBezel(this);
+        _settingsService.CurrentSettings.PanelLeft = Left;
+        _settingsService.CurrentSettings.PanelTop = Top;
+    }
+
     private void OpenSettings()
     {
         var settingsVm = new SettingsViewModel(_settingsService, _ => SetupHotkeys(), _viewModel.GoogleDriveSyncService, _viewModel.UpdateService, _viewModel.PrayerService, _viewModel.LocationService);
         settingsVm.PropertyChanged += (s, ev) =>
         {
+            if (ev.PropertyName == nameof(SettingsViewModel.NotchHorizontalOffsetPercent))
+            {
+                ApplyNotchHorizontalOffset();
+                return;
+            }
+
             _viewModel.RefreshComponentLayout();
             UpdatePrayerWindowState();
             UpdateBmkgWindowState();

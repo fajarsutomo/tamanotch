@@ -136,6 +136,28 @@ public class SettingsViewModel : ViewModelBase
         }
     }
 
+    public double NotchHorizontalOffsetPercent
+    {
+        get => Settings.NotchHorizontalOffsetPercent;
+        set
+        {
+            double clamped = Math.Clamp(Math.Round(value), -WindowHelper.MaxHorizontalOffsetPercent, WindowHelper.MaxHorizontalOffsetPercent);
+            if (Math.Abs(Settings.NotchHorizontalOffsetPercent - clamped) > 0.01)
+            {
+                Settings.NotchHorizontalOffsetPercent = clamped;
+                _settingsService.Save();
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(NotchHorizontalOffsetText));
+            }
+        }
+    }
+
+    public string NotchHorizontalOffsetText => Math.Abs(NotchHorizontalOffsetPercent) < 0.5
+        ? "Tengah"
+        : $"{Math.Abs(NotchHorizontalOffsetPercent):0}% ke {(NotchHorizontalOffsetPercent < 0 ? "kiri" : "kanan")}";
+
+    public ICommand ResetNotchPositionCommand { get; }
+
     public double LyricsFontSize
     {
         get => Settings.LyricsFontSize;
@@ -987,6 +1009,8 @@ public class SettingsViewModel : ViewModelBase
         _updateService = updateService ?? new UpdateService(settingsService);
         _prayerService = prayerService ?? new PrayerService(settingsService);
         _locationService = locationService ?? new LocationService(settingsService, _prayerService);
+
+        ResetNotchPositionCommand = new RelayCommand(() => NotchHorizontalOffsetPercent = 0);
 
         DetectLocationCommand = new RelayCommand(async () =>
         {

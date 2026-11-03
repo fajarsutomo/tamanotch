@@ -7,6 +7,7 @@ public class AppSettings
     public string PreferredDeviceName { get; set; } = string.Empty;
     public double PanelLeft { get; set; } = -1;
     public double PanelTop { get; set; } = -1;
+    public double NotchHorizontalOffsetPercent { get; set; } = 0;
     public double LyricsLeft { get; set; } = -1;
     public double LyricsTop { get; set; } = -1;
     public double LyricsWidth { get; set; } = 480;

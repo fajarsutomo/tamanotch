@@ -87,7 +87,7 @@ public static class WindowHelper
 
         if (window.Left < screenLeft || window.Left + window.ActualWidth > screenLeft + screenWidth)
         {
-            window.Left = screenLeft + (screenWidth - window.ActualWidth) / 2.0;
+            window.Left = CalculateLeft(screenLeft, screenWidth, window.ActualWidth, HorizontalOffsetPercent);
         }
 
         window.Top = screenTop;
@@ -112,7 +112,21 @@ public static class WindowHelper
         double screenWidth = bounds.Width / dpiX;
         double width = window.ActualWidth > 0 ? window.ActualWidth : (double.IsNaN(window.Width) ? 0 : window.Width);
 
-        window.Left = screenLeft + (screenWidth - width) / 2.0;
+        window.Left = CalculateLeft(screenLeft, screenWidth, width, HorizontalOffsetPercent);
         window.Top = screenTop;
+    }
+
+    /// <summary>Geser horizontal notch dari tengah layar, dalam persen lebar layar (negatif = kiri, positif = kanan).</summary>
+    public static double HorizontalOffsetPercent { get; set; }
+
+    public const double MaxHorizontalOffsetPercent = 50;
+
+    /// <summary>Posisi kiri jendela: tengah layar digeser <paramref name="offsetPercent"/> persen lebar layar, tetap di dalam layar.</summary>
+    public static double CalculateLeft(double screenLeft, double screenWidth, double windowWidth, double offsetPercent)
+    {
+        double offset = Math.Clamp(offsetPercent, -MaxHorizontalOffsetPercent, MaxHorizontalOffsetPercent);
+        double left = screenLeft + (screenWidth - windowWidth) / 2.0 + screenWidth * offset / 100.0;
+        double maxLeft = screenLeft + Math.Max(0, screenWidth - windowWidth);
+        return Math.Clamp(left, screenLeft, maxLeft);
     }
 }

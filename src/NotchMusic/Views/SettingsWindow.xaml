@@ -248,6 +248,20 @@
                     <StackPanel>
                         <TextBlock Text="Tampilan &amp; Perilaku" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="0,0,0,8"/>
                         <CheckBox Content="Jalankan otomatis saat login Windows" IsChecked="{Binding StartWithWindows}"/>
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Posisi notch (geser kiri/kanan dari tengah layar):" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding NotchHorizontalOffsetText}" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        </Grid>
+                        <Slider Minimum="-50" Maximum="50" Value="{Binding NotchHorizontalOffsetPercent}"
+                                TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="5" Margin="0,2,0,4"/>
+                        <Button Content="Kembalikan ke Tengah" Command="{Binding ResetNotchPositionCommand}"
+                                Background="#25252C" Foreground="#FFFFFF" BorderThickness="0" Padding="10,5"
+                                HorizontalAlignment="Left" Cursor="Hand"/>
                     </StackPanel>
                 </Border>
 

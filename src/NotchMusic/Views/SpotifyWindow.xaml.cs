@@ -21,6 +21,11 @@ public partial class SpotifyWindow : Window
     private readonly ISettingsService? _settingsService;
     private bool _isForceClose;
     private bool _isInitialized;
+    private bool _userZoomOverride;
+
+    private const double NarrowTitleBarWidth = 460;
+    private const double DesktopLayoutWidth = 1000;
+    private const double MinAutoZoom = 0.5;
 
     public SpotifyWindow(MainViewModel? viewModel = null, ISettingsService? settingsService = null)
     {
@@ -161,6 +166,7 @@ public partial class SpotifyWindow : Window
                     StatusText.Text = "Tersambung ke TAMANOTCH";
                     BackButton.IsEnabled = webView.CanGoBack;
                     ForwardButton.IsEnabled = webView.CanGoForward;
+                    ApplyAutoZoom();
                 });
             };
 
@@ -299,10 +305,18 @@ public partial class SpotifyWindow : Window
             ("110%", 1.10),
             ("125%", 1.25)
         };
+        var autoZoomItem = new MenuItem { Header = "Otomatis (sesuai lebar jendela)", Foreground = System.Windows.Media.Brushes.White, Padding = new Thickness(8, 4, 8, 4), IsChecked = !_userZoomOverride };
+        autoZoomItem.Click += (s, ev) => { _userZoomOverride = false; ApplyAutoZoom(); };
+        zoomMenu.Items.Add(autoZoomItem);
         foreach (var z in zoomLevels)
         {
             var zi = new MenuItem { Header = z.Label, Foreground = System.Windows.Media.Brushes.White, Padding = new Thickness(8, 4, 8, 4) };
-            zi.Click += (s, ev) => { if (webView?.CoreWebView2 != null) webView.ZoomFactor = z.Factor; };
+            zi.Click += (s, ev) =>
+            {
+                if (webView?.CoreWebView2 == null) return;
+                _userZoomOverride = true;
+                webView.ZoomFactor = z.Factor;
+            };
             zoomMenu.Items.Add(zi);
         }
         menu.Items.Add(zoomMenu);
@@ -412,7 +426,34 @@ public partial class SpotifyWindow : Window
     protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
     {
         base.OnRenderSizeChanged(sizeInfo);
+        ApplyResponsiveLayout();
         SaveWindowBounds();
+    }
+
+    // Di lebar sempit judul-bar meluap sehingga tombol tutup terpotong; sembunyikan elemen non-esensial.
+    private void ApplyResponsiveLayout()
+    {
+        if (GripChip == null) return;
+
+        bool narrow = ActualWidth < NarrowTitleBarWidth;
+        var compact = narrow ? Visibility.Collapsed : Visibility.Visible;
+        GripChip.Visibility = compact;
+        TitleText.Visibility = compact;
+        MaximizeButton.Visibility = compact;
+
+        ApplyAutoZoom();
+    }
+
+    // Situs desktop Spotify butuh lebar ~DesktopLayoutWidth px; perkecil skala agar tidak meluap di jendela sempit.
+    private void ApplyAutoZoom()
+    {
+        if (_userZoomOverride || webView?.CoreWebView2 == null) return;
+
+        double zoom = Math.Clamp(webView.ActualWidth / DesktopLayoutWidth, MinAutoZoom, 1.0);
+        if (Math.Abs(webView.ZoomFactor - zoom) > 0.01)
+        {
+            webView.ZoomFactor = zoom;
+        }
     }
 
     private void SaveWindowBounds()

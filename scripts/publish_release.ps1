@@ -1,7 +1,7 @@
 param(
-    [string]$Version = "1.8.1",
-    [string]$Title = "TAMANOTCH v1.8.1 - Perbaikan Binding Suara Azan, Sinkronisasi Real-Time dan Desain Ikon Tombol Tes",
-    [string]$NotesFile = "release_notes_v1.8.1.md"
+    [string]$Version = "0.1.0",
+    [string]$Title = "TAMANOTCH v0.1.0",
+    [string]$NotesFile = "release_notes_v0.1.0.md"
 )
 
 $ErrorActionPreference = "Stop"

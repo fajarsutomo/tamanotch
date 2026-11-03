@@ -64,5 +64,5 @@ BMKG (cuaca dan gempa), LRCLIB (lirik), Radio-Browser (stasiun radio), serta str
 ## Kredit & Lisensi
 
 - Berlisensi [MIT](LICENSE).
-- Berbasis **DRANOTCH** oleh [dningratx](https://github.com/dningratx/dranotch) (MIT). Hak cipta kode asli tetap milik penulis aslinya; modifikasi TAMANOTCH oleh Fajar Sutomo.
+- Dikembangkan berdasarkan **DRANOTCH v1.8.4** oleh [dningratx](https://github.com/dningratx/dranotch) (MIT). Hak cipta kode asli tetap milik penulis aslinya; modifikasi TAMANOTCH oleh Fajar Sutomo.
 - Riwayat perubahan ada di [CHANGELOG.md](CHANGELOG.md).

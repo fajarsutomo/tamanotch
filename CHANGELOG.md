@@ -1,8 +1,17 @@
 # Changelog
 
-Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/). Basis fork: DRANOTCH v1.8.4.
+Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/).
 
-## [Belum dirilis]
+## Penomoran versi
+
+TAMANOTCH memakai versi `0.x.y`:
+
+- **x** naik untuk fitur atau elemen baru yang cukup signifikan.
+- **y** naik untuk perbaikan bug (fitur lama maupun baru) dan kembali ke 0 setiap x naik.
+
+Contoh: `0.1.0` → `0.1.1` (perbaikan bug) → `0.2.0` (fitur baru) → `0.2.1`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
+
+## [0.1.0] - belum dirilis
 
 ### Ditambahkan
 - Pilihan ukuran HP di menu ukuran (ikon 📐) jendela YouTube Music dan Spotify: iPhone SE, Galaxy S, iPhone 14/15, Pixel 7, iPhone Pro Max, serta tombol putar (tukar lebar dan tinggi). Area web dibuat seukuran layar HP, dan ukuran diperkecil otomatis bila melebihi layar.

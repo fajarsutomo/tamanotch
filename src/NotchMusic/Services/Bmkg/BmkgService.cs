@@ -1,3 +1,4 @@
+using NotchMusic.Helpers;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -97,7 +98,7 @@ public class BmkgService : IBmkgService
         {
             Timeout = TimeSpan.FromSeconds(12)
         };
-        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("TAMANOTCH/1.8 (Windows; BMKG Open Data Integration)");
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"{AppVersion.UserAgentToken} (Windows; BMKG Open Data Integration)");
     }
 
     public BmkgService(ISettingsService settingsService)

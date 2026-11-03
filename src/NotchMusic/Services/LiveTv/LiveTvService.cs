@@ -91,7 +91,7 @@ public class LiveTvService : ILiveTvService
     private static HttpClient CreateHttpClient()
     {
         var client = new HttpClient { Timeout = TimeSpan.FromSeconds(12) };
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("TAMANOTCH/1.8 (+https://github.com/fajarsutomo; LiveTV)");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd($"{AppVersion.UserAgentToken} (+https://github.com/fajarsutomo; LiveTV)");
         return client;
     }
 

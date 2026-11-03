@@ -19,7 +19,7 @@ $innoScript = Join-Path $rootDir "Installer\NotchMusic.iss"
 # 1. Determine Version (Major / Minor / Patch / Custom)
 [xml]$projXml = Get-Content $projectPath
 $currentVersionNode = $projXml.SelectSingleNode("//PropertyGroup/Version")
-$currentVersionStr = if ($currentVersionNode) { $currentVersionNode.InnerText.Trim() } else { "1.0.0" }
+$currentVersionStr = if ($currentVersionNode) { $currentVersionNode.InnerText.Trim() } else { "0.1.0" }
 
 $targetVersion = $currentVersionStr
 $isMajor = $false

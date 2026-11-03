@@ -21,20 +21,7 @@ public class UpdateService : IUpdateService, IDisposable
     private readonly HttpClient _httpClient;
     private readonly bool _disposeClient;
 
-    public string CurrentVersion
-    {
-        get
-        {
-            var asm = Assembly.GetExecutingAssembly();
-            var infoVersion = asm.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-            if (!string.IsNullOrWhiteSpace(infoVersion))
-            {
-                return infoVersion.Split('+')[0].Trim();
-            }
-            var ver = asm.GetName().Version;
-            return ver != null ? $"{ver.Major}.{ver.Minor}.{ver.Build}" : "1.0.0";
-        }
-    }
+    public string CurrentVersion => AppVersion.Current;
 
     public UpdateService(ISettingsService settingsService, HttpClient? httpClient = null)
     {

@@ -715,36 +715,19 @@
                             </Border>
                         </StackPanel>
 
-                        <!-- TENGAH: LOGO TAMANOTCH (Selalu Tampil; Saat Idle Hanya Ini yang Terlihat) -->
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- TENGAH: Mata menyala (hanya saat idle; saat hover slot ini hilang). Klik membuka Pengaturan. -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center"
+                                    Visibility="{Binding ShowIdleEyes, Converter={StaticResource BoolToVis}}">
                             <Border Width="{Binding CenterIconWidth}" Height="{Binding CenterIconHeight}" Margin="2,0,2,0" Cursor="Hand"
-                                ToolTip="TAMANOTCH (Klik untuk membuka Pengaturan)">
-                            <Border.Style>
-                                <!-- Saat idle dengan mata: tanpa lencana, mata menyala langsung di atas hitam notch -->
-                                <Style TargetType="Border" BasedOn="{StaticResource NotchIconBadgeStyle}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ShowIdleEyes}" Value="True">
-                                            <Setter Property="Background" Value="Transparent"/>
-                                            <Setter Property="BorderBrush" Value="Transparent"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
-                            <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" Command="{Binding OpenSettingsCommand}"/>
-                            </Border.InputBindings>
-                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Image Source="pack://application:,,,/NotchMusic;component/Assets/app.png"
-                                       Width="{Binding CenterLogoImageSize}" Height="{Binding CenterLogoImageSize}" Stretch="Uniform"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       Visibility="{Binding ShowCenterLogo, Converter={StaticResource BoolToVis}}"
-                                       RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <views:NotchEyes Width="{Binding CenterIconWidth}" Height="{Binding CenterIconHeight}"
-                                                 HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                 Visibility="{Binding ShowIdleEyes, Converter={StaticResource BoolToVis}}"/>
-                            </Grid>
-                        </Border>
+                                    Background="Transparent" ToolTip="TAMANOTCH (Klik untuk membuka Pengaturan)">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding OpenSettingsCommand}"/>
+                                </Border.InputBindings>
+                                <views:NotchEyes HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                 Width="{Binding CenterIconWidth}" Height="{Binding CenterIconHeight}"/>
+                            </Border>
                         </StackPanel>
+
 
                         <!-- SISI KANAN: KOMPONEN 4 (BROWSER), KOMPONEN BMKG, & KOMPONEN 5 (TO-DO LIST LENGKAP DI PALING KANAN) (Muncul saat Hover) -->
                         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="{Binding ShowComponentIcons, Converter={StaticResource BoolToVis}}"
@@ -991,9 +974,7 @@
                             <!-- Album art / Icon TAMANOTCH (Luxury Mac Squircle) -->
                             <Border Grid.Column="0" Width="50" Height="50" CornerRadius="13" ClipToBounds="True" Background="#14141C" BorderBrush="#36FFFFFF" BorderThickness="1.2" Margin="0,0,12,0" VerticalAlignment="Center">
                                 <Grid>
-                                    <Image Source="pack://application:,,,/NotchMusic;component/Assets/app.png" Width="28" Height="28" Stretch="Uniform"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                                           RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    <Path Data="{StaticResource LuxuryMusicNoteGeometry}" Fill="{StaticResource MetallicSilverBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <Image Source="{Binding CurrentTrack.Thumbnail}" Stretch="UniformToFill"
                                            RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Grid>
@@ -2288,9 +2269,7 @@
                         <Border Grid.Column="0" Width="48" Height="48" CornerRadius="12" ClipToBounds="True"
                                 Background="#14141C" BorderBrush="#36FFFFFF" BorderThickness="1.2" Margin="0,0,14,0" VerticalAlignment="Center">
                             <Grid>
-                                <Image Source="pack://application:,,,/NotchMusic;component/Assets/app.png" Width="26" Height="26" Stretch="Uniform"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <Path Data="{StaticResource LuxuryMusicNoteGeometry}" Fill="{StaticResource MetallicSilverBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Image Source="{Binding CurrentTrack.Thumbnail}" Stretch="UniformToFill"
                                        RenderOptions.BitmapScalingMode="HighQuality"/>
                             </Grid>

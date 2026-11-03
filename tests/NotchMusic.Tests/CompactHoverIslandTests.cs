@@ -74,24 +74,21 @@ public class CompactHoverIslandTests
     }
 
     [Fact]
-    public void CenterIcon_WhenIdleWithEyesStyle_ShowsEyesAtConfiguredSize()
+    public void CenterIcon_WhenIdle_ShowsEyesAtConfiguredSize()
     {
         var settings = new FakeSettingsService();
-        settings.CurrentSettings.IdleIconStyle = "Eyes";
         settings.CurrentSettings.IdleIconSize = 30;
         var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), settings);
         vm.CurrentMode = PanelMode.Compact;
 
         Assert.True(vm.ShowIdleEyes);
-        Assert.False(vm.ShowCenterLogo);
         Assert.Equal(30, vm.CenterIconSize);
     }
 
     [Fact]
-    public void CenterIcon_IdleEyes_UsesSlimCapsuleAndHoverRestoresSquare()
+    public void CenterIcon_IdleEyes_UsesSlimCapsuleAndHoverRestoresMargin()
     {
         var settings = new FakeSettingsService();
-        settings.CurrentSettings.IdleIconStyle = "Eyes";
         settings.CurrentSettings.IdleIconSize = 40;
         var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), settings);
         vm.CurrentMode = PanelMode.Compact;
@@ -103,36 +100,20 @@ public class CompactHoverIslandTests
 
         vm.OnMouseEnter();
 
-        Assert.Equal(44, vm.CenterIconWidth);
-        Assert.Equal(44, vm.CenterIconHeight);
+        Assert.False(vm.ShowIdleEyes);
         Assert.Equal(10, vm.CompactViewMargin.Top + vm.CompactViewMargin.Bottom);
     }
 
     [Fact]
-    public void CenterIcon_WhenHovered_ShowsLogoInsteadOfEyes()
+    public void CenterIcon_WhenHovered_HidesEyes()
     {
         var settings = new FakeSettingsService();
-        settings.CurrentSettings.IdleIconStyle = "Eyes";
         var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), settings);
         vm.CurrentMode = PanelMode.Compact;
         vm.OnMouseEnter();
 
         Assert.True(vm.ShowComponentIcons);
         Assert.False(vm.ShowIdleEyes);
-        Assert.True(vm.ShowCenterLogo);
-        Assert.Equal(44, vm.CenterIconSize);
-    }
-
-    [Fact]
-    public void CenterIcon_WithLogoStyle_NeverShowsEyes()
-    {
-        var settings = new FakeSettingsService();
-        settings.CurrentSettings.IdleIconStyle = "Logo";
-        var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), settings);
-        vm.CurrentMode = PanelMode.Compact;
-
-        Assert.False(vm.ShowIdleEyes);
-        Assert.True(vm.ShowCenterLogo);
     }
 
     [Fact]

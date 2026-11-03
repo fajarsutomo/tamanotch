@@ -8,8 +8,6 @@ public class AppSettings
     public double PanelLeft { get; set; } = -1;
     public double PanelTop { get; set; } = -1;
     public double NotchHorizontalOffsetPercent { get; set; } = 0;
-    // "Eyes" = animasi mata saat idle, "Logo" = logo aplikasi. Saat hover selalu logo.
-    public string IdleIconStyle { get; set; } = "Eyes";
     public double IdleIconSize { get; set; } = 34;
     public double LyricsLeft { get; set; } = -1;
     public double LyricsTop { get; set; } = -1;

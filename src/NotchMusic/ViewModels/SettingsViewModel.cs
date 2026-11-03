@@ -160,34 +160,6 @@ public class SettingsViewModel : ViewModelBase
 
     public ICommand ResetNotchPositionCommand { get; }
 
-    public bool IsIdleStyleEyes
-    {
-        get => string.Equals(Settings.IdleIconStyle, "Eyes", StringComparison.OrdinalIgnoreCase);
-        set
-        {
-            if (value) SetIdleIconStyle("Eyes");
-        }
-    }
-
-    public bool IsIdleStyleLogo
-    {
-        get => !IsIdleStyleEyes;
-        set
-        {
-            if (value) SetIdleIconStyle("Logo");
-        }
-    }
-
-    private void SetIdleIconStyle(string style)
-    {
-        if (string.Equals(Settings.IdleIconStyle, style, StringComparison.OrdinalIgnoreCase)) return;
-
-        Settings.IdleIconStyle = style;
-        _settingsService.Save();
-        OnPropertyChanged(nameof(IsIdleStyleEyes));
-        OnPropertyChanged(nameof(IsIdleStyleLogo));
-    }
-
     public double IdleIconSize
     {
         get => Settings.IdleIconSize;

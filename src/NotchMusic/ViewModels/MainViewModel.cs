@@ -253,16 +253,14 @@ public class MainViewModel : ViewModelBase
 
     public bool ShowComponentIcons => IsCompactMode && !_isBezelMinimized && (_isHovering || IsPinned);
 
-    // Ikon tengah notch: saat idle bisa berupa animasi mata; saat hover (komponen terbuka) selalu logo.
-    public bool ShowIdleEyes => !ShowComponentIcons && string.Equals(Settings.IdleIconStyle, "Eyes", StringComparison.OrdinalIgnoreCase);
-    public bool ShowCenterLogo => !ShowIdleEyes;
-    public double CenterIconSize => ShowComponentIcons ? 44 : Math.Clamp(Settings.IdleIconSize, 24, 48);
-    public double CenterLogoImageSize => CenterIconSize * 28.0 / 44.0;
+    // Slot tengah notch: saat idle berisi mata menyala; saat hover (komponen terbuka) slot ini disembunyikan.
+    public bool ShowIdleEyes => !ShowComponentIcons;
+    public double CenterIconSize => Math.Clamp(Settings.IdleIconSize, 24, 48);
 
-    // Mata berbentuk lebar (40:24); kapsul idle dibuat ramping mengikuti bentuknya, bukan kotak persegi seperti logo.
+    // Mata berbentuk lebar (40:24); kapsul idle dibuat ramping mengikuti bentuknya.
     private const double EyesAspect = 24.0 / 40.0;
     public double CenterIconWidth => CenterIconSize;
-    public double CenterIconHeight => ShowIdleEyes ? CenterIconSize * EyesAspect : CenterIconSize;
+    public double CenterIconHeight => CenterIconSize * EyesAspect;
     public System.Windows.Thickness CompactViewMargin => ShowIdleEyes
         ? new System.Windows.Thickness(12, 3, 12, 5)
         : new System.Windows.Thickness(14, 4, 14, 6);
@@ -270,9 +268,7 @@ public class MainViewModel : ViewModelBase
     private void RaiseCenterIconChanged()
     {
         OnPropertyChanged(nameof(ShowIdleEyes));
-        OnPropertyChanged(nameof(ShowCenterLogo));
         OnPropertyChanged(nameof(CenterIconSize));
-        OnPropertyChanged(nameof(CenterLogoImageSize));
         OnPropertyChanged(nameof(CenterIconWidth));
         OnPropertyChanged(nameof(CenterIconHeight));
         OnPropertyChanged(nameof(CompactViewMargin));

@@ -11,6 +11,8 @@ public partial class MainViewModel
     private bool _isClickThrough;
 
     private bool _isHovering;
+    private bool _isHoveringWindow;
+    private DispatcherTimer? _hoverCollapseTimer;
 
 
 
@@ -252,6 +254,14 @@ public partial class MainViewModel
             {
                 Settings.IsPinned = value;
                 _settingsService.Save();
+                if (value)
+                {
+                    _hoverCollapseTimer?.Stop();
+                }
+                else if (!_isHoveringWindow)
+                {
+                    ScheduleHoverCollapse();
+                }
                 OnPropertyChanged(nameof(ShowCompactMusicView));
                 OnPropertyChanged(nameof(ShowCompactTodoOnlyView));
                 OnPropertyChanged(nameof(ShowComponentIcons));
@@ -364,7 +374,9 @@ public partial class MainViewModel
 
     public void OnMouseEnter()
     {
+        _isHoveringWindow = true;
         IsHovering = true;
+        _hoverCollapseTimer?.Stop();
         OnPropertyChanged(nameof(IsNotchActive));
 
         // Check for any cloud changes immediately when approaching the notch
@@ -376,6 +388,44 @@ public partial class MainViewModel
 
     public void OnMouseLeave()
     {
+        _isHoveringWindow = false;
         OnPropertyChanged(nameof(IsNotchActive));
+
+        if (!IsPinned)
+        {
+            ScheduleHoverCollapse();
+        }
+    }
+
+    /// <summary>Jeda setelah kursor meninggalkan notch sebelum island kembali ke tampilan idle.</summary>
+    public TimeSpan HoverCollapseDelay { get; set; } = TimeSpan.FromMilliseconds(1200);
+
+    private void ScheduleHoverCollapse()
+    {
+        _hoverCollapseTimer?.Stop();
+        if (IsPinned || IsLyricsMode)
+        {
+            return;
+        }
+
+        _hoverCollapseTimer = new DispatcherTimer(DispatcherPriority.Normal, Dispatcher.CurrentDispatcher) { Interval = HoverCollapseDelay };
+        _hoverCollapseTimer.Tick += (s, e) =>
+        {
+            _hoverCollapseTimer?.Stop();
+            CollapseHoverIfIdle();
+        };
+        _hoverCollapseTimer.Start();
+    }
+
+    /// <summary>Kembali ke idle bila kursor tidak di atas notch dan tidak ada yang menahan island tetap terbuka.</summary>
+    public void CollapseHoverIfIdle()
+    {
+        if (_isHoveringWindow || IsPinned || IsLyricsMode || IsComponentsMenuOpen
+            || HasActivePrayerNotification || HasActiveBmkgNotification)
+        {
+            return;
+        }
+
+        IsHovering = false;
     }
 }

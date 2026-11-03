@@ -252,6 +252,21 @@ public class MainViewModel : ViewModelBase
         : "▲ Minimize Notch ke Bezel Atas";
 
     public bool ShowComponentIcons => IsCompactMode && !_isBezelMinimized && (_isHovering || IsPinned);
+
+    // Ikon tengah notch: saat idle bisa berupa animasi mata; saat hover (komponen terbuka) selalu logo.
+    public bool ShowIdleEyes => !ShowComponentIcons && string.Equals(Settings.IdleIconStyle, "Eyes", StringComparison.OrdinalIgnoreCase);
+    public bool ShowCenterLogo => !ShowIdleEyes;
+    public double CenterIconSize => ShowComponentIcons ? 44 : Math.Clamp(Settings.IdleIconSize, 24, 48);
+    public double CenterLogoImageSize => CenterIconSize * 28.0 / 44.0;
+
+    private void RaiseCenterIconChanged()
+    {
+        OnPropertyChanged(nameof(ShowIdleEyes));
+        OnPropertyChanged(nameof(ShowCenterLogo));
+        OnPropertyChanged(nameof(CenterIconSize));
+        OnPropertyChanged(nameof(CenterLogoImageSize));
+    }
+
     public bool ShowMusicInNotch => ShowComponentIcons;
     public bool ShowMusicPillInNotch => ShowMusicInNotch && !IsMusicWindowOpen;
     public bool ShowMusicIconInNotch => ShowMusicInNotch && IsMusicWindowOpen;
@@ -1863,7 +1878,6 @@ public class MainViewModel : ViewModelBase
     public ICommand TogglePinCommand { get; }
     public ICommand ToggleBezelMinimizeCommand { get; }
     public ICommand OpenSettingsCommand { get; }
-    public ICommand OpenAboutCommand { get; }
     public ICommand OpenYouTubeMusicCommand { get; }
     public ICommand OpenSpotifyCommand { get; }
     public ICommand OpenTodoCommand { get; }
@@ -1990,7 +2004,6 @@ public ICommand TogglePrayerPanelCommand { get; }
     public ICommand ExitApplicationCommand { get; }
 
     public event Action? RequestExit;
-    public event Action? RequestOpenAbout;
 
     public MainViewModel(
         IMediaSessionService mediaService,
@@ -2021,6 +2034,10 @@ public ICommand TogglePrayerPanelCommand { get; }
         _bmkgService = bmkgService ?? new BmkgService(settingsService);
         _locationService = locationService ?? new LocationService(settingsService, _prayerService, _prayerReminderService);
         _locationService.LocationChanged += OnLocationChanged;
+        PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(ShowComponentIcons)) RaiseCenterIconChanged();
+        };
 
         _bmkgService.DataUpdated += (s, e) => OnBmkgDataUpdated();
         _bmkgService.NotificationTriggered += (s, evt) => OnBmkgNotificationTriggered(evt);
@@ -2231,7 +2248,6 @@ public ICommand TogglePrayerPanelCommand { get; }
         WakeFromIdleCommand = new RelayCommand(WakeFromIdle);
         ToggleMiniModeCommand = new RelayCommand(ToggleMiniMode);
         OpenSettingsCommand = new RelayCommand(() => RequestOpenSettings?.Invoke());
-        OpenAboutCommand = new RelayCommand(() => RequestOpenAbout?.Invoke());
         OpenYouTubeMusicCommand = new RelayCommand(() => RequestOpenYouTubeMusic?.Invoke());
         OpenSpotifyCommand = new RelayCommand(() => RequestOpenSpotify?.Invoke());
         ToggleVocalRemoverCommand = new RelayCommand(() => IsVocalRemoverEnabled = !IsVocalRemoverEnabled);
@@ -2766,6 +2782,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
 
     public void RefreshComponentLayout()
     {
+        RaiseCenterIconChanged();
         OnPropertyChanged(nameof(ComponentDisplayMode));
         OnPropertyChanged(nameof(IsTodoDetached));
         OnPropertyChanged(nameof(IsPrayerDetached));

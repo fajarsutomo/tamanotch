@@ -262,6 +262,32 @@
                         <Button Content="Kembalikan ke Tengah" Command="{Binding ResetNotchPositionCommand}"
                                 Background="#25252C" Foreground="#FFFFFF" BorderThickness="0" Padding="10,5"
                                 HorizontalAlignment="Left" Cursor="Hand"/>
+
+                        <TextBlock Text="Ikon notch saat idle:" Margin="0,14,0,4"/>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton GroupName="IdleIconStyle" Content="Mata menyala (animasi)" IsChecked="{Binding IsIdleStyleEyes}" Margin="0,0,16,0"/>
+                            <RadioButton GroupName="IdleIconStyle" Content="Logo" IsChecked="{Binding IsIdleStyleLogo}"/>
+                        </StackPanel>
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Ukuran ikon idle:" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding IdleIconSizeText}" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        </Grid>
+                        <Slider Minimum="24" Maximum="48" Value="{Binding IdleIconSize}"
+                                TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="4" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Tentang -->
+                <Border Background="#202026" CornerRadius="8" Padding="14" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Tentang TAMANOTCH" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="0,0,0,8"/>
+                        <TextBlock Text="TAMANOTCH menghadirkan pengalaman Dynamic Island di bagian atas desktop Windows untuk menunjang hiburan dan produktivitas: pemutar musik &amp; lirik, radio, Live TV, waktu sholat, cuaca &amp; gempa BMKG, to-do list, dan browser mengambang."
+                                   TextWrapping="Wrap" FontSize="11.5" Foreground="#CCCCCC"/>
+                        <TextBlock Text="{Binding CurrentVersion, StringFormat='Versi: v{0}'}" FontSize="11.5" Foreground="#999999" Margin="0,8,0,0"/>
                     </StackPanel>
                 </Border>
 

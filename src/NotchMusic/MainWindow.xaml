@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helpers="clr-namespace:NotchMusic.Helpers"
+        xmlns:views="clr-namespace:NotchMusic.Views"
         Title="TAMANOTCH"
         FontFamily="Segoe UI Variable Display, Segoe UI"
         TextOptions.TextFormattingMode="Ideal"
@@ -716,16 +717,31 @@
 
                         <!-- TENGAH: LOGO TAMANOTCH (Selalu Tampil; Saat Idle Hanya Ini yang Terlihat) -->
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Border Width="44" Height="44" Style="{StaticResource NotchIconBadgeStyle}" Margin="2,0,2,0" Cursor="Hand"
-                                ToolTip="TAMANOTCH (Klik untuk melihat info tentang TAMANOTCH)">
+                            <Border Width="{Binding CenterIconSize}" Height="{Binding CenterIconSize}" Margin="2,0,2,0" Cursor="Hand"
+                                ToolTip="TAMANOTCH (Klik untuk membuka Pengaturan)">
+                            <Border.Style>
+                                <!-- Saat idle dengan mata: tanpa lencana, mata menyala langsung di atas hitam notch -->
+                                <Style TargetType="Border" BasedOn="{StaticResource NotchIconBadgeStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ShowIdleEyes}" Value="True">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
                             <Border.InputBindings>
-                                <MouseBinding MouseAction="LeftClick" Command="{Binding OpenAboutCommand}"/>
+                                <MouseBinding MouseAction="LeftClick" Command="{Binding OpenSettingsCommand}"/>
                             </Border.InputBindings>
                             <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Image Source="pack://application:,,,/NotchMusic;component/Assets/app.png" 
-                                       Width="28" Height="28" Stretch="Uniform"
+                                <Image Source="pack://application:,,,/NotchMusic;component/Assets/app.png"
+                                       Width="{Binding CenterLogoImageSize}" Height="{Binding CenterLogoImageSize}" Stretch="Uniform"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Visibility="{Binding ShowCenterLogo, Converter={StaticResource BoolToVis}}"
                                        RenderOptions.BitmapScalingMode="HighQuality"/>
+                                <views:NotchEyes Width="{Binding CenterIconSize}" Height="{Binding CenterIconSize}"
+                                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                 Visibility="{Binding ShowIdleEyes, Converter={StaticResource BoolToVis}}"/>
                             </Grid>
                         </Border>
                         </StackPanel>

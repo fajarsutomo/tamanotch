@@ -26,7 +26,6 @@ public partial class MainWindow : Window
     private TodoWindow? _todoWindow;
     private PrayerWindow? _prayerWindow;
     private BmkgWindow? _bmkgWindow;
-    private AboutWindow? _aboutWindow;
     private HotkeyManager? _hotkeyManager;
     private bool _isRealExit;
 
@@ -46,7 +45,6 @@ public partial class MainWindow : Window
         _viewModel.RequestExpand += () => _viewModel.CurrentMode = PanelMode.Expanded;
         _viewModel.RequestCollapse += () => _viewModel.CurrentMode = PanelMode.Compact;
         _viewModel.RequestOpenSettings += OpenSettings;
-        _viewModel.RequestOpenAbout += OpenAbout;
         _viewModel.RequestOpenYouTubeMusic += OpenYouTubeMusic;
         _mediaService = mediaService;
         _viewModel.RequestOpenSpotify += OpenSpotify;
@@ -460,38 +458,6 @@ public partial class MainWindow : Window
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
-    }
-
-    public void OpenAbout()
-    {
-        if (_aboutWindow != null && _aboutWindow.IsVisible)
-        {
-            _aboutWindow.Hide();
-            return;
-        }
-
-        if (_aboutWindow == null)
-        {
-            _aboutWindow = new AboutWindow(_viewModel);
-            _aboutWindow.Closed += (s, e) => _aboutWindow = null;
-        }
-
-        var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)Left, (int)Top));
-        var workingArea = screen.WorkingArea;
-        var source = PresentationSource.FromVisual(this);
-        double dpiX = source?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
-        double dpiY = source?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
-
-        double areaLeft = workingArea.Left / dpiX;
-        double areaTop = workingArea.Top / dpiY;
-        double areaWidth = workingArea.Width / dpiX;
-
-        double notchBottom = Math.Max(areaTop, Top + Math.Max(ActualHeight, 84));
-        _aboutWindow.WindowStartupLocation = WindowStartupLocation.Manual;
-        _aboutWindow.Left = areaLeft + (areaWidth - 400) / 2.0;
-        _aboutWindow.Top = notchBottom + 6;
-        _aboutWindow.Show();
-        _aboutWindow.Activate();
     }
 
     private void ApplyNotchHorizontalOffset()
@@ -993,7 +959,6 @@ public partial class MainWindow : Window
         _bmkgWindow?.ForceClose();
         _todoWindow?.ForceClose();
         _prayerWindow?.Close();
-        _aboutWindow?.Close();
         _hotkeyManager?.Dispose();
         _trayService.Dispose();
         base.OnClosing(e);

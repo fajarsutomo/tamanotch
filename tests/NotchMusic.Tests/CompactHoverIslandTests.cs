@@ -74,6 +74,47 @@ public class CompactHoverIslandTests
     }
 
     [Fact]
+    public void CenterIcon_WhenIdleWithEyesStyle_ShowsEyesAtConfiguredSize()
+    {
+        var settings = new FakeSettingsService();
+        settings.CurrentSettings.IdleIconStyle = "Eyes";
+        settings.CurrentSettings.IdleIconSize = 30;
+        var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), settings);
+        vm.CurrentMode = PanelMode.Compact;
+
+        Assert.True(vm.ShowIdleEyes);
+        Assert.False(vm.ShowCenterLogo);
+        Assert.Equal(30, vm.CenterIconSize);
+    }
+
+    [Fact]
+    public void CenterIcon_WhenHovered_ShowsLogoInsteadOfEyes()
+    {
+        var settings = new FakeSettingsService();
+        settings.CurrentSettings.IdleIconStyle = "Eyes";
+        var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), settings);
+        vm.CurrentMode = PanelMode.Compact;
+        vm.OnMouseEnter();
+
+        Assert.True(vm.ShowComponentIcons);
+        Assert.False(vm.ShowIdleEyes);
+        Assert.True(vm.ShowCenterLogo);
+        Assert.Equal(44, vm.CenterIconSize);
+    }
+
+    [Fact]
+    public void CenterIcon_WithLogoStyle_NeverShowsEyes()
+    {
+        var settings = new FakeSettingsService();
+        settings.CurrentSettings.IdleIconStyle = "Logo";
+        var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), settings);
+        vm.CurrentMode = PanelMode.Compact;
+
+        Assert.False(vm.ShowIdleEyes);
+        Assert.True(vm.ShowCenterLogo);
+    }
+
+    [Fact]
     public void CompactHoverIsland_WhenHovered_Shows5ComponentIcons()
     {
         var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), new FakeSettingsService());
@@ -234,12 +275,11 @@ public class CompactHoverIslandTests
         Assert.False(vm.IsTodoDetachedWindowVisible);
         Assert.Equal(PanelMode.Compact, vm.CurrentMode);
 
-        // Verify clicking TAMANOTCH logo button invokes RequestOpenAbout
-        bool openAboutFired = false;
-        vm.RequestOpenAbout += () => openAboutFired = true;
-        vm.OpenAboutCommand.Execute(null);
-        Assert.True(openAboutFired);
-
+        // Verify clicking TAMANOTCH logo button opens Settings
+        bool openSettingsFired = false;
+        vm.RequestOpenSettings += () => openSettingsFired = true;
+        vm.OpenSettingsCommand.Execute(null);
+        Assert.True(openSettingsFired);
         // Verify after Isya (e.g. 22:40), Subuh countdown is for tomorrow's Subuh ("... lagi", not "... lalu")
         var lateNight = new DateTime(2026, 10, 24, 22, 40, 0);
         var schedule = NotchMusic.Services.Prayer.PrayerTimesCalculator.CalculateSchedule(lateNight, -6.2088, 106.8456, 7.0, "Jakarta");

@@ -72,6 +72,8 @@ public class BmkgService : IBmkgService
     private List<BmkgEarthquakeItem> _recentEarthquakes = new();
     private List<BmkgEarthquakeItem> _feltEarthquakes = new();
     private bool _isLoadingWeather;
+    private bool _weatherRefreshPending;
+    private string _loadingAdm4 = string.Empty;
     private bool _isLoadingEarthquake;
     private string _statusMessage = "Siap memuat data BMKG...";
     private DateTime _lastWeatherFetchTime = DateTime.MinValue;
@@ -635,9 +637,18 @@ public class BmkgService : IBmkgService
 
     public async Task<BmkgWeatherData?> RefreshWeatherAsync(CancellationToken cancellationToken = default)
     {
-        if (_isLoadingWeather) return _currentWeatherData;
+        if (_isLoadingWeather)
+        {
+            // Lokasi berubah saat permintaan lama masih berjalan: ulangi setelah selesai agar tidak tertinggal di lokasi lama.
+            if (_loadingAdm4 != GetActiveAdm4Code())
+            {
+                _weatherRefreshPending = true;
+            }
+            return _currentWeatherData;
+        }
 
         _isLoadingWeather = true;
+        _loadingAdm4 = GetActiveAdm4Code();
         _statusMessage = "Memuat prakiraan cuaca BMKG...";
         RaiseDataUpdated();
 
@@ -687,6 +698,12 @@ public class BmkgService : IBmkgService
         {
             _isLoadingWeather = false;
             RaiseDataUpdated();
+        }
+
+        if (_weatherRefreshPending && !cancellationToken.IsCancellationRequested)
+        {
+            _weatherRefreshPending = false;
+            return await RefreshWeatherAsync(cancellationToken);
         }
 
         return _currentWeatherData;

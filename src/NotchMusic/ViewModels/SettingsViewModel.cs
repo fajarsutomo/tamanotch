@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using NotchMusic.Helpers;
 using NotchMusic.Models;
+using NotchMusic.Services.Location;
 using NotchMusic.Services.Prayer;
 using NotchMusic.Services.Settings;
 using NotchMusic.Services.Sync;
@@ -17,6 +18,7 @@ public class SettingsViewModel : ViewModelBase
     private readonly IGoogleDriveSyncService _syncService;
     private readonly IUpdateService _updateService;
     private readonly IPrayerService _prayerService;
+    private readonly ILocationService _locationService;
     private readonly Action<string> _onHotkeyUpdated;
 
     public AppSettings Settings => _settingsService.CurrentSettings;
@@ -368,11 +370,7 @@ public class SettingsViewModel : ViewModelBase
         {
             if (value != null && Settings.PrayerCity != value.Name)
             {
-                Settings.PrayerCity = value.Name;
-                Settings.PrayerLatitude = value.Latitude;
-                Settings.PrayerLongitude = value.Longitude;
-                Settings.PrayerTimezone = value.Timezone;
-                _settingsService.Save();
+                _locationService.ApplyCity(value, LocationOrigin.Prayer);
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(PrayerCity));
                 OnPropertyChanged(nameof(PrayerLatitude));
@@ -980,13 +978,15 @@ public class SettingsViewModel : ViewModelBase
         Action<string> onHotkeyUpdated,
         IGoogleDriveSyncService? syncService = null,
         IUpdateService? updateService = null,
-        IPrayerService? prayerService = null)
+        IPrayerService? prayerService = null,
+        ILocationService? locationService = null)
     {
         _settingsService = settingsService;
         _onHotkeyUpdated = onHotkeyUpdated;
         _syncService = syncService ?? new GoogleDriveSyncService(settingsService);
         _updateService = updateService ?? new UpdateService(settingsService);
         _prayerService = prayerService ?? new PrayerService(settingsService);
+        _locationService = locationService ?? new LocationService(settingsService, _prayerService);
 
         DetectLocationCommand = new RelayCommand(async () =>
         {
@@ -999,11 +999,16 @@ public class SettingsViewModel : ViewModelBase
                 var detected = await _prayerService.DetectLocationAsync();
                 if (detected != null)
                 {
-                    Settings.PrayerCity = detected.Name;
-                    Settings.PrayerLatitude = detected.Latitude;
-                    Settings.PrayerLongitude = detected.Longitude;
-                    Settings.PrayerTimezone = detected.Timezone;
-                    _settingsService.Save();
+                    var nearest = CityLocation.FindBestMatchOrNearest(detected.Name, detected.Latitude, detected.Longitude);
+                    _locationService.ApplyCity(new CityLocation
+                    {
+                        Name = detected.Name,
+                        Province = detected.Province,
+                        Latitude = detected.Latitude,
+                        Longitude = detected.Longitude,
+                        Timezone = detected.Timezone,
+                        BmkgAdm4Code = nearest.BmkgAdm4Code
+                    }, LocationOrigin.Prayer);
 
                     OnPropertyChanged(nameof(PrayerCity));
                     OnPropertyChanged(nameof(SelectedCity));

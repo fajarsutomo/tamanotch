@@ -495,7 +495,7 @@ public partial class MainWindow : Window
 
     private void OpenSettings()
     {
-        var settingsVm = new SettingsViewModel(_settingsService, _ => SetupHotkeys(), _viewModel.GoogleDriveSyncService, _viewModel.UpdateService, _viewModel.PrayerService);
+        var settingsVm = new SettingsViewModel(_settingsService, _ => SetupHotkeys(), _viewModel.GoogleDriveSyncService, _viewModel.UpdateService, _viewModel.PrayerService, _viewModel.LocationService);
         settingsVm.PropertyChanged += (s, ev) =>
         {
             _viewModel.RefreshComponentLayout();

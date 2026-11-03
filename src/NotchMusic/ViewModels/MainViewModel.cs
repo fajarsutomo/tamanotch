@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using NotchMusic.Helpers;
 using NotchMusic.Models;
 using NotchMusic.Services.Bmkg;
+using NotchMusic.Services.Location;
 using NotchMusic.Services.Lyrics;
 using NotchMusic.Services.LiveTv;
 using NotchMusic.Services.Media;
@@ -34,6 +35,7 @@ public class MainViewModel : ViewModelBase
     private readonly IRadioService _radioService;
     private readonly ILiveTvService _liveTvService;
     private readonly IBmkgService _bmkgService;
+    private readonly ILocationService _locationService;
     private readonly DispatcherTimer _interpolationTimer;
 
     private PrayerNotificationEvent? _activePrayerNotification;
@@ -1030,28 +1032,9 @@ public class MainViewModel : ViewModelBase
         {
             if (value != null)
             {
-                Settings.BmkgSelectedCity = value.Name;
-                Settings.BmkgCustomAdm4Code = value.BmkgAdm4Code;
-                if (Settings.BmkgFollowPrayerCity)
-                {
-                    Settings.PrayerCity = value.Name;
-                    Settings.PrayerLatitude = value.Latitude;
-                    Settings.PrayerLongitude = value.Longitude;
-                    Settings.PrayerTimezone = value.Timezone;
-                    _prayerReminderService.RefreshSchedule();
-                    OnPropertyChanged(nameof(CurrentPrayerSchedule));
-                    OnPropertyChanged(nameof(NextPrayerName));
-                    OnPropertyChanged(nameof(NextPrayerTimeFormatted));
-                    OnPropertyChanged(nameof(NextPrayerCountdownBadge));
-                }
-                _settingsService.Save();
-                OnPropertyChanged(nameof(SelectedBmkgCity));
-                OnPropertyChanged(nameof(BmkgCustomAdm4Code));
-                OnPropertyChanged(nameof(BmkgActiveAdm4Text));
-                OnPropertyChanged(nameof(BmkgWeatherCityText));
+                _locationService.ApplyCity(value, LocationOrigin.Bmkg);
                 BmkgLocationStatus = $"✓ Kota dipilih: {value.DisplayName} (Anda dapat memilih Kecamatan/Kelurahan lebih spesifik di bawah)";
                 _ = SyncRegionSelectorsFromCurrentAdm4Async();
-                _ = _bmkgService.RefreshWeatherAsync();
             }
         }
     }
@@ -1719,6 +1702,7 @@ public class MainViewModel : ViewModelBase
     // Prayer Times & Reminders Properties
     public IPrayerService PrayerService => _prayerService;
     public IPrayerReminderService PrayerReminderService => _prayerReminderService;
+    public ILocationService LocationService => _locationService;
     public PrayerSchedule CurrentPrayerSchedule => _prayerReminderService.CurrentSchedule;
 
     public bool EnablePrayerTimes => Settings.EnablePrayerTimes;
@@ -2019,7 +2003,8 @@ public ICommand TogglePrayerPanelCommand { get; }
         IPrayerReminderService? prayerReminderService = null,
         IRadioService? radioService = null,
         ILiveTvService? liveTvService = null,
-        IBmkgService? bmkgService = null)
+        IBmkgService? bmkgService = null,
+        ILocationService? locationService = null)
     {
         _mediaService = mediaService;
         _lyricsService = lyricsService;
@@ -2034,6 +2019,8 @@ public ICommand TogglePrayerPanelCommand { get; }
         _radioService = radioService ?? new RadioService(settingsService);
         _liveTvService = liveTvService ?? new LiveTvService(settingsService);
         _bmkgService = bmkgService ?? new BmkgService(settingsService);
+        _locationService = locationService ?? new LocationService(settingsService, _prayerService, _prayerReminderService);
+        _locationService.LocationChanged += OnLocationChanged;
 
         _bmkgService.DataUpdated += (s, e) => OnBmkgDataUpdated();
         _bmkgService.NotificationTriggered += (s, evt) => OnBmkgNotificationTriggered(evt);
@@ -3226,12 +3213,36 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
         });
     }
 
+    private void OnLocationChanged()
+    {
+        OnPropertyChanged(nameof(CurrentPrayerSchedule));
+        OnPropertyChanged(nameof(NextPrayerName));
+        OnPropertyChanged(nameof(NextPrayerTimeFormatted));
+        OnPropertyChanged(nameof(NextPrayerCountdownBadge));
+        OnPropertyChanged(nameof(PrayerScheduleTooltip));
+        OnPropertyChanged(nameof(SelectedBmkgCity));
+        OnPropertyChanged(nameof(BmkgCustomAdm4Code));
+        OnPropertyChanged(nameof(BmkgActiveAdm4Text));
+        OnPropertyChanged(nameof(BmkgWeatherCityText));
+        _ = _bmkgService.RefreshWeatherAsync();
+    }
+
+    // Koordinat cuaca hanya dipakai menyelaraskan sholat bila datanya untuk lokasi aktif saat ini dan
+    // lokasi aktif bukan pilihan tingkat kota (yang koordinatnya sudah tepat dari pemilih kota).
+    private bool ShouldAdoptWeatherCoordinates(BmkgWeatherData w)
+    {
+        if (!Settings.BmkgFollowPrayerCity) return false;
+        if (Math.Abs(w.Latitude) <= 0.001 || Math.Abs(w.Longitude) <= 0.001) return false;
+        if (!string.Equals(w.Adm4Code, _bmkgService.GetActiveAdm4Code(), StringComparison.Ordinal)) return false;
+        return !CityLocation.GetIndonesianCities().Any(c => c.BmkgAdm4Code == w.Adm4Code);
+    }
+
     private void OnBmkgDataUpdated()
     {
         void Notify()
         {
             var w = _bmkgService.CurrentWeatherData;
-            if (w != null && Settings.BmkgFollowPrayerCity && Math.Abs(w.Latitude) > 0.001 && Math.Abs(w.Longitude) > 0.001)
+            if (w != null && ShouldAdoptWeatherCoordinates(w))
             {
                 bool coordChanged = Math.Abs(Settings.PrayerLatitude - w.Latitude) > 0.002 ||
                                     Math.Abs(Settings.PrayerLongitude - w.Longitude) > 0.002;
@@ -3323,30 +3334,18 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
                 }
 
                 var nearest = CityLocation.FindBestMatchOrNearest(loc.Name, loc.Latitude, loc.Longitude);
-                Settings.BmkgSelectedCity = nearest.Name;
-                Settings.BmkgCustomAdm4Code = nearest.BmkgAdm4Code;
-                if (Settings.BmkgFollowPrayerCity)
+                _locationService.ApplyCity(new CityLocation
                 {
-                    _prayerService.UpdateLocation(nearest.Name, loc.Latitude, loc.Longitude, nearest.Timezone);
-                    _prayerReminderService.RefreshSchedule();
-                    OnPropertyChanged(nameof(CurrentPrayerSchedule));
-                    OnPropertyChanged(nameof(NextPrayerName));
-                    OnPropertyChanged(nameof(NextPrayerTimeFormatted));
-                    OnPropertyChanged(nameof(NextPrayerCountdownBadge));
-                }
-                else
-                {
-                    _settingsService.Save();
-                }
-
-                OnPropertyChanged(nameof(SelectedBmkgCity));
-                OnPropertyChanged(nameof(BmkgCustomAdm4Code));
-                OnPropertyChanged(nameof(BmkgActiveAdm4Text));
-                OnPropertyChanged(nameof(BmkgWeatherCityText));
+                    Name = nearest.Name,
+                    Province = nearest.Province,
+                    Latitude = loc.Latitude,
+                    Longitude = loc.Longitude,
+                    Timezone = nearest.Timezone,
+                    BmkgAdm4Code = nearest.BmkgAdm4Code
+                }, LocationOrigin.Bmkg);
 
                 BmkgLocationStatus = $"✓ Lokasi: {nearest.DisplayName}";
                 _ = SyncRegionSelectorsFromCurrentAdm4Async();
-                await _bmkgService.RefreshWeatherAsync();
             }
             else
             {
@@ -3410,34 +3409,20 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
         }
     }
 
-    private async Task ApplyBmkgSearchResultAsync(BmkgLocationSearchResult res)
+    private Task ApplyBmkgSearchResultAsync(BmkgLocationSearchResult res)
     {
-        Settings.BmkgCustomAdm4Code = res.Adm4Code;
-        Settings.BmkgSelectedCity = !string.IsNullOrWhiteSpace(res.VillageName)
+        var name = !string.IsNullOrWhiteSpace(res.VillageName)
             ? $"{res.VillageName}, {res.RegencyName}"
             : res.RegencyName;
+        _locationService.ApplyPrecise(name, res.Adm4Code, res.Latitude, res.Longitude, res.Timezone);
 
-        if (Settings.BmkgFollowPrayerCity && Math.Abs(res.Latitude) > 0.001 && Math.Abs(res.Longitude) > 0.001)
-        {
-            _prayerService.UpdateLocation(Settings.BmkgSelectedCity, res.Latitude, res.Longitude, res.Timezone);
-            _prayerReminderService.RefreshSchedule();
-            OnPropertyChanged(nameof(CurrentPrayerSchedule));
-            OnPropertyChanged(nameof(NextPrayerName));
-            OnPropertyChanged(nameof(NextPrayerTimeFormatted));
-            OnPropertyChanged(nameof(NextPrayerCountdownBadge));
-        }
-
-        _settingsService.Save();
         BmkgLocationSearchResults.Clear();
         OnPropertyChanged(nameof(HasBmkgLocationSearchResults));
-        OnPropertyChanged(nameof(BmkgCustomAdm4Code));
-        OnPropertyChanged(nameof(BmkgActiveAdm4Text));
-        OnPropertyChanged(nameof(BmkgWeatherCityText));
         OnPropertyChanged(nameof(BmkgWeatherFullCityText));
 
         BmkgLocationStatus = $"✓ Lokasi presisi: {res.FullLabel} ({res.Adm4Code})";
         _ = SyncRegionSelectorsFromCurrentAdm4Async();
-        await _bmkgService.RefreshWeatherAsync();
+        return Task.CompletedTask;
     }
 
     public async Task SyncRegionSelectorsFromCurrentAdm4Async()

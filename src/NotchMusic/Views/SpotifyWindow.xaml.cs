@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Web.WebView2.Core;
+using NotchMusic.Helpers;
 using NotchMusic.Services.Settings;
 using NotchMusic.ViewModels;
 using Color = System.Windows.Media.Color;
@@ -261,6 +262,20 @@ public partial class SpotifyWindow : Window
             item.Click += (s, ev) => SetWindowPreset(p.W, p.H);
             menu.Items.Add(item);
         }
+
+        menu.Items.Add(PhoneSizePresets.CreateMenu(
+            System.Windows.Media.Brushes.White,
+            SetWindowPreset,
+            () => webView.ActualWidth > 0 && webView.ActualHeight > 0
+                ? (Math.Max(0, ActualWidth - webView.ActualWidth), Math.Max(0, ActualHeight - webView.ActualHeight))
+                : (16, 72),
+            () => WindowHelper.GetWorkAreaSize(this),
+            MinWidth, MinHeight,
+            () =>
+            {
+                var area = WindowHelper.GetWorkAreaSize(this);
+                SetWindowPreset(Math.Min(ActualHeight, area.Width - 20), Math.Min(ActualWidth, area.Height - 20));
+            }));
 
         menu.Items.Add(new Separator { Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1F3325")) });
 

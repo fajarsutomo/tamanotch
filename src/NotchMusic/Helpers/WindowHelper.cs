@@ -1,3 +1,4 @@
+using Size = System.Windows.Size;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -91,6 +92,21 @@ public static class WindowHelper
         }
 
         window.Top = screenTop;
+    }
+
+    /// <summary>Ukuran area kerja (di luar taskbar) layar tempat jendela berada, dalam satuan WPF.</summary>
+    public static Size GetWorkAreaSize(Window window)
+    {
+        var hwnd = new WindowInteropHelper(window).Handle;
+        var screen = hwnd != IntPtr.Zero
+            ? System.Windows.Forms.Screen.FromHandle(hwnd)
+            : System.Windows.Forms.Screen.PrimaryScreen;
+        if (screen == null) return new Size(1280, 720);
+
+        var source = PresentationSource.FromVisual(window);
+        double dpiX = source?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
+        double dpiY = source?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
+        return new Size(screen.WorkingArea.Width / dpiX, screen.WorkingArea.Height / dpiY);
     }
 
     public static void CenterAtTopBezel(Window window)

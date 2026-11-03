@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using NotchMusic.Views;
@@ -57,6 +58,31 @@ public class XamlSmokeTests
             // Isi lebih terang daripada warna cahaya
             Assert.True(fill.Color.G > 0x3D);
             Assert.Equal(0xFF, fill.Color.R);
+        });
+    }
+
+    [Fact]
+    public void PhoneSizeMenu_ClickingAPhone_AppliesWindowSizeWithChrome()
+    {
+        RunSta(() =>
+        {
+            double appliedW = 0, appliedH = 0;
+            var menu = NotchMusic.Helpers.PhoneSizePresets.CreateMenu(
+                System.Windows.Media.Brushes.White,
+                (w, h) => { appliedW = w; appliedH = h; },
+                () => (16, 72),
+                () => new Size(1920, 1040),
+                340, 420,
+                () => { });
+
+            // 5 ukuran HP + pemisah + "Putar"
+            Assert.Equal(NotchMusic.Helpers.PhoneSizePresets.All.Count + 2, menu.Items.Count);
+
+            var iphone = menu.Items.OfType<System.Windows.Controls.MenuItem>().Single(i => i.Header.ToString()!.Contains("iPhone 14"));
+            iphone.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.MenuItem.ClickEvent));
+
+            Assert.Equal(390 + 16, appliedW);
+            Assert.Equal(844 + 72, appliedH);
         });
     }
 }

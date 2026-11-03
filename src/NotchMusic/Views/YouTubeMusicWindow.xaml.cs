@@ -276,6 +276,20 @@ public partial class YouTubeMusicWindow : Window
             menu.Items.Add(item);
         }
 
+        menu.Items.Add(PhoneSizePresets.CreateMenu(
+            System.Windows.Media.Brushes.White,
+            SetWindowPreset,
+            () => webView.ActualWidth > 0 && webView.ActualHeight > 0
+                ? (Math.Max(0, ActualWidth - webView.ActualWidth), Math.Max(0, ActualHeight - webView.ActualHeight))
+                : (16, 72),
+            () => WindowHelper.GetWorkAreaSize(this),
+            MinWidth, MinHeight,
+            () =>
+            {
+                var area = WindowHelper.GetWorkAreaSize(this);
+                SetWindowPreset(Math.Min(ActualHeight, area.Width - 20), Math.Min(ActualWidth, area.Height - 20));
+            }));
+
         menu.Items.Add(new Separator { Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D2D3E")) });
 
         var zoomInItem = new MenuItem

@@ -6,8 +6,6 @@ public partial class MainViewModel
 {
     public event Action? RequestOpenFloatingBrowser;
 
-    public bool ShowFullBrowserInCompact => !IsIdleMiniMode || IsBrowserWindowOpen;
-
     public bool IsBrowserWindowOpen
     {
         get => Settings.IsBrowserWindowOpen;
@@ -21,7 +19,6 @@ public partial class MainViewModel
                 OnPropertyChanged(nameof(IsBrowserClosed));
                 OnPropertyChanged(nameof(BrowserStatusSummary));
                 OnPropertyChanged(nameof(BrowserButtonActionText));
-                OnPropertyChanged(nameof(ShowFullBrowserInCompact));
                 OnPropertyChanged(nameof(IsNotchActive));
                 RequestComponentLayoutChanged?.Invoke();
             }

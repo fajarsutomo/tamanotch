@@ -45,9 +45,6 @@ public partial class MainViewModel : ViewModelBase
         _lyricsService = lyricsService;
         _settingsService = settingsService;
         _isPinned = _settingsService.CurrentSettings.IsPinned;
-        // Tombol minimize ke bezel dihapus; abaikan status lama agar notch tidak tersembunyi tanpa jalan kembali.
-        _isBezelMinimized = false;
-        _settingsService.CurrentSettings.IsBezelMinimized = false;
         _todoService = todoService ?? new TodoService(settingsService);
         _googleDriveSyncService = googleDriveSyncService ?? new GoogleDriveSyncService(settingsService);
         _updateService = updateService ?? new UpdateService(settingsService);
@@ -122,7 +119,6 @@ public partial class MainViewModel : ViewModelBase
         {
             OnPropertyChanged(nameof(CurrentPrayerSchedule));
             OnPropertyChanged(nameof(ShowCompactPrayerPill));
-        OnPropertyChanged(nameof(ShowIdlePrayerBesideLogo));
             OnPropertyChanged(nameof(NextPrayerName));
             OnPropertyChanged(nameof(NextPrayerTimeFormatted));
             OnPropertyChanged(nameof(NextPrayerCountdownBadge));
@@ -285,9 +281,6 @@ public partial class MainViewModel : ViewModelBase
         });
 
         TogglePinCommand = new RelayCommand(() => IsPinned = !IsPinned);
-        ToggleBezelMinimizeCommand = new RelayCommand(() => IsBezelMinimized = !IsBezelMinimized);
-        WakeFromIdleCommand = new RelayCommand(WakeFromIdle);
-        ToggleMiniModeCommand = new RelayCommand(ToggleMiniMode);
         OpenSettingsCommand = new RelayCommand(() => RequestOpenSettings?.Invoke());
         OpenYouTubeMusicCommand = new RelayCommand(() => RequestOpenYouTubeMusic?.Invoke());
         OpenSpotifyCommand = new RelayCommand(() => RequestOpenSpotify?.Invoke());
@@ -796,11 +789,6 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
         if (Settings.EnableBmkg)
         {
             _bmkgService.Start();
-        }
-
-        if (!IsPinned && !_isHovering)
-        {
-            ResetIdleTimer();
         }
 
         if (_googleDriveSyncService.IsConnected && Settings.GoogleDriveAutoSync)

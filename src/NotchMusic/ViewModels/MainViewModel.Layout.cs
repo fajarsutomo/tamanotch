@@ -8,21 +8,12 @@ public partial class MainViewModel
 {
     private PanelMode _currentMode = PanelMode.Compact;
 
-    private bool _isBezelMinimized;
-
-    private bool _isIdleMiniMode;
-
-    private DispatcherTimer? _idleTimer;
-
     private bool _isClickThrough;
 
     private bool _isHovering;
 
-    private bool _isHoveringWindow;
 
-    public event Action? RequestCollapse;
 
-    public event Action? RequestExpand;
 
     public event Action? RequestOpenSettings;
 
@@ -39,32 +30,13 @@ public partial class MainViewModel
         {
             if (SetProperty(ref _currentMode, value))
             {
-                if (value != PanelMode.Compact && _isIdleMiniMode)
-                {
-                    _isIdleMiniMode = false;
-                    OnPropertyChanged(nameof(IsIdleMiniMode));
-                    OnPropertyChanged(nameof(ShowIdleMiniView));
-                }
-                if (value != PanelMode.Compact && _isBezelMinimized)
-                {
-                    _isBezelMinimized = false;
-                    Settings.IsBezelMinimized = false;
-                    _settingsService.Save();
-                    OnPropertyChanged(nameof(IsBezelMinimized));
-                    OnPropertyChanged(nameof(IsNotBezelMinimized));
-                    OnPropertyChanged(nameof(BezelMinimizeButtonTooltip));
-                    OnPropertyChanged(nameof(BezelMinimizeMenuText));
-                }
                 OnPropertyChanged(nameof(IsCompactMode));
                 OnPropertyChanged(nameof(ShowCompactView));
                 OnPropertyChanged(nameof(IsExpandedMode));
                 OnPropertyChanged(nameof(IsLyricsMode));
-                OnPropertyChanged(nameof(ShowIdleMiniView));
                 OnPropertyChanged(nameof(ShowCompactMusicView));
                 OnPropertyChanged(nameof(ShowCompactTodoOnlyView));
                 OnPropertyChanged(nameof(ShowComponentIcons));
-                OnPropertyChanged(nameof(ShowIdlePrayerBesideLogo));
-                OnPropertyChanged(nameof(ShowIdleWeatherBesideLogo));
                 OnPropertyChanged(nameof(ShowHoverWeatherPill));
                 OnPropertyChanged(nameof(ShowMusicInNotch));
                 OnPropertyChanged(nameof(ShowMusicPillInNotch));
@@ -85,8 +57,6 @@ public partial class MainViewModel
             if (SetProperty(ref _isHovering, value))
             {
                 OnPropertyChanged(nameof(ShowComponentIcons));
-                OnPropertyChanged(nameof(ShowIdlePrayerBesideLogo));
-                OnPropertyChanged(nameof(ShowIdleWeatherBesideLogo));
                 OnPropertyChanged(nameof(ShowHoverWeatherPill));
                 OnPropertyChanged(nameof(ShowMusicInNotch));
                 OnPropertyChanged(nameof(ShowMusicPillInNotch));
@@ -96,51 +66,9 @@ public partial class MainViewModel
         }
     }
 
-    public bool IsBezelMinimized
-    {
-        get => _isBezelMinimized;
-        set
-        {
-            if (SetProperty(ref _isBezelMinimized, value))
-            {
-                Settings.IsBezelMinimized = value;
-                _settingsService.Save();
-                if (value && _currentMode != PanelMode.Compact)
-                {
-                    _currentMode = PanelMode.Compact;
-                    OnPropertyChanged(nameof(CurrentMode));
-                    OnPropertyChanged(nameof(IsCompactMode));
-                    OnPropertyChanged(nameof(IsExpandedMode));
-                    OnPropertyChanged(nameof(IsLyricsMode));
-                }
-                OnPropertyChanged(nameof(IsNotBezelMinimized));
-                OnPropertyChanged(nameof(ShowCompactView));
-                OnPropertyChanged(nameof(ShowComponentIcons));
-                OnPropertyChanged(nameof(ShowIdlePrayerBesideLogo));
-                OnPropertyChanged(nameof(ShowIdleWeatherBesideLogo));
-                OnPropertyChanged(nameof(ShowHoverWeatherPill));
-                OnPropertyChanged(nameof(ShowMusicInNotch));
-                OnPropertyChanged(nameof(ShowMusicPillInNotch));
-                OnPropertyChanged(nameof(ShowMusicIconInNotch));
-                OnPropertyChanged(nameof(BezelMinimizeButtonTooltip));
-                OnPropertyChanged(nameof(BezelMinimizeMenuText));
-            }
-        }
-    }
+    public bool ShowCompactView => IsCompactMode;
 
-    public bool IsNotBezelMinimized => !_isBezelMinimized;
-
-    public bool ShowCompactView => IsCompactMode && !_isBezelMinimized;
-
-    public string BezelMinimizeButtonTooltip => IsBezelMinimized
-        ? "Buka kembali Notch TAMANOTCH"
-        : "Minimize Notch ke Bezel Atas (Agar tidak mengganggu jendela lain)";
-
-    public string BezelMinimizeMenuText => IsBezelMinimized
-        ? "▼ Buka Kembali Notch dari Bezel"
-        : "▲ Minimize Notch ke Bezel Atas";
-
-    public bool ShowComponentIcons => IsCompactMode && !_isBezelMinimized && (_isHovering || IsPinned);
+    public bool ShowComponentIcons => IsCompactMode && (_isHovering || IsPinned);
 
     // Slot tengah notch: saat idle berisi mata menyala; saat hover (komponen terbuka) slot ini disembunyikan.
     public bool ShowIdleEyes => !ShowComponentIcons;
@@ -179,40 +107,6 @@ public partial class MainViewModel
         : "Pemutar Musik TAMANOTCH (Klik untuk perluas pemutar & lirik)";
 
     public string PinMenuText => IsPinned ? "Lepas Pin Notch (Otomatis ke Logo saat Idle)" : "📌 Pin Notch (Tetap Tampilkan 5 Ikon)";
-
-    public bool IsIdleMiniMode
-    {
-        get => _isIdleMiniMode && !IsPinned;
-        set
-        {
-            var effective = value && !IsPinned;
-            if (SetProperty(ref _isIdleMiniMode, effective))
-            {
-                OnPropertyChanged(nameof(ShowIdleMiniView));
-                OnPropertyChanged(nameof(ShowCompactMusicView));
-                OnPropertyChanged(nameof(ShowCompactTodoOnlyView));
-                OnPropertyChanged(nameof(ShowComponentIcons));
-                OnPropertyChanged(nameof(ShowIdlePrayerBesideLogo));
-                OnPropertyChanged(nameof(ShowMusicInNotch));
-                OnPropertyChanged(nameof(ShowMusicPillInNotch));
-                OnPropertyChanged(nameof(ShowMusicIconInNotch));
-                OnPropertyChanged(nameof(ShowFullMusicInCompact));
-                OnPropertyChanged(nameof(ShowFullRadioInCompact));
-                OnPropertyChanged(nameof(ShowFullTodoInCompact));
-                OnPropertyChanged(nameof(ShowFullBrowserInCompact));
-                OnPropertyChanged(nameof(MiniModeButtonTooltip));
-                OnPropertyChanged(nameof(IsExpandedMode));
-            }
-        }
-    }
-
-    public bool ShowIdleMiniView => IsCompactMode && IsIdleMiniMode;
-
-    public bool ShowFullMusicInCompact => !IsIdleMiniMode || IsPlaying;
-
-    public string MiniModeButtonTooltip => IsIdleMiniMode
-        ? "Perbesar Notch (Tampilkan semua detail komponen)"
-        : "Kecilkan Notch (Tampilkan yang aktif & ikon saja)";
 
     public string ComponentDisplayMode
     {
@@ -358,32 +252,12 @@ public partial class MainViewModel
             {
                 Settings.IsPinned = value;
                 _settingsService.Save();
-                if (value)
-                {
-                    _idleTimer?.Stop();
-                    if (_isIdleMiniMode)
-                    {
-                        _isIdleMiniMode = false;
-                    }
-                }
-                else if (!_isHovering)
-                {
-                    ResetIdleTimer();
-                }
-                OnPropertyChanged(nameof(IsIdleMiniMode));
-                OnPropertyChanged(nameof(ShowIdleMiniView));
                 OnPropertyChanged(nameof(ShowCompactMusicView));
                 OnPropertyChanged(nameof(ShowCompactTodoOnlyView));
                 OnPropertyChanged(nameof(ShowComponentIcons));
-                OnPropertyChanged(nameof(ShowIdlePrayerBesideLogo));
                 OnPropertyChanged(nameof(ShowMusicInNotch));
                 OnPropertyChanged(nameof(ShowMusicPillInNotch));
                 OnPropertyChanged(nameof(ShowMusicIconInNotch));
-                OnPropertyChanged(nameof(ShowFullMusicInCompact));
-                OnPropertyChanged(nameof(ShowFullRadioInCompact));
-                OnPropertyChanged(nameof(ShowFullTodoInCompact));
-                OnPropertyChanged(nameof(ShowFullBrowserInCompact));
-                OnPropertyChanged(nameof(MiniModeButtonTooltip));
                 OnPropertyChanged(nameof(IsExpandedMode));
                 OnPropertyChanged(nameof(PinButtonTooltip));
                 OnPropertyChanged(nameof(PinMenuText));
@@ -405,8 +279,6 @@ public partial class MainViewModel
 
     public ICommand TogglePinCommand { get; }
 
-    public ICommand ToggleBezelMinimizeCommand { get; }
-
     public ICommand OpenSettingsCommand { get; }
 
     public ICommand ToggleComponentsMenuCommand { get; }
@@ -420,10 +292,6 @@ public partial class MainViewModel
     public ICommand MinimizeMusicWindowCommand { get; }
 
     public ICommand ExpandMusicWindowCommand { get; }
-
-    public ICommand WakeFromIdleCommand { get; }
-
-    public ICommand ToggleMiniModeCommand { get; }
 
     public ICommand ExitApplicationCommand { get; }
 
@@ -454,7 +322,6 @@ public partial class MainViewModel
         OnPropertyChanged(nameof(ShowTodoSectionInMainWindow));
         OnPropertyChanged(nameof(ShowMusicMinimizeButton));
         OnPropertyChanged(nameof(ShowSplitter));
-        OnPropertyChanged(nameof(ShowIdleMiniView));
         OnPropertyChanged(nameof(ShowCompactMusicView));
         OnPropertyChanged(nameof(ShowCompactTodoOnlyView));
         OnPropertyChanged(nameof(ShowPrayerDivider1));
@@ -470,7 +337,6 @@ public partial class MainViewModel
         if (!EnablePrayerTimes) ActivePrayerNotification = null;
         OnPropertyChanged(nameof(HasActivePrayerNotification));
         OnPropertyChanged(nameof(ShowCompactPrayerPill));
-        OnPropertyChanged(nameof(ShowIdlePrayerBesideLogo));
         OnPropertyChanged(nameof(CurrentPrayerSchedule));
         OnPropertyChanged(nameof(NextPrayerName));
         OnPropertyChanged(nameof(NextPrayerTimeFormatted));
@@ -482,7 +348,6 @@ public partial class MainViewModel
         OnPropertyChanged(nameof(RadioButtonActionText));
         OnPropertyChanged(nameof(EnableBmkg));
         OnPropertyChanged(nameof(ShowWeatherInCompactNotch));
-        OnPropertyChanged(nameof(ShowIdleWeatherBesideLogo));
         OnPropertyChanged(nameof(ShowHoverWeatherPill));
         OnPropertyChanged(nameof(IsBmkgWindowOpen));
         OnPropertyChanged(nameof(SelectedBmkgCity));
@@ -497,85 +362,9 @@ public partial class MainViewModel
         RequestComponentLayoutChanged?.Invoke();
     }
 
-    private DispatcherTimer? _expandHoverTimer;
-
-    public void ToggleMiniMode()
-    {
-        _idleTimer?.Stop();
-        if (!IsIdleMiniMode)
-        {
-            if (IsPinned)
-            {
-                IsPinned = false;
-            }
-            IsIdleMiniMode = true;
-        }
-        else
-        {
-            IsIdleMiniMode = false;
-            if (!IsPinned && !_isHovering)
-            {
-                ResetIdleTimer();
-            }
-        }
-    }
-
-    public void EnterIdleMiniMode()
-    {
-        if (IsPinned || IsLyricsMode || IsComponentsMenuOpen || HasActivePrayerNotification || HasActiveBmkgNotification)
-        {
-            return;
-        }
-
-        IsIdleMiniMode = true;
-    }
-
-    public void WakeFromIdle()
-    {
-        _idleTimer?.Stop();
-        if (_isIdleMiniMode)
-        {
-            IsIdleMiniMode = false;
-        }
-
-        if (!IsPinned && !_isHovering)
-        {
-            ResetIdleTimer();
-        }
-    }
-
-    public void ResetIdleTimer()
-    {
-        _idleTimer?.Stop();
-        if (IsPinned || IsLyricsMode)
-        {
-            return;
-        }
-
-        if (System.Windows.Application.Current?.Dispatcher == null)
-        {
-            return;
-        }
-
-        _idleTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(1200) };
-        _idleTimer.Tick += (s, e) =>
-        {
-            _idleTimer?.Stop();
-            if (!_isHoveringWindow && !IsPinned && !IsLyricsMode && !IsComponentsMenuOpen && !HasActivePrayerNotification && !HasActiveBmkgNotification)
-            {
-                IsHovering = false;
-                EnterIdleMiniMode();
-            }
-        };
-        _idleTimer.Start();
-    }
-
     public void OnMouseEnter()
     {
-        _isHoveringWindow = true;
         IsHovering = true;
-        _expandHoverTimer?.Stop();
-        _idleTimer?.Stop();
         OnPropertyChanged(nameof(IsNotchActive));
 
         // Check for any cloud changes immediately when approaching the notch
@@ -583,47 +372,10 @@ public partial class MainViewModel
         {
             _ = _googleDriveSyncService.CheckForRemoteChangesAsync();
         }
-
-        // Fitur On Hover dinonaktifkan: panel tidak lagi terbuka otomatis saat kursor diarahkan
-        if (false && Settings.ExpandOnHover && CurrentMode == PanelMode.Compact && !IsPinned)
-        {
-            _expandHoverTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(650) };
-            _expandHoverTimer.Tick += (s, e) =>
-            {
-                _expandHoverTimer?.Stop();
-                if (_isHovering && CurrentMode == PanelMode.Compact && !IsPinned)
-                {
-                    RequestExpand?.Invoke();
-                }
-            };
-            _expandHoverTimer.Start();
-        }
     }
 
     public void OnMouseLeave()
     {
-        _isHoveringWindow = false;
-        _expandHoverTimer?.Stop();
         OnPropertyChanged(nameof(IsNotchActive));
-
-        if (!IsPinned)
-        {
-            ResetIdleTimer();
-        }
-
-        // Fitur On Hover dinonaktifkan: panel tidak lagi tertutup otomatis saat kursor keluar
-        if (false && Settings.ExpandOnHover && CurrentMode == PanelMode.Expanded && !IsPinned)
-        {
-            var delayTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(450) };
-            delayTimer.Tick += (s, e) =>
-            {
-                delayTimer.Stop();
-                if (!_isHovering && !IsPinned && CurrentMode == PanelMode.Expanded)
-                {
-                    RequestCollapse?.Invoke();
-                }
-            };
-            delayTimer.Start();
-        }
     }
 }

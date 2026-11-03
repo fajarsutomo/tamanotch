@@ -48,9 +48,7 @@ public partial class MainViewModel
 
     public event Action? RequestOpenBmkg;
 
-    public bool ShowIdleWeatherBesideLogo => false;
-
-    public bool ShowHoverWeatherPill => IsCompactMode && !_isBezelMinimized && ShowComponentIcons && Settings.EnableBmkg;
+    public bool ShowHoverWeatherPill => IsCompactMode && ShowComponentIcons && Settings.EnableBmkg;
 
     // ================= BMKG CUACA & GEMPA BUMI PROPERTIES (KOMPONEN KE-7) =================
     public IBmkgService BmkgService => _bmkgService;
@@ -67,7 +65,6 @@ public partial class MainViewModel
                 Settings.EnableBmkg = value;
                 _settingsService.Save();
                 OnPropertyChanged(nameof(EnableBmkg));
-                OnPropertyChanged(nameof(ShowIdleWeatherBesideLogo));
                 OnPropertyChanged(nameof(ShowHoverWeatherPill));
                 OnPropertyChanged(nameof(HasActiveBmkgNotification));
                 if (value)
@@ -94,7 +91,6 @@ public partial class MainViewModel
                 Settings.ShowWeatherInCompactNotch = value;
                 _settingsService.Save();
                 OnPropertyChanged(nameof(ShowWeatherInCompactNotch));
-                OnPropertyChanged(nameof(ShowIdleWeatherBesideLogo));
             }
         }
     }
@@ -518,7 +514,6 @@ public partial class MainViewModel
             OnPropertyChanged(nameof(IsBmkgLoading));
             OnPropertyChanged(nameof(BmkgNotchTooltip));
             OnPropertyChanged(nameof(BmkgActiveAdm4Text));
-            OnPropertyChanged(nameof(ShowIdleWeatherBesideLogo));
             OnPropertyChanged(nameof(ShowHoverWeatherPill));
         }
 

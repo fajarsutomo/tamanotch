@@ -51,7 +51,6 @@ public class SettingsService : ISettingsService
                 var loaded = JsonSerializer.Deserialize<AppSettings>(json);
                 if (loaded != null)
                 {
-                    loaded.ExpandOnHover = false;
                     return loaded;
                 }
             }

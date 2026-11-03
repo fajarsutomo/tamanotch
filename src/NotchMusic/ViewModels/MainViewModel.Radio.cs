@@ -29,8 +29,6 @@ public partial class MainViewModel
 
     public event Action? RequestOpenRadio;
 
-    public bool ShowFullRadioInCompact => !IsIdleMiniMode || IsRadioActiveOrOpen;
-
     // Radio Online Properties (Di sebelah kanan Music Player)
     public IRadioService RadioService => _radioService;
 
@@ -51,7 +49,6 @@ public partial class MainViewModel
                 OnPropertyChanged(nameof(IsRadioActiveOrOpen));
                 OnPropertyChanged(nameof(RadioStatusSummary));
                 OnPropertyChanged(nameof(RadioButtonActionText));
-                OnPropertyChanged(nameof(ShowFullRadioInCompact));
                 OnPropertyChanged(nameof(IsNotchActive));
                 RequestComponentLayoutChanged?.Invoke();
             }
@@ -249,7 +246,6 @@ public partial class MainViewModel
             OnPropertyChanged(nameof(IsAudioActive));
             OnPropertyChanged(nameof(IsRadioBuffering));
             OnPropertyChanged(nameof(IsRadioActiveOrOpen));
-            OnPropertyChanged(nameof(ShowFullRadioInCompact));
             OnPropertyChanged(nameof(IsNotchActive));
             OnPropertyChanged(nameof(RadioStateBadgeText));
             OnPropertyChanged(nameof(RadioStatusMessage));

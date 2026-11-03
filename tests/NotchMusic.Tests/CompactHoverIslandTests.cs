@@ -68,8 +68,6 @@ public class CompactHoverIslandTests
         // When idle (not hovering, not pinned), ShowComponentIcons should be false and ShowIdlePrayerBesideLogo true by default
         Assert.False(vm.ShowComponentIcons);
         Assert.False(vm.ShowMusicInNotch);
-        Assert.False(vm.ShowIdlePrayerBesideLogo);
-        Assert.False(vm.ShowIdleWeatherBesideLogo);
         Assert.False(vm.IsHovering);
     }
 
@@ -303,26 +301,5 @@ public class CompactHoverIslandTests
         Assert.False(vmIdleMusic.ShowMusicInNotch);
         Assert.False(vmIdleMusic.ShowMusicPillInNotch);
 
-        // Verify ToggleBezelMinimizeCommand minimizes the idle notch into the top bezel and restores it
-        Assert.False(vmIdleMusic.IsBezelMinimized);
-        Assert.True(vmIdleMusic.IsNotBezelMinimized);
-        Assert.True(vmIdleMusic.ShowCompactView);
-
-        vmIdleMusic.ToggleBezelMinimizeCommand.Execute(null);
-        Assert.True(vmIdleMusic.IsBezelMinimized);
-        Assert.False(vmIdleMusic.IsNotBezelMinimized);
-        Assert.False(vmIdleMusic.ShowCompactView);
-        Assert.False(vmIdleMusic.ShowMusicInNotch);
-        Assert.False(vmIdleMusic.ShowIdlePrayerBesideLogo);
-
-        // Even when hovered while minimized to bezel, component icons stay hidden until restored
-        vmIdleMusic.OnMouseEnter();
-        Assert.False(vmIdleMusic.ShowComponentIcons);
-
-        // Clicking the bezel arrow button again restores the notch
-        vmIdleMusic.ToggleBezelMinimizeCommand.Execute(null);
-        Assert.False(vmIdleMusic.IsBezelMinimized);
-        Assert.True(vmIdleMusic.ShowCompactView);
-        Assert.True(vmIdleMusic.ShowComponentIcons);
     }
 }

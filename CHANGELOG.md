@@ -28,6 +28,7 @@ Format mengikuti [Keep a Changelog](https://keepachangelog.com/id-ID/1.1.0/). Ba
 - Jendela Spotify: tombol tutup tidak lagi terpotong di lebar sempit, dan halaman diperkecil otomatis agar tombol Log in terjangkau.
 
 ### Dihapus
+- Mode "mini idle" dan setelan `ExpandOnHover` (sudah tidak aktif sebelumnya), serta properti dan perintah yang tidak lagi terpakai di ViewModel.
 - Ikon/logo DRANOTCH dari dalam island (ikon aplikasi untuk exe/taskbar/installer belum diganti).
 - Tombol panah minimize notch ke bezel (▲/▼) beserta entri menu klik kanan, dan status minimize lama diabaikan.
 - Jendela kartu "Tentang" (diganti bagian di Pengaturan).

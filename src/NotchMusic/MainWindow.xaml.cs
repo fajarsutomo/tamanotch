@@ -42,8 +42,6 @@ public partial class MainWindow : Window
         DataContext = _viewModel;
         WindowHelper.HorizontalOffsetPercent = _settingsService.CurrentSettings.NotchHorizontalOffsetPercent;
 
-        _viewModel.RequestExpand += () => _viewModel.CurrentMode = PanelMode.Expanded;
-        _viewModel.RequestCollapse += () => _viewModel.CurrentMode = PanelMode.Compact;
         _viewModel.RequestOpenSettings += OpenSettings;
         _viewModel.RequestOpenYouTubeMusic += OpenYouTubeMusic;
         _mediaService = mediaService;
@@ -75,14 +73,9 @@ public partial class MainWindow : Window
         {
             if (ev.PropertyName == nameof(MainViewModel.CurrentMode) ||
                 ev.PropertyName == nameof(MainViewModel.IsCompactMode) ||
-                ev.PropertyName == nameof(MainViewModel.IsBezelMinimized) ||
                 ev.PropertyName == nameof(MainViewModel.ShowCompactView) ||
-                ev.PropertyName == nameof(MainViewModel.IsIdleMiniMode) ||
-                ev.PropertyName == nameof(MainViewModel.ShowIdleMiniView) ||
                 ev.PropertyName == nameof(MainViewModel.IsMusicWindowOpen) ||
                 ev.PropertyName == nameof(MainViewModel.ShowMusicInNotch) ||
-                ev.PropertyName == nameof(MainViewModel.ShowIdlePrayerBesideLogo) ||
-                ev.PropertyName == nameof(MainViewModel.ShowIdleWeatherBesideLogo) ||
                 ev.PropertyName == nameof(MainViewModel.IsTodoDetachedWindowVisible))
             {
                 Dispatcher.BeginInvoke(new Action(() =>

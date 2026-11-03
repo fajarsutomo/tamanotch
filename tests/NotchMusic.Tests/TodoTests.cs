@@ -1118,33 +1118,6 @@ public class TodoTests
     }
 
     [Fact]
-    public void MainViewModel_Hover_DoesNotImmediatelyExpand()
-    {
-        var settingsService = new FakeSettingsService();
-        settingsService.CurrentSettings.ExpandOnHover = true;
-
-        var vm = new MainViewModel(
-            new FakeMediaSessionService(),
-            new FakeLyricsService(),
-            settingsService,
-            new TodoService(settingsService));
-
-        vm.CurrentMode = PanelMode.Compact;
-
-        bool expandedImmediately = false;
-        vm.RequestExpand += () => expandedImmediately = true;
-
-        vm.OnMouseEnter();
-
-        // Should NOT expand immediately upon cursor entering
-        Assert.False(expandedImmediately, "Hover should not expand the panel immediately upon mouse enter");
-
-        // Leaving mouse should cancel the expansion timer
-        vm.OnMouseLeave();
-        Assert.False(expandedImmediately);
-    }
-
-    [Fact]
     public void TodoItem_DueDate_SerializationAndDeserialization()
     {
         var tempFile = Path.Combine(Path.GetTempPath(), $"todo_due_{Guid.NewGuid()}.json");

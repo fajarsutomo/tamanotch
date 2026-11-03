@@ -32,20 +32,6 @@ public partial class SettingsViewModel
         }
     }
 
-    public bool ExpandOnHover
-    {
-        get => Settings.ExpandOnHover;
-        set
-        {
-            if (Settings.ExpandOnHover != value)
-            {
-                Settings.ExpandOnHover = value;
-                _settingsService.Save();
-                OnPropertyChanged();
-            }
-        }
-    }
-
     public string ComponentDisplayMode
     {
         get => Settings.ComponentDisplayMode ?? "Both";

@@ -40,9 +40,7 @@ public class AppSettings
     public double LyricsHeight { get; set; } = 320;
     public double LyricsFontSize { get; set; } = 18;
     public double LyricsOpacity { get; set; } = 0.95;
-    public bool ExpandOnHover { get; set; } = false;
     public bool IsPinned { get; set; } = false;
-    public bool IsBezelMinimized { get; set; } = false;
     public string PreferredSessionId { get; set; } = string.Empty;
     public bool AutoSearchLyrics { get; set; } = true;
     public bool ClickThroughInLyricsMode { get; set; } = false;

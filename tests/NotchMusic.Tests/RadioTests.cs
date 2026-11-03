@@ -186,7 +186,7 @@ public class RadioTests
     }
 
     [Fact]
-    public void MainViewModel_IdleMiniMode_ShrinksWhenUnpinned_And_StaysFullWhenPinned()
+    public void MainViewModel_TogglePin_PinsAndPersistsTheSetting()
     {
         var settings = new FakeSettingsService();
         using var radioService = new RadioService(settings);
@@ -197,41 +197,12 @@ public class RadioTests
             radioService: radioService);
 
         Assert.False(mainVm.IsPinned);
-        Assert.False(mainVm.IsIdleMiniMode);
         Assert.True(mainVm.ShowCompactMusicView);
-        Assert.True(mainVm.ShowFullMusicInCompact);
-        Assert.True(mainVm.ShowFullRadioInCompact);
-        Assert.True(mainVm.ShowFullBrowserInCompact);
 
-        // Clicking ToggleMiniModeCommand (rightmost button) shrinks the Notch:
-        // inactive components show icons only, while active components show full info
-        mainVm.ToggleMiniModeCommand.Execute(null);
-        Assert.True(mainVm.IsIdleMiniMode);
-        Assert.True(mainVm.ShowCompactMusicView);
-        Assert.False(mainVm.ShowFullMusicInCompact);
-        Assert.False(mainVm.ShowFullRadioInCompact);
-        Assert.False(mainVm.ShowFullBrowserInCompact);
-
-        // If Radio or Browser becomes active while shrunk, only that active component expands in Compact view
-        mainVm.IsRadioWindowOpen = true;
-        Assert.True(mainVm.ShowFullRadioInCompact);
-        Assert.False(mainVm.ShowFullBrowserInCompact);
-        mainVm.IsRadioWindowOpen = false;
-
-        // Clicking ToggleMiniModeCommand again restores full details for all components
-        mainVm.ToggleMiniModeCommand.Execute(null);
-        Assert.False(mainVm.IsIdleMiniMode);
-        Assert.True(mainVm.ShowFullMusicInCompact);
-        Assert.True(mainVm.ShowFullRadioInCompact);
-        Assert.True(mainVm.ShowFullBrowserInCompact);
-
-        // When pinned, EnterIdleMiniMode must NOT shrink the Notch
         mainVm.TogglePinCommand.Execute(null);
+
         Assert.True(mainVm.IsPinned);
         Assert.True(settings.CurrentSettings.IsPinned);
-
-        mainVm.EnterIdleMiniMode();
-        Assert.False(mainVm.IsIdleMiniMode);
-        Assert.True(mainVm.ShowFullMusicInCompact);
+        Assert.True(mainVm.ShowComponentIcons);
     }
 }

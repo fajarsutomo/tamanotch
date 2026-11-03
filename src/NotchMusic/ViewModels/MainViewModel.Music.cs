@@ -79,7 +79,6 @@ public partial class MainViewModel
                 OnPropertyChanged(nameof(ShowMusicPillInNotch));
                 OnPropertyChanged(nameof(ShowMusicIconInNotch));
                 OnPropertyChanged(nameof(IsAudioActive));
-                OnPropertyChanged(nameof(ShowFullMusicInCompact));
                 OnPropertyChanged(nameof(IsNotchActive));
                 OnPropertyChanged(nameof(HasTrack));
                 OnPropertyChanged(nameof(HasTrackThumbnail));

@@ -16,8 +16,6 @@ public partial class MainViewModel
 
     private bool _isPrayerPanelOpen;
 
-    public bool ShowIdlePrayerBesideLogo => false;
-
     public bool IsPrayerDetached
     {
         get => Settings.IsPrayerDetached;

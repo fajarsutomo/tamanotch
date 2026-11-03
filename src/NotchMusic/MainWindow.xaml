@@ -538,7 +538,6 @@
         <Border x:Name="MainIslandBorder"
                 Grid.Column="1"
                 BorderThickness="1.2,0,1.2,1.2"
-                Visibility="{Binding IsNotBezelMinimized, Converter={StaticResource BoolToVis}}"
                 MouseDown="Island_MouseDown">
             <Border.Style>
                 <!-- Idle: kapsul menempel di atas dengan tepi neon (warna, ukuran, sudut dari Pengaturan); hover: island biasa (warna bawaan atau pilihan) -->
@@ -2406,44 +2405,6 @@
                     </Grid>
                 </Grid>
 
-                <!-- ================= FLOATING ISLAND TODO DEADLINE NOTIFICATION BANNER ================= -->
-                <Border Grid.Row="0" Visibility="{Binding HasActiveTodoNotification, Converter={StaticResource BoolToVis}}"
-                        Background="#161017" BorderBrush="#FF4D6D" BorderThickness="1.5" CornerRadius="22"
-                        Padding="12,6" Margin="4,2" VerticalAlignment="Center">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Icon -->
-                        <Border Grid.Column="0" Width="34" Height="34" CornerRadius="17" Background="#301520" Margin="0,0,10,0">
-                            <Path Data="M 12,2 C 6.48,2 2,6.48 2,12 C 2,17.52 6.48,22 12,22 C 17.52,22 22,17.52 22,12 C 22,6.48 17.52,2 12,2 Z M 12,20 C 7.59,20 4,16.41 4,12 C 4,7.59 7.59,4 12,4 C 16.41,4 20,7.59 20,12 C 20,16.41 16.41,20 12,20 Z M 11.25,6.5 L 11.25,12.5 L 15.5,15 L 16.25,13.75 L 12.75,11.75 L 12.75,6.5 Z"
-                                  Width="16" Height="16" Stretch="Uniform" Fill="#FF6B8B" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-
-                        <!-- Info -->
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,8,0">
-                            <TextBlock Text="{Binding ActiveTodoNotification.Title}" Foreground="#FF6B8B" FontWeight="Bold" FontSize="12" TextTrimming="CharacterEllipsis"/>
-                            <TextBlock Text="{Binding ActiveTodoNotification.Message}" Foreground="#EAEAEA" FontSize="10.5" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
-                        </StackPanel>
-
-                        <!-- Selesai Button -->
-                        <Button Grid.Column="2" Command="{Binding CompleteTodoNotificationCommand}"
-                                Style="{StaticResource SmallPillButton}" Content="Selesai" ToolTip="Tandai tugas selesai"
-                                Background="#1A3820" Foreground="#4CD964" BorderBrush="#2A5C32"
-                                Height="24" Padding="8,0" Margin="0,0,6,0" VerticalAlignment="Center"/>
-
-                        <!-- Dismiss button -->
-                        <Button Grid.Column="3" Command="{Binding DismissTodoNotificationCommand}"
-                                Style="{StaticResource SmallPillButton}" Content="&#x2715;" ToolTip="Tutup Notifikasi"
-                                Width="24" Height="24" Padding="0" VerticalAlignment="Center"/>
-                    </Grid>
-                </Border>
-
-                <!-- ================= FLOATING ISLAND PRAYER NOTIFICATION BANNER ================= -->
                 <!-- ================= FLOATING ISLAND TODO DEADLINE NOTIFICATION BANNER ================= -->
                 <Border Grid.Row="0" Visibility="{Binding HasActiveTodoNotification, Converter={StaticResource BoolToVis}}"
                         Background="#161017" BorderBrush="#FF4D6D" BorderThickness="1.5" CornerRadius="22"

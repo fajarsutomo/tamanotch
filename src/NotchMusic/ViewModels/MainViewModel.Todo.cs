@@ -47,10 +47,6 @@ public partial class MainViewModel
         ? $"To-Do List: {PendingTodosCount} tugas aktif\nKlik untuk buka daftar tugas"
         : "To-Do List TAMANOTCH (Klik untuk buka daftar tugas)";
 
-    public string PendingTodoCountText => PendingTodosCount > 99 ? "99+" : PendingTodosCount.ToString();
-
-    public bool ShowFullTodoInCompact => !IsIdleMiniMode || HasPendingTodos;
-
     public bool IsTodoDetached
     {
         get => Settings.IsTodoDetached;
@@ -817,6 +813,5 @@ public void ExpandAllCategories()
         OnPropertyChanged(nameof(CurrentTickerBadge));
         OnPropertyChanged(nameof(CurrentTickerItem));
         OnPropertyChanged(nameof(HasPendingTodos));
-        OnPropertyChanged(nameof(ShowFullTodoInCompact));
     }
 }

@@ -183,8 +183,6 @@ public partial class SettingsViewModel
         }
     }
 
-    public bool IsAdhanControlVisible => true;
-
     // Pengaturan Durasi Adzan Pendek
     public bool AdhanCustomDurationEnabled
     {

@@ -61,7 +61,5 @@ public partial class SettingsViewModel
         }
     }
 
-    public string CachePath => _settingsService.GetLyricsCachePath();
-
     public ICommand ClearCacheCommand { get; }
 }

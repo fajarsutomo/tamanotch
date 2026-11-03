@@ -14,6 +14,7 @@ Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai 
 ## [Belum dirilis] (versi pengembangan 0.1.0)
 
 ### Ditambahkan
+- Pemutar **Jellyfin** (server media pribadi, bawaan `myflix.tamahome.id`) di jendela WebView2 seperti YouTube Music dan Spotify: login tersimpan, tombol segitiga di notch dan menu tray, saling jeda dengan YouTube Music, Spotify, radio, dan Live TV, selalu-di-atas, ukuran HP, dan mode tampilan HP (layout mobile Jellyfin). Alamat server dan tombol "Tes koneksi" ada di Pengaturan.
 - Ikon aplikasi baru (taskbar, tray, installer, dan jendela): kotak gelap bertepi neon dengan dua mata menyala, turunan dari notch idle. Dibuat dari kode oleh `scripts/make-icon.ps1` sehingga dapat dibuat ulang dengan warna lain.
 - Pilihan ukuran HP di menu ukuran (ikon 📐) jendela YouTube Music dan Spotify: iPhone SE, Galaxy S, iPhone 14/15, Pixel 7, iPhone Pro Max, serta tombol putar (tukar lebar dan tinggi). Area web dibuat seukuran layar HP, dan ukuran diperkecil otomatis bila melebihi layar.
 - Kustomisasi notch di Pengaturan: warna mata dan warna frame saat idle dari 11 preset neon, bentuk frame idle (panjang, lebar, dan radius sudut kiri-bawah dan kanan-bawah, atau otomatis mengikuti ukuran mata), serta warna frame island dan warna cincin ikon saat disorot kursor (dengan opsi "Samakan dengan notch idle" dan pilihan kembali ke tampilan bawaan).

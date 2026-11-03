@@ -284,6 +284,7 @@ public partial class MainViewModel : ViewModelBase
         OpenSettingsCommand = new RelayCommand(() => RequestOpenSettings?.Invoke());
         OpenYouTubeMusicCommand = new RelayCommand(() => RequestOpenYouTubeMusic?.Invoke());
         OpenSpotifyCommand = new RelayCommand(() => RequestOpenSpotify?.Invoke());
+        OpenJellyfinCommand = new RelayCommand(() => RequestOpenJellyfin?.Invoke());
         ToggleVocalRemoverCommand = new RelayCommand(() => IsVocalRemoverEnabled = !IsVocalRemoverEnabled);
         OpenTodoCommand = new RelayCommand(() =>
         {

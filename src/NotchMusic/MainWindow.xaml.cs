@@ -19,6 +19,7 @@ public partial class MainWindow : Window
     private readonly IMediaSessionService _mediaService;
     private YouTubeMusicWindow? _ytMusicWindow;
     private SpotifyWindow? _spotifyWindow;
+    private JellyfinWindow? _jellyfinWindow;
     private FloatingBrowserWindow? _floatingBrowserWindow;
     private RadioWindow? _radioWindow;
     private LiveTvWindow? _liveTvWindow;
@@ -50,6 +51,14 @@ public partial class MainWindow : Window
         _mediaService.PlaybackStartedOnYouTubeMusic += (s, e) => Dispatcher.Invoke(PauseSpotifyPlayback);
         _viewModel.PlaybackStartedOnSpotify += () => Dispatcher.Invoke(PauseYouTubeMusicPlayback);
         _viewModel.PlaybackStartedOnYouTubeMusic += () => Dispatcher.Invoke(PauseSpotifyPlayback);
+        _viewModel.PlaybackStartedOnSpotify += () => Dispatcher.Invoke(PauseJellyfinPlayback);
+        _viewModel.PlaybackStartedOnYouTubeMusic += () => Dispatcher.Invoke(PauseJellyfinPlayback);
+        _viewModel.RequestOpenJellyfin += OpenJellyfin;
+        _viewModel.PlaybackStartedOnJellyfin += () => Dispatcher.Invoke(() =>
+        {
+            PauseYouTubeMusicPlayback();
+            PauseSpotifyPlayback();
+        });
         _viewModel.RequestVocalRemoverChanged += OnVocalRemoverChanged;
         _viewModel.RequestOpenFloatingBrowser += OpenFloatingBrowser;
         _viewModel.RequestOpenRadio += OpenRadio;
@@ -227,6 +236,7 @@ public partial class MainWindow : Window
 
         _trayService.OpenYouTubeMusicRequested += () => Dispatcher.Invoke(OpenYouTubeMusic);
         _trayService.OpenSpotifyRequested += () => Dispatcher.Invoke(OpenSpotify);
+        _trayService.OpenJellyfinRequested += () => Dispatcher.Invoke(OpenJellyfin);
         _trayService.OpenRadioRequested += () => Dispatcher.Invoke(OpenRadio);
         _trayService.OpenLiveTvRequested += () => Dispatcher.Invoke(OpenLiveTv);
         _trayService.OpenBmkgRequested += () => Dispatcher.Invoke(OpenBmkg);
@@ -484,8 +494,13 @@ public partial class MainWindow : Window
             settingsVm.HasAvailableUpdate = true;
             settingsVm.UpdateStatus = $"Tersedia versi baru: v{_viewModel.AvailableUpdateInfo.Version} ({_viewModel.AvailableUpdateInfo.UpdateTypeLabel})";
         }
+        var jellyfinUrlBefore = _settingsService.CurrentSettings.JellyfinUrl;
         var win = new SettingsWindow(settingsVm) { Owner = this };
         win.ShowDialog();
+        if (_settingsService.CurrentSettings.JellyfinUrl != jellyfinUrlBefore)
+        {
+            _jellyfinWindow?.NavigateHome();
+        }
         _viewModel.RefreshComponentLayout();
         UpdateTodoWindowState();
         UpdatePrayerWindowState();
@@ -695,6 +710,86 @@ public partial class MainWindow : Window
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
+    }
+
+    public void OpenJellyfin()
+    {
+        try
+        {
+            _viewModel.CurrentMode = PanelMode.Compact;
+
+            if (_jellyfinWindow == null)
+            {
+                _jellyfinWindow = new JellyfinWindow(_viewModel, _settingsService);
+                _jellyfinWindow.Closed += (s, e) => _jellyfinWindow = null;
+
+                var saved = _settingsService.CurrentSettings;
+                PositionPlayerWindow(_jellyfinWindow, saved.JellyfinLeft, saved.JellyfinTop, saved.JellyfinWidth, saved.JellyfinHeight, 390, 780);
+            }
+
+            if (_jellyfinWindow.WindowState == WindowState.Minimized)
+            {
+                _jellyfinWindow.WindowState = WindowState.Normal;
+            }
+
+            _jellyfinWindow.Show();
+            _jellyfinWindow.Activate();
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                $"Tidak dapat membuka pemutar Jellyfin:\n{ex.Message}",
+                "TAMANOTCH - Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    // Memakai posisi/ukuran tersimpan bila masih valid; kalau tidak, taruh di bawah notch, di tengah layar aktif.
+    private void PositionPlayerWindow(Window window, double savedLeft, double savedTop, double savedWidth, double savedHeight, double defaultWidth, double defaultHeight)
+    {
+        window.WindowStartupLocation = WindowStartupLocation.Manual;
+
+        if (savedLeft > 0 && savedTop >= 0 && savedWidth >= window.MinWidth && savedHeight >= window.MinHeight)
+        {
+            window.Left = savedLeft;
+            window.Top = savedTop;
+            window.Width = savedWidth;
+            window.Height = savedHeight;
+            return;
+        }
+
+        var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)Left, (int)Top));
+        var workingArea = screen.WorkingArea;
+        var source = PresentationSource.FromVisual(this);
+        double dpiX = source?.CompositionTarget?.TransformToDevice.M11 ?? 1.0;
+        double dpiY = source?.CompositionTarget?.TransformToDevice.M22 ?? 1.0;
+
+        double areaLeft = workingArea.Left / dpiX;
+        double areaTop = workingArea.Top / dpiY;
+        double areaWidth = workingArea.Width / dpiX;
+        double areaHeight = workingArea.Height / dpiY;
+
+        double width = Math.Min(defaultWidth, areaWidth - 40);
+        if (width < window.MinWidth) width = Math.Min(window.MinWidth, areaWidth - 10);
+
+        double top = Math.Max(areaTop, Top + 64) + 8;
+        double height = Math.Min(defaultHeight, areaTop + areaHeight - top - 16);
+        if (height < window.MinHeight)
+        {
+            height = Math.Min(window.MinHeight, areaHeight - 30);
+            top = Math.Max(areaTop + 4, areaTop + areaHeight - height - 16);
+        }
+
+        window.Left = areaLeft + (areaWidth - width) / 2.0;
+        window.Top = top;
+        window.Width = width;
+        window.Height = height;
+    }
+
+    public void PauseJellyfinPlayback()
+    {
+        _ = _jellyfinWindow?.PausePlaybackAsync();
     }
 
     public void PauseYouTubeMusicPlayback()
@@ -942,6 +1037,7 @@ public partial class MainWindow : Window
 
         _ytMusicWindow?.ForceClose();
         _spotifyWindow?.ForceClose();
+        _jellyfinWindow?.ForceClose();
         _floatingBrowserWindow?.ForceClose();
         _radioWindow?.ForceClose();
         _liveTvWindow?.ForceClose();

@@ -157,6 +157,15 @@ public class AppSettings
     public double SpotifyHeight { get; set; } = 740;
     public bool SpotifyAlwaysOnTop { get; set; } = false;
 
+    // Jellyfin (pemutar web server media pribadi)
+    public string JellyfinUrl { get; set; } = "https://myflix.tamahome.id/";
+    public double JellyfinLeft { get; set; } = -1;
+    public double JellyfinTop { get; set; } = -1;
+    public double JellyfinWidth { get; set; } = 390;
+    public double JellyfinHeight { get; set; } = 780;
+    public bool JellyfinAlwaysOnTop { get; set; } = false;
+    public bool JellyfinMobileMode { get; set; } = true;
+
     // Live TV (Komponen ke-6)
     public bool IsLiveTvWindowOpen { get; set; } = false;
     public double LiveTvWindowLeft { get; set; } = -1;

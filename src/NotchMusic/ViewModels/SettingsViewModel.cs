@@ -50,6 +50,9 @@ public partial class SettingsViewModel : ViewModelBase
         _wellnessService = wellnessService ?? new WellnessReminderService(settingsService);
 
         ResetNotchPositionCommand = new RelayCommand(() => NotchHorizontalOffsetPercent = 0);
+
+        CheckJellyfinCommand = new RelayCommand(async () => await CheckJellyfinAsync());
+        ResetJellyfinUrlCommand = new RelayCommand(() => JellyfinUrl = JellyfinAddress.Default);
         LogDrinkCommand = new RelayCommand(() =>
         {
             _wellnessService.LogDrink();

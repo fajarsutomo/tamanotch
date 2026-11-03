@@ -9,6 +9,7 @@ public interface ITrayIconService : IDisposable
     event Action? ToggleVisibilityRequested;
     event Action? OpenYouTubeMusicRequested;
     event Action? OpenSpotifyRequested;
+    event Action? OpenJellyfinRequested;
     event Action? OpenRadioRequested;
     event Action? OpenLiveTvRequested;
     event Action? OpenBmkgRequested;
@@ -28,6 +29,7 @@ public class TrayIconService : ITrayIconService
     public event Action? ToggleVisibilityRequested;
     public event Action? OpenYouTubeMusicRequested;
     public event Action? OpenSpotifyRequested;
+    public event Action? OpenJellyfinRequested;
     public event Action? OpenRadioRequested;
     public event Action? OpenLiveTvRequested;
     public event Action? OpenBmkgRequested;
@@ -112,6 +114,9 @@ public class TrayIconService : ITrayIconService
 
         var spotifyItem = new ToolStripMenuItem("Buka Spotify (Player)", null, (s, e) => OpenSpotifyRequested?.Invoke());
         contextMenu.Items.Add(spotifyItem);
+
+        var jellyfinItem = new ToolStripMenuItem("Buka Jellyfin (Player)", null, (s, e) => OpenJellyfinRequested?.Invoke());
+        contextMenu.Items.Add(jellyfinItem);
 
         var radioItem = new ToolStripMenuItem("Buka Radio Online (Streaming Radio)", null, (s, e) => OpenRadioRequested?.Invoke());
         contextMenu.Items.Add(radioItem);

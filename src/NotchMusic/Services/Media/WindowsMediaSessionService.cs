@@ -173,7 +173,7 @@ public class WindowsMediaSessionService : IMediaSessionService
     {
         if (string.IsNullOrWhiteSpace(appId)) return "Unknown Player";
         var lower = appId.ToLowerInvariant();
-        if (lower.Contains("tamanotch") || lower.Contains("notchmusic") || lower.Contains("msedgewebview2")) return "YouTube Music (TAMANOTCH Player)";
+        if (lower.Contains("tamanotch") || lower.Contains("notchmusic") || lower.Contains("msedgewebview2")) return "TAMANOTCH Player";
         if (lower.Contains("chrome")) return "Google Chrome (YouTube Music / Web)";
         if (lower.Contains("msedge") || lower.Contains("edge")) return "Microsoft Edge (YouTube Music / Web)";
         if (lower.Contains("brave")) return "Brave Browser";

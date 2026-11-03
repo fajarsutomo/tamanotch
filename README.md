@@ -19,6 +19,7 @@ TAMANOTCH adalah widget *Dynamic Island* di bagian atas layar Windows. Saat idle
 | Komponen | Kemampuan |
 |---|---|
 | **Pemutar musik & lirik** | Mendeteksi lagu dari Windows Media Session; pemutar bawaan YouTube Music dan Spotify (WebView2, login tersimpan, saling jeda otomatis); lirik tersinkron dari [LRCLIB](https://lrclib.net) dengan offset manual dan impor `.lrc`/`.txt`; mode karaoke (penghilang vokal) |
+| **Jellyfin** | Pemutar server media Jellyfin pribadi di jendela WebView2 (login tersimpan, tampilan HP, saling jeda dengan pemutar lain); alamat server diatur di Pengaturan |
 | **Radio online** | Puluhan stasiun Indonesia dan dunia, pencarian stasiun lewat Radio-Browser, favorit, stasiun kustom |
 | **Live TV** | Saluran TV Indonesia dan dunia (HLS dan YouTube Live), failover sumber, mode bioskop, mini PiP |
 | **Waktu sholat** | Jadwal offline (standar Kemenag/MABIMS), pilihan kota, pencarian sampai kelurahan/desa, pengingat dan azan dengan auto-pause musik |

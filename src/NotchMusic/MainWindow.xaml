@@ -522,7 +522,7 @@
 
     <!-- Main Outer Container Attached to Top Bezel with Mac-Style Concave Notch Ears & DropShadow -->
     <!-- Main Outer Container Attached to Top Bezel -->
-    <Grid Margin="6,0,6,8" SnapsToDevicePixels="True" UseLayoutRounding="True">
+    <Grid Margin="16,0,16,16" SnapsToDevicePixels="True" UseLayoutRounding="True">
 
 
 
@@ -534,12 +534,28 @@
 
         <Border x:Name="MainIslandBorder"
                 Grid.Column="1"
-                Background="#000000"
-                BorderBrush="{StaticResource LuxuryNotchBorderBrush}"
                 BorderThickness="1.2,0,1.2,1.2"
-                CornerRadius="0,0,22,22"
                 Visibility="{Binding IsNotBezelMinimized, Converter={StaticResource BoolToVis}}"
                 MouseDown="Island_MouseDown">
+            <Border.Style>
+                <!-- Idle: kapsul menempel di atas dengan tepi biru muda neon yang bercahaya; hover: island biasa tanpa cahaya -->
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#000000"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource LuxuryNotchBorderBrush}"/>
+                    <Setter Property="CornerRadius" Value="0,0,22,22"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowIdleEyes}" Value="True">
+                            <Setter Property="BorderBrush" Value="#8CEBFF"/>
+                            <Setter Property="CornerRadius" Value="0,0,24,24"/>
+                            <Setter Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="#35D6FF" BlurRadius="14" ShadowDepth="0" Opacity="0.9"/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
 
 
 
@@ -550,7 +566,6 @@
                     <MenuItem Header="Perkecil ke Notch" Command="{Binding SetModeCommand}" CommandParameter="Compact"
                               Foreground="#FFFFFF" Visibility="{Binding IsExpandedMode, Converter={StaticResource BoolToVis}}"/>
                     <MenuItem Header="{Binding PinMenuText}" Command="{Binding TogglePinCommand}" Foreground="#FFFFFF"/>
-                    <MenuItem Header="{Binding BezelMinimizeMenuText}" Command="{Binding ToggleBezelMinimizeCommand}" Foreground="#FFFFFF"/>
                     <MenuItem Header="Pengaturan" Command="{Binding OpenSettingsCommand}" Foreground="#FFFFFF"/>
                     <Separator Background="#282834"/>
                     <MenuItem Header="Tutup / Keluar Aplikasi" Command="{Binding ExitApplicationCommand}" Foreground="#FF6666"/>
@@ -2541,86 +2556,5 @@
                     </Grid>
                 </Border>
             </Grid>
-        </Border>
-
-        <!-- ================= TOMBOL PANAH ATAS/BAWAH MENEMPEL DI TENGAH GARIS BEZEL BAWAH ================= -->
-        <Button x:Name="BezelMinimizeToggleButton"
-                Grid.Column="1"
-                Command="{Binding ToggleBezelMinimizeCommand}"
-                ToolTip="{Binding BezelMinimizeButtonTooltip}"
-                HorizontalAlignment="Center"
-                Panel.ZIndex="10"
-                Cursor="Hand">
-            <Button.ContextMenu>
-                <ContextMenu Background="#141418" BorderBrush="#282834" BorderThickness="1.2">
-                    <MenuItem Header="{Binding BezelMinimizeMenuText}" Command="{Binding ToggleBezelMinimizeCommand}" Foreground="#FFFFFF"/>
-                    <MenuItem Header="Pengaturan" Command="{Binding OpenSettingsCommand}" Foreground="#FFFFFF"/>
-                    <Separator Background="#282834"/>
-                    <MenuItem Header="Tutup / Keluar Aplikasi" Command="{Binding ExitApplicationCommand}" Foreground="#FF6666"/>
-                </ContextMenu>
-            </Button.ContextMenu>
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="VerticalAlignment" Value="Bottom"/>
-                    <Setter Property="Margin" Value="0,0,0,-5.5"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="TogglePillBorder"
-                                        Background="#0B0B10"
-                                        BorderBrush="#3C3C52"
-                                        BorderThickness="1.2"
-                                        CornerRadius="6"
-                                        Padding="10,1.5">
-                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <!-- Panah ke Atas (&#x25B2;) saat Notch Terbuka / Idle (Klik untuk minimize ke bezel) -->
-                                        <Path Data="M 1,5.2 L 5,1.2 L 9,5.2"
-                                              Stroke="{StaticResource MetallicSilverBrush}"
-                                              StrokeThickness="1.7"
-                                              StrokeStartLineCap="Round"
-                                              StrokeEndLineCap="Round"
-                                              StrokeLineJoin="Round"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Visibility="{Binding IsNotBezelMinimized, Converter={StaticResource BoolToVis}}"/>
-                                        <!-- Panah ke Bawah (&#x25BC;) saat Notch Diminimize ke Bezel (Klik untuk membuka kembali notch) -->
-                                        <Path Data="M 1,1.2 L 5,5.2 L 9,1.2"
-                                              Stroke="{StaticResource MetallicSilverBrush}"
-                                              StrokeThickness="1.7"
-                                              StrokeStartLineCap="Round"
-                                              StrokeEndLineCap="Round"
-                                              StrokeLineJoin="Round"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Visibility="{Binding IsBezelMinimized, Converter={StaticResource BoolToVis}}"/>
-                                    </Grid>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding IsBezelMinimized}" Value="True">
-                                        <Setter TargetName="TogglePillBorder" Property="Background" Value="#000000"/>
-                                        <Setter TargetName="TogglePillBorder" Property="BorderThickness" Value="1.2,0,1.2,1.2"/>
-                                        <Setter TargetName="TogglePillBorder" Property="CornerRadius" Value="0,0,10,10"/>
-                                        <Setter TargetName="TogglePillBorder" Property="Padding" Value="16,3.5,16,4.5"/>
-                                    </DataTrigger>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="TogglePillBorder" Property="Background" Value="#242436"/>
-                                        <Setter TargetName="TogglePillBorder" Property="BorderBrush" Value="#80FFFFFF"/>
-                                    </Trigger>
-                                    <Trigger Property="IsPressed" Value="True">
-                                        <Setter TargetName="TogglePillBorder" Property="Background" Value="#34344C"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsBezelMinimized}" Value="True">
-                            <Setter Property="VerticalAlignment" Value="Top"/>
-                            <Setter Property="Margin" Value="0"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-    </Grid>
+        </Border>    </Grid>
 </Window>

@@ -2030,7 +2030,9 @@ public ICommand TogglePrayerPanelCommand { get; }
         _lyricsService = lyricsService;
         _settingsService = settingsService;
         _isPinned = _settingsService.CurrentSettings.IsPinned;
-        _isBezelMinimized = _settingsService.CurrentSettings.IsBezelMinimized;
+        // Tombol minimize ke bezel dihapus; abaikan status lama agar notch tidak tersembunyi tanpa jalan kembali.
+        _isBezelMinimized = false;
+        _settingsService.CurrentSettings.IsBezelMinimized = false;
         _todoService = todoService ?? new TodoService(settingsService);
         _googleDriveSyncService = googleDriveSyncService ?? new GoogleDriveSyncService(settingsService);
         _updateService = updateService ?? new UpdateService(settingsService);

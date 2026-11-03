@@ -10,6 +10,18 @@ public class AppSettings
     public double NotchHorizontalOffsetPercent { get; set; } = 0;
     public double IdleIconSize { get; set; } = 34;
 
+    // Kustomisasi notch (warna = "#RRGGBB"; hover "default" = tampilan bawaan)
+    public string IdleEyeColor { get; set; } = "#4FC3FF";
+    public string IdleFrameColor { get; set; } = "#35D6FF";
+    public bool IdleFrameAutoSize { get; set; } = true;
+    public double IdleFrameWidth { get; set; } = 66;
+    public double IdleFrameHeight { get; set; } = 30;
+    public double IdleFrameRadiusLeft { get; set; } = 24;
+    public double IdleFrameRadiusRight { get; set; } = 24;
+    public bool HoverSameAsIdle { get; set; } = false;
+    public string HoverFrameColor { get; set; } = "default";
+    public string HoverRingColor { get; set; } = "default";
+
     // Pengingat kesehatan (opt-in): gerak dan minum selama jam kerja.
     public bool MoveReminderEnabled { get; set; } = false;
     public int MoveReminderMinutes { get; set; } = 45;

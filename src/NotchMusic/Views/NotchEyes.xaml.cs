@@ -1,3 +1,4 @@
+using Color = System.Windows.Media.Color;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -6,6 +7,17 @@ namespace NotchMusic.Views;
 
 public partial class NotchEyes : System.Windows.Controls.UserControl
 {
+    public static readonly DependencyProperty EyeColorProperty = DependencyProperty.Register(
+        nameof(EyeColor), typeof(Color), typeof(NotchEyes),
+        new PropertyMetadata(Color.FromRgb(0x4F, 0xC3, 0xFF), (d, e) => ((NotchEyes)d).ApplyEyeColor((Color)e.NewValue)));
+
+    /// <summary>Warna cahaya mata; warna isi dibuat lebih terang dari warna ini.</summary>
+    public Color EyeColor
+    {
+        get => (Color)GetValue(EyeColorProperty);
+        set => SetValue(EyeColorProperty, value);
+    }
+
     private static readonly TimeSpan BlinkCycle = TimeSpan.FromSeconds(6);
     private static readonly TimeSpan LookCycle = TimeSpan.FromSeconds(7);
 
@@ -17,6 +29,23 @@ public partial class NotchEyes : System.Windows.Controls.UserControl
             if (e.NewValue is true) StartAnimations(); else StopAnimations();
         };
         Unloaded += (s, e) => StopAnimations();
+    }
+
+    private void ApplyEyeColor(Color glow)
+    {
+        if (LeftEye == null || RightEye == null) return;
+
+        var fill = new SolidColorBrush(Color.FromRgb(
+            (byte)Math.Round(glow.R + (255 - glow.R) * 0.78),
+            (byte)Math.Round(glow.G + (255 - glow.G) * 0.78),
+            (byte)Math.Round(glow.B + (255 - glow.B) * 0.78)));
+        fill.Freeze();
+
+        foreach (var eye in new[] { LeftEye, RightEye })
+        {
+            eye.Fill = fill;
+            if (eye.Effect is System.Windows.Media.Effects.DropShadowEffect shadow) shadow.Color = glow;
+        }
     }
 
     // Animasi hanya berjalan saat terlihat agar tidak memakai CPU ketika notch sedang di-hover/disembunyikan.

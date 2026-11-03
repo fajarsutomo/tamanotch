@@ -26,6 +26,66 @@
             <Setter Property="Margin" Value="0,4"/>
         </Style>
 
+        <!-- Pemilih warna: deretan swatch bulat; yang terpilih diberi cincin putih -->
+        <Style x:Key="SwatchListBox" TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="SelectedValuePath" Value="Hex"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin" Value="0,0,6,6"/>
+                        <Setter Property="ToolTip" Value="{Binding Name}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Grid Width="26" Height="26" Cursor="Hand" Background="Transparent">
+                                        <Ellipse x:Name="Ring" Stroke="Transparent" StrokeThickness="2"/>
+                                        <Ellipse Margin="4" Fill="{Binding SwatchHex}"/>
+                                        <TextBlock Text="&#x21BA;" Foreground="#CCCCCC" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Ring" Property="Stroke" Value="#80FFFFFF"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Ring" Property="Stroke" Value="#FFFFFF"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.35"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <!-- High-Contrast Dark ComboBox & ComboBoxItem Style -->
         <Style TargetType="ComboBoxItem">
             <Setter Property="Background" Value="#1E1E28"/>
@@ -273,6 +333,73 @@
                         </Grid>
                         <Slider Minimum="24" Maximum="48" Value="{Binding IdleIconSize}"
                                 TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="4" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Kustomisasi Notch -->
+                <Border Background="#202026" CornerRadius="8" Padding="14" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Kustomisasi Notch" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="0,0,0,8"/>
+
+                        <TextBlock Text="Saat idle" FontWeight="SemiBold" Foreground="#CFE8FF" Margin="0,0,0,6"/>
+                        <TextBlock Text="Warna mata" FontSize="11.5" Foreground="#CCCCCC" Margin="0,0,0,4"/>
+                        <ListBox Style="{StaticResource SwatchListBox}" ItemsSource="{Binding IdlePalette}" SelectedValue="{Binding IdleEyeColor, Mode=TwoWay}"/>
+
+                        <TextBlock Text="Warna frame" FontSize="11.5" Foreground="#CCCCCC" Margin="0,6,0,4"/>
+                        <ListBox Style="{StaticResource SwatchListBox}" ItemsSource="{Binding IdlePalette}" SelectedValue="{Binding IdleFrameColor, Mode=TwoWay}"/>
+
+                        <TextBlock Text="Bentuk frame (persegi panjang, sudut bawah dapat dibulatkan)" FontSize="11.5" Foreground="#CCCCCC" Margin="0,6,0,2"/>
+                        <CheckBox Content="Ukuran otomatis (mengikuti ukuran mata)" IsChecked="{Binding IdleFrameAutoSize}"/>
+                        <StackPanel IsEnabled="{Binding IsIdleFrameSizeEditable}">
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Panjang" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding IdleFrameWidthText}" FontWeight="Bold" Foreground="#FFFFFF"/>
+                            </Grid>
+                            <Slider Minimum="40" Maximum="240" Value="{Binding IdleFrameWidth}" TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="10"/>
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Lebar (tinggi)" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding IdleFrameHeightText}" FontWeight="Bold" Foreground="#FFFFFF"/>
+                            </Grid>
+                            <Slider Minimum="20" Maximum="90" Value="{Binding IdleFrameHeight}" TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="5"/>
+                        </StackPanel>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Sudut kiri bawah" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding IdleFrameRadiusLeftText}" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        </Grid>
+                        <Slider Minimum="0" Maximum="60" Value="{Binding IdleFrameRadiusLeft}" TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="5"/>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Sudut kanan bawah" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding IdleFrameRadiusRightText}" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        </Grid>
+                        <Slider Minimum="0" Maximum="60" Value="{Binding IdleFrameRadiusRight}" TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="5"/>
+
+                        <Border Height="1" Background="#2E2E3A" Margin="0,12,0,12"/>
+
+                        <TextBlock Text="Saat hover (dynamic island)" FontWeight="SemiBold" Foreground="#CFE8FF" Margin="0,0,0,6"/>
+                        <CheckBox Content="Samakan dengan notch idle" IsChecked="{Binding HoverSameAsIdle}"/>
+                        <TextBlock Text="Warna frame" FontSize="11.5" Foreground="#CCCCCC" Margin="0,6,0,4"/>
+                        <ListBox Style="{StaticResource SwatchListBox}" ItemsSource="{Binding HoverPalette}" SelectedValue="{Binding HoverFrameColor, Mode=TwoWay}"
+                                 IsEnabled="{Binding IsHoverColorEditable}"/>
+                        <TextBlock Text="Warna cincin ikon luar" FontSize="11.5" Foreground="#CCCCCC" Margin="0,6,0,4"/>
+                        <ListBox Style="{StaticResource SwatchListBox}" ItemsSource="{Binding HoverPalette}" SelectedValue="{Binding HoverRingColor, Mode=TwoWay}"
+                                 IsEnabled="{Binding IsHoverColorEditable}"/>
+                        <TextBlock Text="Ikon &#x21BA; = tampilan bawaan." FontSize="10.5" Foreground="#888888" Margin="0,2,0,0"/>
                     </StackPanel>
                 </Border>
 

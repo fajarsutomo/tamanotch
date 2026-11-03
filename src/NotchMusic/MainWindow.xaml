@@ -79,6 +79,7 @@
             <GradientStop Color="#15151E" Offset="1.0"/>
         </LinearGradientBrush>
 
+        <SolidColorBrush x:Key="NotchPillBorderBrush" Color="#2C2C3A"/>
         <LinearGradientBrush x:Key="MetallicIconBadgeBorderBrush" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#4AFFFFFF" Offset="0.0"/>
             <GradientStop Color="#1CFFFFFF" Offset="0.5"/>
@@ -399,7 +400,7 @@
         <!-- Style untuk Badge 5 Ikon Notch saat Hover -->
         <Style x:Key="NotchIconBadgeStyle" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource MetallicIconBadgeBgBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource MetallicIconBadgeBorderBrush}"/>
+            <Setter Property="BorderBrush" Value="{Binding HoverRingBrush, TargetNullValue={StaticResource MetallicIconBadgeBorderBrush}, FallbackValue={StaticResource MetallicIconBadgeBorderBrush}}"/>
             <Setter Property="BorderThickness" Value="1.2"/>
             <Setter Property="CornerRadius" Value="11"/>
             <Style.Triggers>
@@ -413,7 +414,7 @@
         <!-- Style untuk Pill Waktu Sholat di Bawah saat Hover -->
         <Style x:Key="NotchPrayerPillStyle" TargetType="Border">
             <Setter Property="Background" Value="#121218"/>
-            <Setter Property="BorderBrush" Value="#2C2C3A"/>
+            <Setter Property="BorderBrush" Value="{Binding HoverRingBrush, TargetNullValue={StaticResource NotchPillBorderBrush}, FallbackValue={StaticResource NotchPillBorderBrush}}"/>
             <Setter Property="BorderThickness" Value="1.2"/>
             <Setter Property="CornerRadius" Value="13"/>
             <Style.Triggers>
@@ -538,20 +539,19 @@
                 Visibility="{Binding IsNotBezelMinimized, Converter={StaticResource BoolToVis}}"
                 MouseDown="Island_MouseDown">
             <Border.Style>
-                <!-- Idle: kapsul menempel di atas dengan tepi biru muda neon yang bercahaya; hover: island biasa tanpa cahaya -->
+                <!-- Idle: kapsul menempel di atas dengan tepi neon (warna, ukuran, sudut dari Pengaturan); hover: island biasa (warna bawaan atau pilihan) -->
                 <Style TargetType="Border">
                     <Setter Property="Background" Value="#000000"/>
-                    <Setter Property="BorderBrush" Value="{StaticResource LuxuryNotchBorderBrush}"/>
+                    <Setter Property="BorderBrush" Value="{Binding HoverFrameBrush, TargetNullValue={StaticResource LuxuryNotchBorderBrush}, FallbackValue={StaticResource LuxuryNotchBorderBrush}}"/>
                     <Setter Property="CornerRadius" Value="0,0,22,22"/>
+                    <Setter Property="Effect" Value="{Binding HoverGlowEffect}"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ShowIdleEyes}" Value="True">
-                            <Setter Property="BorderBrush" Value="#8CEBFF"/>
-                            <Setter Property="CornerRadius" Value="0,0,24,24"/>
-                            <Setter Property="Effect">
-                                <Setter.Value>
-                                    <DropShadowEffect Color="#35D6FF" BlurRadius="14" ShadowDepth="0" Opacity="0.9"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter Property="BorderBrush" Value="{Binding IdleFrameBrush}"/>
+                            <Setter Property="CornerRadius" Value="{Binding IdleFrameCornerRadius}"/>
+                            <Setter Property="Width" Value="{Binding IdleFrameWidth}"/>
+                            <Setter Property="Height" Value="{Binding IdleFrameHeight}"/>
+                            <Setter Property="Effect" Value="{Binding IdleGlowEffect}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -739,7 +739,8 @@
                                     <MouseBinding MouseAction="LeftClick" Command="{Binding OpenSettingsCommand}"/>
                                 </Border.InputBindings>
                                 <views:NotchEyes HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                 Width="{Binding CenterIconWidth}" Height="{Binding CenterIconHeight}"/>
+                                                 Width="{Binding CenterIconWidth}" Height="{Binding CenterIconHeight}"
+                                                 EyeColor="{Binding IdleEyeColor}"/>
                             </Border>
                         </StackPanel>
 

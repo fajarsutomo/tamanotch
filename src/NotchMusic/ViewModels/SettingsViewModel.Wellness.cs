@@ -19,7 +19,7 @@ public partial class SettingsViewModel
     public IReadOnlyList<string> WorkTimeOptions { get; } =
         Enumerable.Range(5, 19).Select(h => $"{h:00}:00").ToArray();
 
-    private void SetWellness<T>(T current, T value, Action<T> apply, params string[] extra)
+    private void SetSetting<T>(T current, T value, Action<T> apply, params string[] extra)
     {
         if (EqualityComparer<T>.Default.Equals(current, value)) return;
         apply(value);
@@ -30,55 +30,55 @@ public partial class SettingsViewModel
     public bool MoveReminderEnabled
     {
         get => Settings.MoveReminderEnabled;
-        set { SetWellness(Settings.MoveReminderEnabled, value, v => Settings.MoveReminderEnabled = v, nameof(MoveReminderEnabled)); }
+        set { SetSetting(Settings.MoveReminderEnabled, value, v => Settings.MoveReminderEnabled = v, nameof(MoveReminderEnabled)); }
     }
 
     public int MoveReminderMinutes
     {
         get => Settings.MoveReminderMinutes;
-        set { SetWellness(Settings.MoveReminderMinutes, value, v => Settings.MoveReminderMinutes = v, nameof(MoveReminderMinutes)); }
+        set { SetSetting(Settings.MoveReminderMinutes, value, v => Settings.MoveReminderMinutes = v, nameof(MoveReminderMinutes)); }
     }
 
     public bool DrinkReminderEnabled
     {
         get => Settings.DrinkReminderEnabled;
-        set { SetWellness(Settings.DrinkReminderEnabled, value, v => Settings.DrinkReminderEnabled = v, nameof(DrinkReminderEnabled)); }
+        set { SetSetting(Settings.DrinkReminderEnabled, value, v => Settings.DrinkReminderEnabled = v, nameof(DrinkReminderEnabled)); }
     }
 
     public int DrinkReminderMinutes
     {
         get => Settings.DrinkReminderMinutes;
-        set { SetWellness(Settings.DrinkReminderMinutes, value, v => Settings.DrinkReminderMinutes = v, nameof(DrinkReminderMinutes)); }
+        set { SetSetting(Settings.DrinkReminderMinutes, value, v => Settings.DrinkReminderMinutes = v, nameof(DrinkReminderMinutes)); }
     }
 
     public int DrinkGlassMl
     {
         get => Settings.DrinkGlassMl;
-        set { SetWellness(Settings.DrinkGlassMl, value, v => Settings.DrinkGlassMl = v, nameof(DrinkGlassMl), nameof(DrinkProgressText)); }
+        set { SetSetting(Settings.DrinkGlassMl, value, v => Settings.DrinkGlassMl = v, nameof(DrinkGlassMl), nameof(DrinkProgressText)); }
     }
 
     public int DrinkDailyGoalGlasses
     {
         get => Settings.DrinkDailyGoalGlasses;
-        set { SetWellness(Settings.DrinkDailyGoalGlasses, value, v => Settings.DrinkDailyGoalGlasses = v, nameof(DrinkDailyGoalGlasses), nameof(DrinkProgressText)); }
+        set { SetSetting(Settings.DrinkDailyGoalGlasses, value, v => Settings.DrinkDailyGoalGlasses = v, nameof(DrinkDailyGoalGlasses), nameof(DrinkProgressText)); }
     }
 
     public string ReminderWorkStart
     {
         get => Settings.ReminderWorkStart;
-        set { SetWellness(Settings.ReminderWorkStart, value, v => Settings.ReminderWorkStart = v, nameof(ReminderWorkStart)); }
+        set { SetSetting(Settings.ReminderWorkStart, value, v => Settings.ReminderWorkStart = v, nameof(ReminderWorkStart)); }
     }
 
     public string ReminderWorkEnd
     {
         get => Settings.ReminderWorkEnd;
-        set { SetWellness(Settings.ReminderWorkEnd, value, v => Settings.ReminderWorkEnd = v, nameof(ReminderWorkEnd)); }
+        set { SetSetting(Settings.ReminderWorkEnd, value, v => Settings.ReminderWorkEnd = v, nameof(ReminderWorkEnd)); }
     }
 
     public bool ReminderSoundEnabled
     {
         get => Settings.ReminderSoundEnabled;
-        set { SetWellness(Settings.ReminderSoundEnabled, value, v => Settings.ReminderSoundEnabled = v, nameof(ReminderSoundEnabled)); }
+        set { SetSetting(Settings.ReminderSoundEnabled, value, v => Settings.ReminderSoundEnabled = v, nameof(ReminderSoundEnabled)); }
     }
 
     public string DrinkProgressText

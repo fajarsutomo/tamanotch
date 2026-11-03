@@ -160,6 +160,7 @@ public partial class MainViewModel
 
     private void RaiseCenterIconChanged()
     {
+        RaiseAppearanceChanged();
         OnPropertyChanged(nameof(ShowIdleEyes));
         OnPropertyChanged(nameof(CenterIconSize));
         OnPropertyChanged(nameof(CenterIconWidth));

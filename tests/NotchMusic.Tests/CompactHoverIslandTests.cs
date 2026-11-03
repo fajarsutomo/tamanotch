@@ -88,6 +88,27 @@ public class CompactHoverIslandTests
     }
 
     [Fact]
+    public void CenterIcon_IdleEyes_UsesSlimCapsuleAndHoverRestoresSquare()
+    {
+        var settings = new FakeSettingsService();
+        settings.CurrentSettings.IdleIconStyle = "Eyes";
+        settings.CurrentSettings.IdleIconSize = 40;
+        var vm = new MainViewModel(new FakeMediaSessionService(), new FakeLyricsService(), settings);
+        vm.CurrentMode = PanelMode.Compact;
+
+        Assert.Equal(40, vm.CenterIconWidth);
+        Assert.Equal(24, vm.CenterIconHeight, 3);
+        Assert.True(vm.CenterIconHeight < vm.CenterIconWidth);
+        Assert.True(vm.CompactViewMargin.Top + vm.CompactViewMargin.Bottom < 10);
+
+        vm.OnMouseEnter();
+
+        Assert.Equal(44, vm.CenterIconWidth);
+        Assert.Equal(44, vm.CenterIconHeight);
+        Assert.Equal(10, vm.CompactViewMargin.Top + vm.CompactViewMargin.Bottom);
+    }
+
+    [Fact]
     public void CenterIcon_WhenHovered_ShowsLogoInsteadOfEyes()
     {
         var settings = new FakeSettingsService();

@@ -561,7 +561,7 @@
                 <!-- ================= MODE 1: COMPACT (DYNAMIC ISLAND NOTCH: 5 KOMPONEN HOVER) ================= -->
                 <!-- Saat idle: Hanya logo TAMANOTCH yang muncul. Saat dihover: 5 ikon komponen muncul ke kiri (musik, radio), kanan (todo, browser), dan bawah (waktu sholat) -->
                 <Grid x:Name="CompactView" Grid.Row="0" Visibility="{Binding ShowCompactView, Converter={StaticResource BoolToVis}}" 
-                      Margin="14,4,14,6" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      Margin="{Binding CompactViewMargin}" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
                         <!-- Baris 0: Logo TAMANOTCH di tengah, Musik & Radio di kiri, To-Do & Browser di kanan -->
                         <RowDefinition Height="Auto"/>
@@ -717,7 +717,7 @@
 
                         <!-- TENGAH: LOGO TAMANOTCH (Selalu Tampil; Saat Idle Hanya Ini yang Terlihat) -->
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Border Width="{Binding CenterIconSize}" Height="{Binding CenterIconSize}" Margin="2,0,2,0" Cursor="Hand"
+                            <Border Width="{Binding CenterIconWidth}" Height="{Binding CenterIconHeight}" Margin="2,0,2,0" Cursor="Hand"
                                 ToolTip="TAMANOTCH (Klik untuk membuka Pengaturan)">
                             <Border.Style>
                                 <!-- Saat idle dengan mata: tanpa lencana, mata menyala langsung di atas hitam notch -->
@@ -739,7 +739,7 @@
                                        HorizontalAlignment="Center" VerticalAlignment="Center"
                                        Visibility="{Binding ShowCenterLogo, Converter={StaticResource BoolToVis}}"
                                        RenderOptions.BitmapScalingMode="HighQuality"/>
-                                <views:NotchEyes Width="{Binding CenterIconSize}" Height="{Binding CenterIconSize}"
+                                <views:NotchEyes Width="{Binding CenterIconWidth}" Height="{Binding CenterIconHeight}"
                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
                                                  Visibility="{Binding ShowIdleEyes, Converter={StaticResource BoolToVis}}"/>
                             </Grid>

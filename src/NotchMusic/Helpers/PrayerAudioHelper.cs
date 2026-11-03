@@ -445,9 +445,9 @@ public static class PrayerAudioHelper
         string p1 = Path.Combine(AppContext.BaseDirectory, "Assets", "Adhans", fileName);
         if (File.Exists(p1)) return p1;
 
-        // 2. Cek di %LOCALAPPDATA%\DRANOTCH\Adhans
+        // 2. Cek di %LOCALAPPDATA%\TAMANOTCH\Adhans
         string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        string appDataAdhans = Path.Combine(localAppData, "DRANOTCH", "Adhans");
+        string appDataAdhans = Path.Combine(localAppData, "TAMANOTCH", "Adhans");
         string p2 = Path.Combine(appDataAdhans, fileName);
         if (File.Exists(p2)) return p2;
 

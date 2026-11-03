@@ -5,10 +5,10 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "=== DRANOTCH Code Signing Tool ===" -ForegroundColor Cyan
+Write-Host "=== TAMANOTCH Code Signing Tool ===" -ForegroundColor Cyan
 
 $rootDir = Split-Path -Parent $PSScriptRoot
-$certName = "DRANOTCH"
+$certName = "TAMANOTCH"
 
 # 1. Find or create Code Signing Certificate
 $cert = Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert -ErrorAction SilentlyContinue |
@@ -48,13 +48,13 @@ if ($ExportCert) {
         $batPath = Join-Path $dir "Install-Certificate.bat"
         $batContent = @"
 @echo off
-title Memasang Sertifikat Digital DRANOTCH
+title Memasang Sertifikat Digital TAMANOTCH
 cls
 echo ======================================================================
-echo   DRANOTCH - Pemasangan Sertifikat Digital Mandiri (Trusted Root)
+echo   TAMANOTCH - Pemasangan Sertifikat Digital Mandiri (Trusted Root)
 echo ======================================================================
 echo.
-echo Script ini akan mendaftarkan sertifikat DRANOTCH ke Otoritas
+echo Script ini akan mendaftarkan sertifikat TAMANOTCH ke Otoritas
 echo Sertifikasi Tepercaya (Trusted Root) pada komputer Anda.
 echo.
 echo Windows akan menampilkan jendela peringatan keamanan konfirmasi:
@@ -66,11 +66,11 @@ echo.
 pause
 echo.
 echo Mendaftarkan sertifikat...
-certutil -addstore -user root "%~dp0DRANOTCH.cer"
+certutil -addstore -user root "%~dp0TAMANOTCH.cer"
 echo.
 if %ERRORLEVEL% EQU 0 (
-    echo [BERHASIL] Sertifikat DRANOTCH berhasil dipasang dan dipercaya!
-    echo Sekarang installer dan aplikasi DRANOTCH dapat dibuka tanpa peringatan.
+    echo [BERHASIL] Sertifikat TAMANOTCH berhasil dipasang dan dipercaya!
+    echo Sekarang installer dan aplikasi TAMANOTCH dapat dibuka tanpa peringatan.
 ) else (
     echo [INFO] Pemasangan sertifikat dibatalkan atau terjadi kesalahan (%ERRORLEVEL%).
 )

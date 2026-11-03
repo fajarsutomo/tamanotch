@@ -16,7 +16,7 @@ namespace NotchMusic.Services.Update;
 
 public class UpdateService : IUpdateService, IDisposable
 {
-    private const string DefaultGitHubReleaseUrl = "https://api.github.com/repos/dningratx/dranotch/releases/latest";
+    private const string DefaultGitHubReleaseUrl = "https://api.github.com/repos/fajarsutomo/tamanotch/releases/latest";
     private readonly ISettingsService _settingsService;
     private readonly HttpClient _httpClient;
     private readonly bool _disposeClient;
@@ -47,7 +47,7 @@ public class UpdateService : IUpdateService, IDisposable
         else
         {
             _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("DRANOTCH-App", CurrentVersion));
+            _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("TAMANOTCH-App", CurrentVersion));
             _disposeClient = true;
         }
     }
@@ -77,7 +77,7 @@ public class UpdateService : IUpdateService, IDisposable
                 using var request = new HttpRequestMessage(HttpMethod.Get, targetUrl);
                 if (!_httpClient.DefaultRequestHeaders.UserAgent.Any())
                 {
-                    request.Headers.UserAgent.Add(new ProductInfoHeaderValue("DRANOTCH-App", CurrentVersion));
+                    request.Headers.UserAgent.Add(new ProductInfoHeaderValue("TAMANOTCH-App", CurrentVersion));
                 }
 
                 using var response = await _httpClient.SendAsync(request, cancellationToken);
@@ -127,7 +127,7 @@ public class UpdateService : IUpdateService, IDisposable
 
                 var title = root.TryGetProperty("name", out var nameProp) && !string.IsNullOrWhiteSpace(nameProp.GetString())
                     ? nameProp.GetString()!
-                    : $"DRANOTCH v{version}";
+                    : $"TAMANOTCH v{version}";
 
                 var changelog = root.TryGetProperty("body", out var bodyProp) ? (bodyProp.GetString() ?? string.Empty) : string.Empty;
                 var releasePageUrl = root.TryGetProperty("html_url", out var htmlUrlProp) ? (htmlUrlProp.GetString() ?? string.Empty) : string.Empty;
@@ -171,7 +171,7 @@ public class UpdateService : IUpdateService, IDisposable
                 var version = vProp.GetString() ?? string.Empty;
                 if (version.StartsWith("v", StringComparison.OrdinalIgnoreCase)) version = version.Substring(1);
 
-                var title = root.TryGetProperty("title", out var tProp) ? (tProp.GetString() ?? $"DRANOTCH v{version}") : $"DRANOTCH v{version}";
+                var title = root.TryGetProperty("title", out var tProp) ? (tProp.GetString() ?? $"TAMANOTCH v{version}") : $"TAMANOTCH v{version}";
                 var changelog = root.TryGetProperty("changelog", out var clProp) ? (clProp.GetString() ?? string.Empty) : string.Empty;
 
                 string downloadUrl = string.Empty;
@@ -226,10 +226,10 @@ public class UpdateService : IUpdateService, IDisposable
             }
         }
 
-        var tempDir = Path.Combine(Path.GetTempPath(), "DRANOTCH_Update");
+        var tempDir = Path.Combine(Path.GetTempPath(), "TAMANOTCH_Update");
         Directory.CreateDirectory(tempDir);
 
-        string fileName = "DRANOTCH-Setup.exe";
+        string fileName = "TAMANOTCH-Setup.exe";
         try
         {
             var uri = new Uri(downloadUrl);

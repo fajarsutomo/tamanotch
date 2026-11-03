@@ -173,7 +173,7 @@ public class WindowsMediaSessionService : IMediaSessionService
     {
         if (string.IsNullOrWhiteSpace(appId)) return "Unknown Player";
         var lower = appId.ToLowerInvariant();
-        if (lower.Contains("dranotch") || lower.Contains("notchmusic") || lower.Contains("msedgewebview2")) return "YouTube Music (DRANOTCH Player)";
+        if (lower.Contains("tamanotch") || lower.Contains("notchmusic") || lower.Contains("msedgewebview2")) return "YouTube Music (TAMANOTCH Player)";
         if (lower.Contains("chrome")) return "Google Chrome (YouTube Music / Web)";
         if (lower.Contains("msedge") || lower.Contains("edge")) return "Microsoft Edge (YouTube Music / Web)";
         if (lower.Contains("brave")) return "Brave Browser";
@@ -214,7 +214,7 @@ public class WindowsMediaSessionService : IMediaSessionService
                 best = sessions.FirstOrDefault(s =>
                 {
                     var id = s.SourceAppUserModelId?.ToLowerInvariant() ?? "";
-                    return id.Contains("dranotch") || id.Contains("notchmusic") || id.Contains("msedgewebview2") || id.Contains("spotify");
+                    return id.Contains("tamanotch") || id.Contains("notchmusic") || id.Contains("msedgewebview2") || id.Contains("spotify");
                 });
             }
 
@@ -304,7 +304,7 @@ public class WindowsMediaSessionService : IMediaSessionService
             if (playbackInfo?.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing)
             {
                 var appId = session.SourceAppUserModelId?.ToLowerInvariant() ?? "";
-                if (appId.Contains("spotify") && !appId.Contains("dranotch") && !appId.Contains("notchmusic"))
+                if (appId.Contains("spotify") && !appId.Contains("tamanotch") && !appId.Contains("notchmusic"))
                 {
                     PlaybackStartedOnSpotify?.Invoke(this, EventArgs.Empty);
                 }

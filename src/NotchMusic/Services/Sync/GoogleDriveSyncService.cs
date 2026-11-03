@@ -12,11 +12,11 @@ namespace NotchMusic.Services.Sync;
 
 public class GoogleDriveSyncService : IGoogleDriveSyncService
 {
-    private const string FolderName = "DRANOTCH";
+    private const string FolderName = "TAMANOTCH";
     private const string FileName = "todos.json";
     private static readonly string[] Scopes = { DriveService.Scope.DriveFile };
 
-    // Kredensial Bawaan Aplikasi DRANOTCH
+    // Kredensial Bawaan Aplikasi TAMANOTCH
     private static readonly byte[] EncId = new byte[] { 105, 107, 107, 109, 108, 109, 109, 110, 106, 111, 108, 107, 119, 55, 63, 106, 57, 43, 44, 52, 46, 40, 49, 40, 104, 106, 47, 106, 104, 43, 56, 42, 55, 60, 98, 106, 60, 56, 105, 59, 44, 41, 44, 98, 40, 116, 59, 42, 42, 41, 116, 61, 53, 53, 61, 54, 63, 47, 41, 63, 40, 57, 53, 52, 46, 63, 52, 46, 116, 57, 53, 55 };
     private static readonly byte[] EncSec = new byte[] { 29, 21, 25, 9, 10, 2, 119, 52, 48, 2, 56, 57, 34, 104, 56, 111, 12, 10, 99, 16, 9, 40, 30, 22, 21, 23, 9, 28, 14, 119, 31, 45, 19, 16, 13 };
 
@@ -212,7 +212,7 @@ public class GoogleDriveSyncService : IGoogleDriveSyncService
         return new DriveService(new BaseClientService.Initializer
         {
             HttpClientInitializer = credential,
-            ApplicationName = "DRANOTCH"
+            ApplicationName = "TAMANOTCH"
         });
     }
 

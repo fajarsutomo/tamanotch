@@ -84,7 +84,7 @@ public partial class YouTubeMusicWindow : Window
         {
             StatusText.Text = "Menyiapkan browser...";
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var userDataFolder = Path.Combine(localAppData, "DRANOTCH", "WebView2Profile");
+            var userDataFolder = Path.Combine(localAppData, "TAMANOTCH", "WebView2Profile");
             var legacyProfile = Path.Combine(localAppData, "NotchMusic", "WebView2Profile");
             if (!Directory.Exists(userDataFolder) && Directory.Exists(legacyProfile))
             {
@@ -116,8 +116,8 @@ public partial class YouTubeMusicWindow : Window
                 (function() {
                     function hookMedia() {
                         var v = document.querySelector('video') || document.querySelector('audio');
-                        if (v && !v.__dranotchHooked) {
-                            v.__dranotchHooked = true;
+                        if (v && !v.__tamanotchHooked) {
+                            v.__tamanotchHooked = true;
                             v.addEventListener('play', function() {
                                 if (window.chrome && window.chrome.webview) {
                                     window.chrome.webview.postMessage('yt_playing');
@@ -157,7 +157,7 @@ public partial class YouTubeMusicWindow : Window
                 {
                     LoadingPanel.Visibility = Visibility.Collapsed;
                     webView.Visibility = Visibility.Visible;
-                    StatusText.Text = "Tersambung ke DRANOTCH";
+                    StatusText.Text = "Tersambung ke TAMANOTCH";
                     BackButton.IsEnabled = webView.CanGoBack;
                     ForwardButton.IsEnabled = webView.CanGoForward;
                 });
@@ -172,7 +172,7 @@ public partial class YouTubeMusicWindow : Window
             StatusText.Text = "Gagal memuat WebView2";
             System.Windows.MessageBox.Show(
                 $"Gagal menginisialisasi Microsoft Edge WebView2:\n{ex.Message}\n\nPastikan Microsoft Edge WebView2 Runtime terpasang di sistem Anda.",
-                "DRANOTCH - WebView2 Error",
+                "TAMANOTCH - WebView2 Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

@@ -1,17 +1,17 @@
-# 🔐 Panduan Konfigurasi Google Drive API untuk DRANOTCH
+# 🔐 Panduan Konfigurasi Google Drive API untuk TAMANOTCH
 
-Dokumen ini menjelaskan langkah-langkah membuat kredensial Google OAuth 2.0 Client pribadi secara gratis untuk fitur sinkronisasi To-Do List di **DRANOTCH**.
+Dokumen ini menjelaskan langkah-langkah membuat kredensial Google OAuth 2.0 Client pribadi secara gratis untuk fitur sinkronisasi To-Do List di **TAMANOTCH**.
 
 ---
 
 ## 📌 Mengapa Menggunakan Kredensial Sendiri?
 1. **Keamanan & Privasi**: Kontrol penuh atas akses Google Cloud Project Anda sendiri.
-2. **Bebas Limit Kuota**: Tidak terpengaruh kuota request pengguna DRANOTCH lainnya.
+2. **Bebas Limit Kuota**: Tidak terpengaruh kuota request pengguna TAMANOTCH lainnya.
 3. **Standar Open-Source**: Memenuhi *best practice* keamanan repositori publik.
 
 > [!NOTE]
-> DRANOTCH hanya meminta hak akses ke scope `https://www.googleapis.com/auth/drive.file`.
-> Artinya, aplikasi ini **HANYA** dapat membaca dan memodifikasi file yang dibuatnya sendiri (`todos.json` di dalam folder `DRANOTCH`), dan **TIDAK BISA** melihat dokumen, foto, atau file lain di Google Drive Anda.
+> TAMANOTCH hanya meminta hak akses ke scope `https://www.googleapis.com/auth/drive.file`.
+> Artinya, aplikasi ini **HANYA** dapat membaca dan memodifikasi file yang dibuatnya sendiri (`todos.json` di dalam folder `TAMANOTCH`), dan **TIDAK BISA** melihat dokumen, foto, atau file lain di Google Drive Anda.
 
 ---
 
@@ -21,7 +21,7 @@ Dokumen ini menjelaskan langkah-langkah membuat kredensial Google OAuth 2.0 Clie
 1. Buka [Google Cloud Console](https://console.cloud.google.com/).
 2. Login menggunakan akun Google Anda.
 3. Klik dropdown proyek di bagian atas (sebelah logo Google Cloud), lalu klik **New Project** (Proyek Baru).
-4. Beri nama proyek, misalnya `DRANOTCH Desktop`, lalu klik **Create**.
+4. Beri nama proyek, misalnya `TAMANOTCH Desktop`, lalu klik **Create**.
 
 ---
 
@@ -36,13 +36,13 @@ Dokumen ini menjelaskan langkah-langkah membuat kredensial Google OAuth 2.0 Clie
 1. Di menu sebelah kiri, klik **APIs & Services** > **OAuth consent screen**.
 2. Pilih User Type: **External** (Eksternal), lalu klik **Create**.
 3. Isi informasi dasar aplikasi:
-   * **App name**: `DRANOTCH`
+   * **App name**: `TAMANOTCH`
    * **User support email**: Pilih email Google Anda.
    * **Developer contact information**: Masukkan email Anda.
 4. Klik **Save and Continue** pada langkah *Scopes* (bisa dilewati karena aplikasi meminta scope `drive.file` saat runtime).
 5. Pada bagian **Test users**:
    * Klik **+ ADD USERS**.
-   * Masukkan alamat email Google yang akan Anda pakai untuk login di DRANOTCH.
+   * Masukkan alamat email Google yang akan Anda pakai untuk login di TAMANOTCH.
    * Klik **Save and Continue**.
 
 ---
@@ -51,18 +51,18 @@ Dokumen ini menjelaskan langkah-langkah membuat kredensial Google OAuth 2.0 Clie
 1. Di menu sebelah kiri, klik **APIs & Services** > **Credentials**.
 2. Klik **+ CREATE CREDENTIALS** di bagian atas, lalu pilih **OAuth client ID**.
 3. Pada dropdown **Application type**, pilih **Desktop app** (Aplikasi Desktop).
-4. Beri nama, misalnya `DRANOTCH Client`, lalu klik **Create**.
+4. Beri nama, misalnya `TAMANOTCH Client`, lalu klik **Create**.
 5. Jendela akan menampilkan **Client ID** dan **Client Secret**, serta tombol **DOWNLOAD JSON**.
 6. Klik **DOWNLOAD JSON** untuk mengunduh berkas `client_secret_...json`.
 
 ---
 
-## 📥 Cara Memasukkan Kredensial ke DRANOTCH
+## 📥 Cara Memasukkan Kredensial ke TAMANOTCH
 
 Pilih salah satu dari 3 cara praktis berikut:
 
 ### Opsi A: Lewat Antarmuka Aplikasi (Paling Mudah)
-1. Buka aplikasi **DRANOTCH**.
+1. Buka aplikasi **TAMANOTCH**.
 2. Buka menu **Pengaturan** (ikon gear / roda gigi di notch).
 3. Gulir ke bagian **Sinkronisasi Google Drive**.
 4. Klik tombol **"Impor File credentials.json"**, lalu pilih file JSON yang baru Anda unduh.
@@ -71,8 +71,8 @@ Pilih salah satu dari 3 cara praktis berikut:
 ### Opsi B: Letakkan Berkas di Folder Aplikasi
 1. Ganti nama file JSON yang diunduh menjadi `credentials.json`.
 2. Letakkan file tersebut di:
-   `%LOCALAPPDATA%\DRANOTCH\credentials.json`
-3. Jalankan aplikasi DRANOTCH, aplikasi akan mendeteksi dan mengimpor kredensial secara otomatis saat startup.
+   `%LOCALAPPDATA%\TAMANOTCH\credentials.json`
+3. Jalankan aplikasi TAMANOTCH, aplikasi akan mendeteksi dan mengimpor kredensial secara otomatis saat startup.
 
 ### Opsi C: Menggunakan Environment Variables (Developer / CI)
 Setel variabel lingkungan di sistem Anda atau salin `.env.example` menjadi `.env`:
@@ -86,6 +86,6 @@ GOOGLE_DRIVE_CLIENT_SECRET=isi_client_secret_anda
 ## ❓ FAQ & Troubleshooting
 
 * **Peringatan *"Google hasn't verified this app"***:  
-  Karena aplikasi ini berstatus *Testing* dan menggunakan Client ID milik Anda sendiri, Google akan menampilkan peringatan keamanan saat pertama kali login di browser. Klik **Advanced** (Lanjutan) > **Go to DRANOTCH (unsafe)**. Ini 100% aman karena Anda adalah pemilik project tersebut.
+  Karena aplikasi ini berstatus *Testing* dan menggunakan Client ID milik Anda sendiri, Google akan menampilkan peringatan keamanan saat pertama kali login di browser. Klik **Advanced** (Lanjutan) > **Go to TAMANOTCH (unsafe)**. Ini 100% aman karena Anda adalah pemilik project tersebut.
 * **Ingin Memutuskan Akun?**  
-  Buka Pengaturan DRANOTCH > klik **"Putuskan Sambungan"**. Anda juga bisa menghapus otorisasi aplikasi dari menu [Keamanan Akun Google](https://myaccount.google.com/permissions).
+  Buka Pengaturan TAMANOTCH > klik **"Putuskan Sambungan"**. Anda juga bisa menghapus otorisasi aplikasi dari menu [Keamanan Akun Google](https://myaccount.google.com/permissions).

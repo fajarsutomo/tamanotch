@@ -11,8 +11,8 @@ public static class WebAudioVocalRemoverScript
         var enabledLiteral = initialEnabled ? "true" : "false";
         return $$"""
             (function() {
-                if (!window.__dranotchKaraoke) {
-                    window.__dranotchKaraoke = {
+                if (!window.__tamanotchKaraoke) {
+                    window.__tamanotchKaraoke = {
                         enabled: {{enabledLiteral}},
                         ctx: null,
                         nodes: new WeakMap(),
@@ -104,7 +104,7 @@ public static class WebAudioVocalRemoverScript
                                 this.trackedElements.push(entry);
                                 return entry;
                             } catch (err) {
-                                console.warn('DRANOTCH Karaoke DSP attach warning:', err);
+                                console.warn('TAMANOTCH Karaoke DSP attach warning:', err);
                                 return null;
                             }
                         },
@@ -133,25 +133,25 @@ public static class WebAudioVocalRemoverScript
                     };
 
                     document.addEventListener('play', function() {
-                        if (window.__dranotchKaraoke && window.__dranotchKaraoke.enabled) {
-                            window.__dranotchKaraoke.applyAll();
+                        if (window.__tamanotchKaraoke && window.__tamanotchKaraoke.enabled) {
+                            window.__tamanotchKaraoke.applyAll();
                         }
                     }, true);
 
                     document.addEventListener('playing', function() {
-                        if (window.__dranotchKaraoke && window.__dranotchKaraoke.enabled) {
-                            window.__dranotchKaraoke.applyAll();
+                        if (window.__tamanotchKaraoke && window.__tamanotchKaraoke.enabled) {
+                            window.__tamanotchKaraoke.applyAll();
                         }
                     }, true);
 
                     setInterval(function() {
-                        if (window.__dranotchKaraoke && window.__dranotchKaraoke.enabled) {
-                            window.__dranotchKaraoke.applyAll();
+                        if (window.__tamanotchKaraoke && window.__tamanotchKaraoke.enabled) {
+                            window.__tamanotchKaraoke.applyAll();
                         }
                     }, 900);
                 }
                 if ({{enabledLiteral}}) {
-                    window.__dranotchKaraoke.setEnabled(true);
+                    window.__tamanotchKaraoke.setEnabled(true);
                 }
             })();
             """;
@@ -163,8 +163,8 @@ public static class WebAudioVocalRemoverScript
         return $$"""
             (function() {
                 {{GetBootstrapScript(enabled)}}
-                if (window.__dranotchKaraoke) {
-                    window.__dranotchKaraoke.setEnabled({{enabledLiteral}});
+                if (window.__tamanotchKaraoke) {
+                    window.__tamanotchKaraoke.setEnabled({{enabledLiteral}});
                 }
             })();
             """;

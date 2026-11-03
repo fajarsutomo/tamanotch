@@ -66,14 +66,14 @@ public class UpdateTests
 
         var githubJson = @"{
             ""tag_name"": ""v1.2.0"",
-            ""name"": ""DRANOTCH v1.2.0"",
+            ""name"": ""TAMANOTCH v1.2.0"",
             ""body"": ""- Added update button\n- Minor bug fixes"",
-            ""html_url"": ""https://github.com/dranotch/dranotch/releases/tag/v1.2.0"",
+            ""html_url"": ""https://github.com/fajarsutomo/tamanotch/releases/tag/v1.2.0"",
             ""published_at"": ""2026-10-21T12:00:00Z"",
             ""assets"": [
                 {
-                    ""name"": ""DRANOTCH-Setup-1.2.0.exe"",
-                    ""browser_download_url"": ""https://github.com/dranotch/dranotch/releases/download/v1.2.0/DRANOTCH-Setup-1.2.0.exe""
+                    ""name"": ""TAMANOTCH-Setup-1.2.0.exe"",
+                    ""browser_download_url"": ""https://github.com/fajarsutomo/tamanotch/releases/download/v1.2.0/TAMANOTCH-Setup-1.2.0.exe""
                 }
             ]
         }";
@@ -82,10 +82,10 @@ public class UpdateTests
 
         Assert.NotNull(updateInfo);
         Assert.Equal("1.2.0", updateInfo!.Version);
-        Assert.Equal("DRANOTCH v1.2.0", updateInfo.Title);
+        Assert.Equal("TAMANOTCH v1.2.0", updateInfo.Title);
         Assert.Contains("Added update button", updateInfo.Changelog);
-        Assert.Equal("https://github.com/dranotch/dranotch/releases/download/v1.2.0/DRANOTCH-Setup-1.2.0.exe", updateInfo.DownloadUrl);
-        Assert.Equal("https://github.com/dranotch/dranotch/releases/tag/v1.2.0", updateInfo.ReleasePageUrl);
+        Assert.Equal("https://github.com/fajarsutomo/tamanotch/releases/download/v1.2.0/TAMANOTCH-Setup-1.2.0.exe", updateInfo.DownloadUrl);
+        Assert.Equal("https://github.com/fajarsutomo/tamanotch/releases/tag/v1.2.0", updateInfo.ReleasePageUrl);
     }
 
     [Fact]
@@ -96,9 +96,9 @@ public class UpdateTests
 
         var standaloneJson = @"{
             ""version"": ""2.0.0"",
-            ""title"": ""DRANOTCH 2.0.0 Major Release"",
+            ""title"": ""TAMANOTCH 2.0.0 Major Release"",
             ""changelog"": ""Major UI and core improvements"",
-            ""downloadUrl"": ""https://example.com/DRANOTCH-Setup-2.0.0.exe"",
+            ""downloadUrl"": ""https://example.com/TAMANOTCH-Setup-2.0.0.exe"",
             ""releasePageUrl"": ""https://example.com/release/2.0.0""
         }";
 
@@ -106,9 +106,9 @@ public class UpdateTests
 
         Assert.NotNull(updateInfo);
         Assert.Equal("2.0.0", updateInfo!.Version);
-        Assert.Equal("DRANOTCH 2.0.0 Major Release", updateInfo.Title);
+        Assert.Equal("TAMANOTCH 2.0.0 Major Release", updateInfo.Title);
         Assert.Equal("Major UI and core improvements", updateInfo.Changelog);
-        Assert.Equal("https://example.com/DRANOTCH-Setup-2.0.0.exe", updateInfo.DownloadUrl);
+        Assert.Equal("https://example.com/TAMANOTCH-Setup-2.0.0.exe", updateInfo.DownloadUrl);
     }
 
     [Fact]
@@ -129,9 +129,9 @@ public class UpdateTests
         var settings = new MockSettingsService();
         var json = @"{
             ""version"": ""9.9.9"",
-            ""title"": ""DRANOTCH Future Release"",
+            ""title"": ""TAMANOTCH Future Release"",
             ""changelog"": ""Brand new features"",
-            ""downloadUrl"": ""https://example.com/DRANOTCH-Setup-9.9.9.exe"",
+            ""downloadUrl"": ""https://example.com/TAMANOTCH-Setup-9.9.9.exe"",
             ""releasePageUrl"": ""https://example.com/release""
         }";
 

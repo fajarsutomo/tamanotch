@@ -41,7 +41,7 @@ public class TrayIconService : ITrayIconService
     {
         _notifyIcon = new NotifyIcon
         {
-            Text = "DRANOTCH",
+            Text = "TAMANOTCH",
             Visible = true
         };
 

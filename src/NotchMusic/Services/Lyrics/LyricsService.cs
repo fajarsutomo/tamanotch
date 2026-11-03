@@ -55,7 +55,7 @@ public class LyricsService : ILyricsService
 
     static LyricsService()
     {
-        HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("DRANOTCH/1.0 (https://github.com/dranotch/dranotch)");
+        HttpClient.DefaultRequestHeaders.UserAgent.ParseAdd("TAMANOTCH/1.0 (https://github.com/fajarsutomo/tamanotch)");
     }
 
     public LyricsService(ISettingsService settingsService)

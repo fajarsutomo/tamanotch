@@ -1,14 +1,14 @@
 param(
     [string]$Version,
     [ValidateSet("major", "minor", "patch")][string]$Bump,
-    [string]$Changelog = "Pembaruan versi DRANOTCH",
+    [string]$Changelog = "Pembaruan versi TAMANOTCH",
     [switch]$SkipInstaller,
     [switch]$SkipTests
 )
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "=== DRANOTCH Build & Packaging Script ===" -ForegroundColor Cyan
+Write-Host "=== TAMANOTCH Build & Packaging Script ===" -ForegroundColor Cyan
 
 $rootDir = Split-Path -Parent $PSScriptRoot
 $projectPath = Join-Path $rootDir "src\NotchMusic\NotchMusic.csproj"
@@ -139,10 +139,10 @@ if (-not $SkipInstaller) {
         New-Item -ItemType Directory -Force -Path $installerDir | Out-Null
         & "$isccExe" "/DMyAppVersion=$targetVersion" "$innoScript"
         if ($LASTEXITCODE -eq 0) {
-            $expectedInstaller = Join-Path $installerDir "DRANOTCH-Setup-$targetVersion.exe"
+            $expectedInstaller = Join-Path $installerDir "TAMANOTCH-Setup-$targetVersion.exe"
             Write-Host "Installer created successfully: $expectedInstaller" -ForegroundColor Green
 
-            # Sign installer executable with DRANOTCH certificate
+            # Sign installer executable with TAMANOTCH certificate
             if (Test-Path $signScript) {
                 Write-Host "Signing Inno Setup installer..." -ForegroundColor Yellow
                 & "$signScript" -FilePath $expectedInstaller -ExportCert
@@ -151,13 +151,13 @@ if (-not $SkipInstaller) {
             # Generate version.json manifest for update service
             $versionMetadata = @{
                 version = $targetVersion
-                title = "DRANOTCH v$targetVersion"
+                title = "TAMANOTCH v$targetVersion"
                 releaseDate = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
                 isMajor = $isMajor
                 isMinor = $isMinor
-                installerFileName = "DRANOTCH-Setup-$targetVersion.exe"
-                downloadUrl = "https://github.com/dningratx/dranotch/releases/download/v$targetVersion/DRANOTCH-Setup-$targetVersion.exe"
-                releasePageUrl = "https://github.com/dningratx/dranotch/releases/tag/v$targetVersion"
+                installerFileName = "TAMANOTCH-Setup-$targetVersion.exe"
+                downloadUrl = "https://github.com/fajarsutomo/tamanotch/releases/download/v$targetVersion/TAMANOTCH-Setup-$targetVersion.exe"
+                releasePageUrl = "https://github.com/fajarsutomo/tamanotch/releases/tag/v$targetVersion"
                 changelog = $Changelog
             } | ConvertTo-Json -Depth 4
 

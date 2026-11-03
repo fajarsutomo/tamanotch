@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helpers="clr-namespace:NotchMusic.Helpers"
-        Title="DRANOTCH"
+        Title="TAMANOTCH"
         FontFamily="Segoe UI Variable Display, Segoe UI"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="ClearType"
@@ -64,7 +64,7 @@
             <GradientStop Color="#191922" Offset="1.0"/>
         </LinearGradientBrush>
 
-        <!-- Silver Metallic Gradient Brush (Matching DRANOTCH Logo) -->
+        <!-- Silver Metallic Gradient Brush (Matching TAMANOTCH Logo) -->
         <LinearGradientBrush x:Key="MetallicSilverBrush" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#FFFFFF" Offset="0.0"/>
             <GradientStop Color="#E2E6F0" Offset="0.35"/>
@@ -558,11 +558,11 @@
 
             <Grid>
                 <!-- ================= MODE 1: COMPACT (DYNAMIC ISLAND NOTCH: 5 KOMPONEN HOVER) ================= -->
-                <!-- Saat idle: Hanya logo DRANOTCH yang muncul. Saat dihover: 5 ikon komponen muncul ke kiri (musik, radio), kanan (todo, browser), dan bawah (waktu sholat) -->
+                <!-- Saat idle: Hanya logo TAMANOTCH yang muncul. Saat dihover: 5 ikon komponen muncul ke kiri (musik, radio), kanan (todo, browser), dan bawah (waktu sholat) -->
                 <Grid x:Name="CompactView" Grid.Row="0" Visibility="{Binding ShowCompactView, Converter={StaticResource BoolToVis}}" 
                       Margin="14,4,14,6" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.RowDefinitions>
-                        <!-- Baris 0: Logo DRANOTCH di tengah, Musik & Radio di kiri, To-Do & Browser di kanan -->
+                        <!-- Baris 0: Logo TAMANOTCH di tengah, Musik & Radio di kiri, To-Do & Browser di kanan -->
                         <RowDefinition Height="Auto"/>
                         <!-- Baris 1: Waktu Sholat di bawah -->
                         <RowDefinition Height="Auto"/>
@@ -573,7 +573,7 @@
                         <Grid.ColumnDefinitions>
                             <!-- Kolom 0: Komponen Kiri (Musik & Radio) -->
                             <ColumnDefinition Width="Auto"/>
-                            <!-- Kolom 1: Logo DRANOTCH (Pusat / Tengah) -->
+                            <!-- Kolom 1: Logo TAMANOTCH (Pusat / Tengah) -->
                             <ColumnDefinition Width="Auto"/>
                             <!-- Kolom 2: Komponen Kanan (Browser & To-Do List) -->
                             <ColumnDefinition Width="Auto"/>
@@ -616,7 +616,7 @@
                                             <TextBlock Text="{Binding CurrentTrack.Artist, FallbackValue=''}" 
                                                        Foreground="#A0A0B2" FontSize="11" FontWeight="SemiBold" DockPanel.Dock="Right" 
                                                        VerticalAlignment="Center" Margin="6,0,0,0" TextTrimming="CharacterEllipsis"/>
-                                            <TextBlock Text="{Binding CurrentTrack.Title, FallbackValue='DRANOTCH'}" 
+                                            <TextBlock Text="{Binding CurrentTrack.Title, FallbackValue='TAMANOTCH'}" 
                                                        Foreground="#FFFFFF" FontWeight="Bold" FontSize="13"
                                                        TextTrimming="CharacterEllipsis"/>
                                         </DockPanel>
@@ -714,10 +714,10 @@
                             </Border>
                         </StackPanel>
 
-                        <!-- TENGAH: LOGO DRANOTCH (Selalu Tampil; Saat Idle Hanya Ini yang Terlihat) -->
+                        <!-- TENGAH: LOGO TAMANOTCH (Selalu Tampil; Saat Idle Hanya Ini yang Terlihat) -->
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                             <Border Width="44" Height="44" Style="{StaticResource NotchIconBadgeStyle}" Margin="2,0,2,0" Cursor="Hand"
-                                ToolTip="DRANOTCH (Klik untuk melihat info tentang DRANOTCH)">
+                                ToolTip="TAMANOTCH (Klik untuk melihat info tentang TAMANOTCH)">
                             <Border.InputBindings>
                                 <MouseBinding MouseAction="LeftClick" Command="{Binding OpenAboutCommand}"/>
                             </Border.InputBindings>
@@ -733,7 +733,7 @@
                         <!-- SISI KANAN: KOMPONEN 4 (BROWSER), KOMPONEN BMKG, & KOMPONEN 5 (TO-DO LIST LENGKAP DI PALING KANAN) (Muncul saat Hover) -->
                         <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="{Binding ShowComponentIcons, Converter={StaticResource BoolToVis}}"
                                     >
-                            <!-- 4. Browser Mengambang (Di sebelah kanan Logo DRANOTCH) -->
+                            <!-- 4. Browser Mengambang (Di sebelah kanan Logo TAMANOTCH) -->
                             <Border Width="42" Height="42" Style="{StaticResource NotchIconBadgeStyle}" Margin="6,0,2,0" Cursor="Hand"
                                     ToolTip="Buka Browser Mengambang (YouTube, Streaming Film, Web Bebas)">
                                 <Border.InputBindings>
@@ -852,7 +852,7 @@
                                 Visibility="{Binding ShowComponentIcons, Converter={StaticResource BoolToVis}}"
                                 Width="30" Height="30" Margin="0,0,6,0" Padding="0" Cursor="Hand"
                                 HorizontalAlignment="Right" VerticalAlignment="Center"
-                                ToolTip="Pengaturan DRANOTCH">
+                                ToolTip="Pengaturan TAMANOTCH">
                             <Border.InputBindings>
                                 <MouseBinding MouseAction="LeftClick" Command="{Binding OpenSettingsCommand}"/>
                             </Border.InputBindings>
@@ -972,7 +972,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Album art / Icon DRANOTCH (Luxury Mac Squircle) -->
+                            <!-- Album art / Icon TAMANOTCH (Luxury Mac Squircle) -->
                             <Border Grid.Column="0" Width="50" Height="50" CornerRadius="13" ClipToBounds="True" Background="#14141C" BorderBrush="#36FFFFFF" BorderThickness="1.2" Margin="0,0,12,0" VerticalAlignment="Center">
                                 <Grid>
                                     <Image Source="pack://application:,,,/NotchMusic;component/Assets/app.png" Width="28" Height="28" Stretch="Uniform"
@@ -998,7 +998,7 @@
                                 <Button Style="{StaticResource SmallPillButton}" 
                                         Command="{Binding OpenUpdateCommand}" 
                                         Visibility="{Binding HasAvailableUpdate, Converter={StaticResource BoolToVis}}" 
-                                        ToolTip="Versi baru tersedia! Klik untuk memperbarui DRANOTCH" 
+                                        ToolTip="Versi baru tersedia! Klik untuk memperbarui TAMANOTCH" 
                                         Background="#222228" Padding="6,3" Margin="0,0,3,0">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="&#x2728;" FontSize="10" Margin="0,0,3,0" VerticalAlignment="Center"/>
@@ -1373,7 +1373,7 @@
 
                                 <!-- Tombol Close Aplikasi di ujung sebelah kanan -->
                                 <Button Style="{StaticResource CloseAppButtonStyle}" Command="{Binding ExitApplicationCommand}"
-                                        Content="&#x2715;" ToolTip="Tutup Aplikasi DRANOTCH" Padding="7,4" Margin="0"/>
+                                        Content="&#x2715;" ToolTip="Tutup Aplikasi TAMANOTCH" Padding="7,4" Margin="0"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -2281,7 +2281,7 @@
                         </Border>
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,12,0">
-                            <TextBlock Text="{Binding CurrentTrack.Title, FallbackValue='DRANOTCH'}"
+                            <TextBlock Text="{Binding CurrentTrack.Title, FallbackValue='TAMANOTCH'}"
                                        FontWeight="Bold" FontSize="17" Foreground="#FFFFFF" TextTrimming="CharacterEllipsis"/>
                             <TextBlock Text="{Binding CurrentTrack.Artist, FallbackValue='Siap memutar musik...'}"
                                        FontSize="13" FontWeight="Medium" Foreground="#A6A6BA" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
@@ -2293,7 +2293,7 @@
                             <Button Style="{StaticResource SmallPillButton}" Command="{Binding SetModeCommand}" CommandParameter="Compact"
                                     Content="Compact" FontSize="12.5" Padding="14,6" Margin="0,0,6,0" ToolTip="Kembali ke Notch"/>
                             <Button Style="{StaticResource CloseAppButtonStyle}" Command="{Binding ExitApplicationCommand}"
-                                    Content="&#x2715;" FontSize="12.5" Padding="10,6" Margin="0" ToolTip="Tutup Aplikasi DRANOTCH"/>
+                                    Content="&#x2715;" FontSize="12.5" Padding="10,6" Margin="0" ToolTip="Tutup Aplikasi TAMANOTCH"/>
                         </StackPanel>
                     </Grid>
 

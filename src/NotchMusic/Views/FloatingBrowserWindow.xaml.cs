@@ -70,7 +70,7 @@ public partial class FloatingBrowserWindow : Window
         {
             StatusText.Text = "Menyiapkan browser...";
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var userDataFolder = Path.Combine(localAppData, "DRANOTCH", "FloatingBrowserProfile");
+            var userDataFolder = Path.Combine(localAppData, "TAMANOTCH", "FloatingBrowserProfile");
             Directory.CreateDirectory(userDataFolder);
 
             var options = new CoreWebView2EnvironmentOptions("--autoplay-policy=no-user-gesture-required");
@@ -120,7 +120,7 @@ public partial class FloatingBrowserWindow : Window
                     if (!string.IsNullOrWhiteSpace(title))
                     {
                         StatusText.Text = title;
-                        Title = $"{title} - DRANOTCH Browser";
+                        Title = $"{title} - TAMANOTCH Browser";
                     }
                 });
             };
@@ -170,7 +170,7 @@ public partial class FloatingBrowserWindow : Window
             StatusText.Text = "Gagal memuat WebView2";
             System.Windows.MessageBox.Show(
                 $"Gagal menginisialisasi Microsoft Edge WebView2:\n{ex.Message}\n\nPastikan Microsoft Edge WebView2 Runtime terpasang di sistem Anda.",
-                "DRANOTCH - WebView2 Error",
+                "TAMANOTCH - WebView2 Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -342,7 +342,7 @@ public partial class FloatingBrowserWindow : Window
         }
         catch (Exception ex)
         {
-            System.Windows.MessageBox.Show($"Alamat URL tidak valid:\n{ex.Message}", "DRANOTCH Browser", MessageBoxButton.OK, MessageBoxImage.Warning);
+            System.Windows.MessageBox.Show($"Alamat URL tidak valid:\n{ex.Message}", "TAMANOTCH Browser", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 

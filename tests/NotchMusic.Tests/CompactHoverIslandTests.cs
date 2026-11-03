@@ -169,7 +169,7 @@ public class CompactHoverIslandTests
             DownloadCalled = true;
             progress?.Report(50);
             progress?.Report(100);
-            return Task.FromResult(@"C:\temp\DRANOTCH-Setup.exe");
+            return Task.FromResult(@"C:\temp\TAMANOTCH-Setup.exe");
         }
 
         public void LaunchInstallerAndExit(string installerPath)
@@ -187,7 +187,7 @@ public class CompactHoverIslandTests
             {
                 Version = "1.6.0",
                 IsNewerVersion = true,
-                DownloadUrl = "https://example.com/DRANOTCH-Setup.exe"
+                DownloadUrl = "https://example.com/TAMANOTCH-Setup.exe"
             }
         };
 
@@ -201,7 +201,7 @@ public class CompactHoverIslandTests
 
         Assert.True(fakeUpdate.CheckCalled);
         Assert.True(fakeUpdate.DownloadCalled);
-        Assert.Equal(@"C:\temp\DRANOTCH-Setup.exe", fakeUpdate.InstalledPath);
+        Assert.Equal(@"C:\temp\TAMANOTCH-Setup.exe", fakeUpdate.InstalledPath);
     }
 
     [Fact]
@@ -234,7 +234,7 @@ public class CompactHoverIslandTests
         Assert.False(vm.IsTodoDetachedWindowVisible);
         Assert.Equal(PanelMode.Compact, vm.CurrentMode);
 
-        // Verify clicking DRANOTCH logo button invokes RequestOpenAbout
+        // Verify clicking TAMANOTCH logo button invokes RequestOpenAbout
         bool openAboutFired = false;
         vm.RequestOpenAbout += () => openAboutFired = true;
         vm.OpenAboutCommand.Execute(null);

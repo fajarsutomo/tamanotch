@@ -1,6 +1,6 @@
 param(
     [string]$Version = "1.8.1",
-    [string]$Title = "DRANOTCH v1.8.1 - Perbaikan Binding Suara Azan, Sinkronisasi Real-Time dan Desain Ikon Tombol Tes",
+    [string]$Title = "TAMANOTCH v1.8.1 - Perbaikan Binding Suara Azan, Sinkronisasi Real-Time dan Desain Ikon Tombol Tes",
     [string]$NotesFile = "release_notes_v1.8.1.md"
 )
 
@@ -80,9 +80,9 @@ public class JsonHelper {
 Add-Type -TypeDefinition $source -ErrorAction SilentlyContinue
 
 $targets = @(
-    'git:https://dningratx@github.com',
+    'git:https://fajarsutomo@github.com',
     'git:https://github.com',
-    'LegacyGeneric:target=git:https://dningratx@github.com',
+    'LegacyGeneric:target=git:https://fajarsutomo@github.com',
     'LegacyGeneric:target=git:https://github.com'
 )
 
@@ -100,17 +100,17 @@ if ([string]::IsNullOrWhiteSpace($token)) {
     exit 1
 }
 
-$repo = "dningratx/dranotch"
+$repo = "fajarsutomo/tamanotch"
 $verClean = $Version.TrimStart('v')
 $tag = "v$verClean"
-$title = if ($Title) { $Title } else { "DRANOTCH $tag" }
+$title = if ($Title) { $Title } else { "TAMANOTCH $tag" }
 $notesPath = Join-Path $PSScriptRoot "..\dist\$NotesFile"
 $notes = [System.IO.File]::ReadAllText($notesPath, [System.Text.Encoding]::UTF8)
 
 $headers = @{
     "Authorization" = "Bearer $token"
     "Accept"        = "application/vnd.github+json"
-    "User-Agent"    = "DRANOTCH-Release-Script"
+    "User-Agent"    = "TAMANOTCH-Release-Script"
 }
 
 Write-Host "Checking if release for $tag exists..." -ForegroundColor Cyan
@@ -150,13 +150,13 @@ if ($existingAssets) {
 
 $assets = @(
     @{
-        Path = (Join-Path $PSScriptRoot "..\dist\Installer\DRANOTCH-Setup-$verClean.exe")
-        Name = "DRANOTCH-Setup-$verClean.exe"
+        Path = (Join-Path $PSScriptRoot "..\dist\Installer\TAMANOTCH-Setup-$verClean.exe")
+        Name = "TAMANOTCH-Setup-$verClean.exe"
         ContentType = "application/octet-stream"
     },
     @{
-        Path = (Join-Path $PSScriptRoot "..\dist\Installer\DRANOTCH.cer")
-        Name = "DRANOTCH.cer"
+        Path = (Join-Path $PSScriptRoot "..\dist\Installer\TAMANOTCH.cer")
+        Name = "TAMANOTCH.cer"
         ContentType = "application/x-x509-ca-cert"
     },
     @{
@@ -182,7 +182,7 @@ foreach ($asset in $assets) {
     $uploadHeaders = @{
         "Authorization"  = "Bearer $token"
         "Accept"         = "application/vnd.github+json"
-        "User-Agent"     = "DRANOTCH-Release-Script"
+        "User-Agent"     = "TAMANOTCH-Release-Script"
         "Content-Type"   = $asset.ContentType
     }
 

@@ -95,7 +95,7 @@ public class BmkgService : IBmkgService
         {
             Timeout = TimeSpan.FromSeconds(12)
         };
-        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("DRANOTCH/1.8 (Windows; BMKG Open Data Integration)");
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("TAMANOTCH/1.8 (Windows; BMKG Open Data Integration)");
     }
 
     public BmkgService(ISettingsService settingsService)

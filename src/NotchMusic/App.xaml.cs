@@ -8,8 +8,8 @@ namespace NotchMusic;
 
 public partial class App : System.Windows.Application
 {
-    private const string MutexName = "DRANOTCH_SINGLE_INSTANCE_MUTEX";
-    private const string PipeName = "DRANOTCH_IPC_PIPE";
+    private const string MutexName = "TAMANOTCH_SINGLE_INSTANCE_MUTEX";
+    private const string PipeName = "TAMANOTCH_IPC_PIPE";
     private static Mutex? _mutex;
     private static bool _ownsMutex;
     private static CancellationTokenSource? _pipeCts;
@@ -32,7 +32,7 @@ public partial class App : System.Windows.Application
             var detail = ex.InnerException != null ? $"\n\nDetail: {ex.InnerException.Message}" : string.Empty;
             System.Windows.MessageBox.Show(
                 $"Terjadi kesalahan aplikasi:\n{ex.Message}{detail}",
-                "DRANOTCH - Error",
+                "TAMANOTCH - Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         };
@@ -75,8 +75,8 @@ public partial class App : System.Windows.Application
             var desktopDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             var shortcutCandidates = new[]
             {
-                Path.Combine(desktopDir, "DRANOTCH.lnk"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory), "DRANOTCH.lnk")
+                Path.Combine(desktopDir, "TAMANOTCH.lnk"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory), "TAMANOTCH.lnk")
             };
 
             var exeDir = AppDomain.CurrentDomain.BaseDirectory;

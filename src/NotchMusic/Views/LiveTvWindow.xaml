@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:helpers="clr-namespace:NotchMusic.Helpers"
-        Title="DRANOTCH - Live TV"
+        Title="TAMANOTCH - Live TV"
         Width="480" Height="650" MinWidth="340" MinHeight="230"
         WindowStartupLocation="Manual"
         Topmost="True"
@@ -702,7 +702,7 @@
             <!-- ================= ROW 7: FOOTER ================= -->
             <DockPanel Grid.Row="7" x:Name="FooterDock" Margin="2,6,2,0" LastChildFill="True"
                        Visibility="{Binding IsLiveTvWindowExpanded, Converter={StaticResource BoolToVis}}">
-                <TextBlock Text="Streaming Live TV Indonesia &amp; Dunia • DRANOTCH"
+                <TextBlock Text="Streaming Live TV Indonesia &amp; Dunia • TAMANOTCH"
                            FontSize="9.5" Foreground="#66667A" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </DockPanel>
         </Grid>

@@ -1237,7 +1237,7 @@ public class SettingsViewModel : ViewModelBase
             var url = AvailableUpdate?.ReleasePageUrl;
             if (string.IsNullOrWhiteSpace(url))
             {
-                url = "https://github.com/dranotch/dranotch/releases";
+                url = "https://github.com/fajarsutomo/tamanotch/releases";
             }
             try
             {

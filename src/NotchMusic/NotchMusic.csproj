@@ -10,9 +10,9 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
     <Version>1.8.4</Version>
-    <AssemblyTitle>DRANOTCH</AssemblyTitle>
-    <Product>DRANOTCH</Product>
-    <Company>DRANOTCH</Company>
+    <AssemblyTitle>TAMANOTCH</AssemblyTitle>
+    <Product>TAMANOTCH</Product>
+    <Company>TAMANOTCH</Company>
   </PropertyGroup>
 
   <ItemGroup>

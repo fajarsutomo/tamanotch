@@ -242,7 +242,7 @@ public class MainViewModel : ViewModelBase
     public bool ShowCompactView => IsCompactMode && !_isBezelMinimized;
 
     public string BezelMinimizeButtonTooltip => IsBezelMinimized
-        ? "Buka kembali Notch DRANOTCH"
+        ? "Buka kembali Notch TAMANOTCH"
         : "Minimize Notch ke Bezel Atas (Agar tidak mengganggu jendela lain)";
 
     public string BezelMinimizeMenuText => IsBezelMinimized
@@ -259,13 +259,13 @@ public class MainViewModel : ViewModelBase
 
     public string MusicNotchTooltip => HasTrack
         ? $"{CurrentTrack?.Title} - {CurrentTrack?.Artist}\nKlik untuk perluas pemutar & lirik"
-        : "Pemutar Musik DRANOTCH (Klik untuk perluas pemutar & lirik)";
+        : "Pemutar Musik TAMANOTCH (Klik untuk perluas pemutar & lirik)";
 
     public bool HasTrackThumbnail => CurrentTrack?.Thumbnail != null;
 
     public string TodoNotchTooltip => HasPendingTodos
         ? $"To-Do List: {PendingTodosCount} tugas aktif\nKlik untuk buka daftar tugas"
-        : "To-Do List DRANOTCH (Klik untuk buka daftar tugas)";
+        : "To-Do List TAMANOTCH (Klik untuk buka daftar tugas)";
 
     public string PendingTodoCountText => PendingTodosCount > 99 ? "99+" : PendingTodosCount.ToString();
 
@@ -1659,7 +1659,7 @@ public class MainViewModel : ViewModelBase
             : CurrentVersionText);
     public string VersionButtonTooltip => HasAvailableUpdate && !string.IsNullOrWhiteSpace(AvailableUpdateVersion)
         ? $"Pembaruan v{AvailableUpdateVersion} tersedia! (Saat ini: {CurrentVersionText}) — Klik untuk langsung download & install"
-        : $"Versi Aplikasi DRANOTCH {CurrentVersionText} — Klik untuk langsung cek, download, dan install pembaruan";
+        : $"Versi Aplikasi TAMANOTCH {CurrentVersionText} — Klik untuk langsung cek, download, dan install pembaruan";
 
     private bool _hasAvailableUpdate;
     public bool HasAvailableUpdate
@@ -3687,7 +3687,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
                 else if (update != null)
                 {
                     UpdateActionStatusText = "Sudah terbaru ✓";
-                    RequestShowTrayNotification?.Invoke("Pembaruan DRANOTCH", $"Aplikasi sudah menggunakan versi terbaru ({CurrentVersionText}).");
+                    RequestShowTrayNotification?.Invoke("Pembaruan TAMANOTCH", $"Aplikasi sudah menggunakan versi terbaru ({CurrentVersionText}).");
                     await Task.Delay(2200);
                     UpdateActionStatusText = string.Empty;
                     return;
@@ -3729,7 +3729,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
         catch (Exception ex)
         {
             UpdateActionStatusText = "Gagal update";
-            RequestShowTrayNotification?.Invoke("Pembaruan DRANOTCH", $"Gagal mengunduh pembaruan: {ex.Message}");
+            RequestShowTrayNotification?.Invoke("Pembaruan TAMANOTCH", $"Gagal mengunduh pembaruan: {ex.Message}");
             await Task.Delay(2200);
             UpdateActionStatusText = string.Empty;
         }
@@ -4358,7 +4358,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
                 {
                     System.Windows.MessageBox.Show(
                         $"Tidak dapat login ke Google Drive:\n{_googleDriveSyncService.SyncStatus}",
-                        "DRANOTCH - Google Drive",
+                        "TAMANOTCH - Google Drive",
                         System.Windows.MessageBoxButton.OK,
                         System.Windows.MessageBoxImage.Warning);
                 }
@@ -4367,7 +4367,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
             {
                 System.Windows.MessageBox.Show(
                     $"Gagal otentikasi Google Drive:\n{ex.Message}",
-                    "DRANOTCH - Google Drive Error",
+                    "TAMANOTCH - Google Drive Error",
                     System.Windows.MessageBoxButton.OK,
                     System.Windows.MessageBoxImage.Error);
             }

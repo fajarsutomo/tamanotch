@@ -1,10 +1,10 @@
-; Inno Setup Script for DRANOTCH
-#define MyAppName "DRANOTCH"
+; Inno Setup Script for TAMANOTCH
+#define MyAppName "TAMANOTCH"
 #ifndef MyAppVersion
 #define MyAppVersion "1.8.4"
 #endif
-#define MyAppPublisher "DRANOTCH"
-#define MyAppURL "https://github.com/dningratx/dranotch"
+#define MyAppPublisher "TAMANOTCH"
+#define MyAppURL "https://github.com/fajarsutomo/tamanotch"
 #define MyAppExeName "NotchMusic.exe"
 
 [Setup]
@@ -20,7 +20,7 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 OutputDir=..\dist\Installer
-OutputBaseFilename=DRANOTCH-Setup-{#MyAppVersion}
+OutputBaseFilename=TAMANOTCH-Setup-{#MyAppVersion}
 SetupIconFile=..\src\NotchMusic\Assets\app.ico
 UninstallDisplayIcon={app}\app.ico
 ChangesAssociations=yes
@@ -50,15 +50,15 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 
 [UninstallRun]
 ; Kill process if running before uninstallation
-Filename: "taskkill.exe"; Parameters: "/F /IM {#MyAppExeName}"; Flags: runhidden; RunOnceId: "StopDRANOTCH"
+Filename: "taskkill.exe"; Parameters: "/F /IM {#MyAppExeName}"; Flags: runhidden; RunOnceId: "StopTAMANOTCH"
 
 [UninstallDelete]
-; Clean up app binaries (leaves user data in LocalAppData\DRANOTCH untouched)
+; Clean up app binaries (leaves user data in LocalAppData\TAMANOTCH untouched)
 Type: filesandordirs; Name: "{app}"
 
 [Registry]
 ; Clean up startup entry upon uninstall if user enabled it
-Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueName: "DRANOTCH"; Flags: dontcreatekey uninsdeletevalue
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueName: "TAMANOTCH"; Flags: dontcreatekey uninsdeletevalue
 
 [Code]
 procedure SHChangeNotify(wEventId: Integer; uFlags: Cardinal; dwItem1, dwItem2: Integer);

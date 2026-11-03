@@ -388,7 +388,7 @@ public partial class MainWindow : Window
         {
             System.Windows.MessageBox.Show(
                 $"Tidak dapat membuka Pemutar Musik:\n{ex.Message}",
-                "DRANOTCH - Error",
+                "TAMANOTCH - Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -455,7 +455,7 @@ public partial class MainWindow : Window
         {
             System.Windows.MessageBox.Show(
                 $"Tidak dapat membuka Cuaca & Gempa Bumi BMKG:\n{ex.Message}",
-                "DRANOTCH - Error",
+                "TAMANOTCH - Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -548,7 +548,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            // Minimize Dranotch ke mode compact saat YT Music dibuka
+            // Minimize Tamanotch ke mode compact saat YT Music dibuka
             _viewModel.CurrentMode = PanelMode.Compact;
 
             if (_ytMusicWindow == null)
@@ -569,7 +569,7 @@ public partial class MainWindow : Window
                 }
                 else
                 {
-                    // Dapatkan area monitor tempat Dranotch berada
+                    // Dapatkan area monitor tempat Tamanotch berada
                     var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)Left, (int)Top));
                     var workingArea = screen.WorkingArea;
 
@@ -591,7 +591,7 @@ public partial class MainWindow : Window
                         targetWidth = Math.Min(_ytMusicWindow.MinWidth, areaWidth - 10);
                     }
 
-                    // Terbuka di bawah dranotch dan tengah horizontalnya
+                    // Terbuka di bawah tamanotch dan tengah horizontalnya
                     double notchHeight = 64;
                     double notchBottom = Top + notchHeight;
                     if (notchBottom < areaTop) notchBottom = areaTop;
@@ -628,7 +628,7 @@ public partial class MainWindow : Window
         {
             System.Windows.MessageBox.Show(
                 $"Tidak dapat membuka pemutar YouTube Music:\n{ex.Message}",
-                "DRANOTCH - Error",
+                "TAMANOTCH - Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -717,7 +717,7 @@ public partial class MainWindow : Window
         {
             System.Windows.MessageBox.Show(
                 $"Tidak dapat membuka pemutar Spotify:\n{ex.Message}",
-                "DRANOTCH - Error",
+                "TAMANOTCH - Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -836,7 +836,7 @@ public partial class MainWindow : Window
         {
             System.Windows.MessageBox.Show(
                 $"Tidak dapat membuka browser mengambang:\n{ex.Message}",
-                "DRANOTCH - Error",
+                "TAMANOTCH - Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -867,7 +867,7 @@ public partial class MainWindow : Window
         {
             System.Windows.MessageBox.Show(
                 $"Tidak dapat membuka Radio Online:\n{ex.Message}",
-                "DRANOTCH - Error",
+                "TAMANOTCH - Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -898,7 +898,7 @@ public partial class MainWindow : Window
         {
             System.Windows.MessageBox.Show(
                 $"Tidak dapat membuka Live TV:\n{ex.Message}",
-                "DRANOTCH - Error",
+                "TAMANOTCH - Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

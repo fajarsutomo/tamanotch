@@ -80,7 +80,7 @@ public partial class SpotifyWindow : Window
         {
             StatusText.Text = "Menyiapkan browser Spotify...";
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var userDataFolder = Path.Combine(localAppData, "DRANOTCH", "SpotifyWebView2Profile");
+            var userDataFolder = Path.Combine(localAppData, "TAMANOTCH", "SpotifyWebView2Profile");
             var legacyProfile = Path.Combine(localAppData, "NotchMusic", "SpotifyWebView2Profile");
             if (!Directory.Exists(userDataFolder) && Directory.Exists(legacyProfile))
             {
@@ -114,8 +114,8 @@ public partial class SpotifyWindow : Window
                         var medias = document.querySelectorAll('video, audio');
                         for (var i = 0; i < medias.length; i++) {
                             var v = medias[i];
-                            if (!v.__dranotchHooked) {
-                                v.__dranotchHooked = true;
+                            if (!v.__tamanotchHooked) {
+                                v.__tamanotchHooked = true;
                                 v.addEventListener('play', function() {
                                     if (window.chrome && window.chrome.webview) {
                                         window.chrome.webview.postMessage('spotify_playing');
@@ -158,7 +158,7 @@ public partial class SpotifyWindow : Window
                 {
                     LoadingPanel.Visibility = Visibility.Collapsed;
                     webView.Visibility = Visibility.Visible;
-                    StatusText.Text = "Tersambung ke DRANOTCH";
+                    StatusText.Text = "Tersambung ke TAMANOTCH";
                     BackButton.IsEnabled = webView.CanGoBack;
                     ForwardButton.IsEnabled = webView.CanGoForward;
                 });
@@ -171,7 +171,7 @@ public partial class SpotifyWindow : Window
             StatusText.Text = "Gagal memuat WebView2";
             System.Windows.MessageBox.Show(
                 $"Gagal menginisialisasi Microsoft Edge WebView2 untuk Spotify:\n{ex.Message}\n\nPastikan Microsoft Edge WebView2 Runtime terpasang di sistem Anda.",
-                "DRANOTCH - WebView2 Error",
+                "TAMANOTCH - WebView2 Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

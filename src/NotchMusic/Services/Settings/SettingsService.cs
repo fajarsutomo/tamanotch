@@ -26,7 +26,7 @@ public class SettingsService : ISettingsService
     public SettingsService()
     {
         var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        _appDataDir = Path.Combine(localAppData, "DRANOTCH");
+        _appDataDir = Path.Combine(localAppData, "TAMANOTCH");
         var legacyDir = Path.Combine(localAppData, "NOTCHMusic");
         if (!Directory.Exists(_appDataDir) && Directory.Exists(legacyDir))
         {
@@ -87,11 +87,11 @@ public class SettingsService : ISettingsService
                 var exePath = Environment.ProcessPath;
                 if (enable && !string.IsNullOrEmpty(exePath))
                 {
-                    key.SetValue("DRANOTCH", $"\"{exePath}\"");
+                    key.SetValue("TAMANOTCH", $"\"{exePath}\"");
                 }
                 else
                 {
-                    key.DeleteValue("DRANOTCH", false);
+                    key.DeleteValue("TAMANOTCH", false);
                 }
             }
             _settings.StartWithWindows = enable;

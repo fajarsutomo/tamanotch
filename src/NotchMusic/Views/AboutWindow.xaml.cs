@@ -27,7 +27,7 @@ public partial class AboutWindow : Window
     {
         try
         {
-            Process.Start(new ProcessStartInfo("https://dningratx.github.io/dranotch/")
+            Process.Start(new ProcessStartInfo("https://fajarsutomo.github.io/tamanotch/")
             {
                 UseShellExecute = true
             });

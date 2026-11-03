@@ -86,7 +86,7 @@ public class RadioService : IRadioService
     private static HttpClient CreateHttpClient()
     {
         var client = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("DRANOTCH/1.5 (+https://github.com/dranotch)");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("TAMANOTCH/1.5 (+https://github.com/fajarsutomo)");
         return client;
     }
 

@@ -18,8 +18,8 @@ namespace NotchMusic.Views;
 
 public partial class LiveTvWindow : Window
 {
-    private const string VirtualHostName = "livetv.dranotch.local";
-    private const string PlayerPageUrl = "https://livetv.dranotch.local/player.html";
+    private const string VirtualHostName = "livetv.tamanotch.local";
+    private const string PlayerPageUrl = "https://livetv.tamanotch.local/player.html";
 
     private readonly MainViewModel _viewModel;
     private readonly ISettingsService _settingsService;
@@ -97,8 +97,8 @@ public partial class LiveTvWindow : Window
         try
         {
             var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            var userDataFolder = Path.Combine(localAppData, "DRANOTCH", "LiveTvProfile");
-            var playerAssetsFolder = Path.Combine(localAppData, "DRANOTCH", "LiveTvPlayer");
+            var userDataFolder = Path.Combine(localAppData, "TAMANOTCH", "LiveTvProfile");
+            var playerAssetsFolder = Path.Combine(localAppData, "TAMANOTCH", "LiveTvPlayer");
             Directory.CreateDirectory(userDataFolder);
             Directory.CreateDirectory(playerAssetsFolder);
 
@@ -196,7 +196,7 @@ public partial class LiveTvWindow : Window
             PlayerLoadingOverlay.Visibility = Visibility.Collapsed;
             System.Windows.MessageBox.Show(
                 $"Gagal menyiapkan pemutar video Live TV (WebView2):\n{ex.Message}",
-                "DRANOTCH - Live TV Error",
+                "TAMANOTCH - Live TV Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -469,7 +469,7 @@ public partial class LiveTvWindow : Window
 <meta charset=""utf-8""/>
 <meta name=""viewport"" content=""width=device-width,initial-scale=1.0""/>
 <meta name=""referrer"" content=""strict-origin-when-cross-origin""/>
-<title>DRANOTCH Live TV Player</title>
+<title>TAMANOTCH Live TV Player</title>
 <script src=""https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js""></script>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }

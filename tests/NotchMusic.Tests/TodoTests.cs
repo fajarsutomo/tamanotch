@@ -60,7 +60,7 @@ public class TodoTests
     [Fact]
     public void TodoService_SavesAndLoadsTodos()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_test_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_test_{Guid.NewGuid():N}.json");
         try
         {
             var service = new TodoService(tempFile);
@@ -116,7 +116,7 @@ public class TodoTests
     [Fact]
     public void MainViewModel_AddAndManageTodos()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_vm_test_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_vm_test_{Guid.NewGuid():N}.json");
         try
         {
             var todoService = new TodoService(tempFile);
@@ -192,7 +192,7 @@ public class TodoTests
     [Fact]
     public void MainViewModel_TickerBehavior_RotatesAndCompletesTasks()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_ticker_test_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_ticker_test_{Guid.NewGuid():N}.json");
         try
         {
             var todoService = new TodoService(tempFile);
@@ -300,7 +300,7 @@ public class TodoTests
     [Fact]
     public void TodoService_DeletedIds_PersistsAndClears()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_test_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_test_{Guid.NewGuid():N}.json");
         var tempDeleted = Path.ChangeExtension(tempFile, ".deleted.json");
         try
         {
@@ -429,7 +429,7 @@ public class TodoTests
     [Fact]
     public async Task MainViewModel_GoogleDriveSync_SyncsTasks()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_gdrive_vm_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_gdrive_vm_{Guid.NewGuid():N}.json");
         try
         {
             var todoService = new TodoService(tempFile);
@@ -465,7 +465,7 @@ public class TodoTests
     [Fact]
     public async Task MainViewModel_GoogleDrive_DetectsRemoteChangesAutomatically()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_gdrive_poll_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_gdrive_poll_{Guid.NewGuid():N}.json");
         try
         {
             var todoService = new TodoService(tempFile);
@@ -551,7 +551,7 @@ public class TodoTests
     [Fact]
     public void MainViewModel_CategoryFiltering_FiltersItemsAndUpdatesTicker()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_cat_test_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_cat_test_{Guid.NewGuid():N}.json");
         try
         {
             var todoService = new TodoService(tempFile);
@@ -609,7 +609,7 @@ public class TodoTests
     [Fact]
     public void MainViewModel_NewTodoCategory_CombinesCategoryWithTitle()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_cat_select_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_cat_select_{Guid.NewGuid():N}.json");
         try
         {
             var todoService = new TodoService(tempFile);
@@ -839,7 +839,7 @@ public class TodoTests
         settingsService.CurrentSettings.GoogleDriveAutoSync = true;
         var syncService = new FakeGoogleDriveSyncService { IsConnected = true };
 
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_autosync_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_autosync_{Guid.NewGuid():N}.json");
         try
         {
             var todoService = new TodoService(tempFile);
@@ -879,7 +879,7 @@ public class TodoTests
     [Fact]
     public void MainViewModel_MoveTodo_ReordersAndPersists()
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_reorder_{Guid.NewGuid():N}.json");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_reorder_{Guid.NewGuid():N}.json");
         try
         {
             var todoService = new TodoService(tempFile);
@@ -1061,7 +1061,7 @@ public class TodoTests
             settingsService.CurrentSettings.GoogleDriveAutoSync = true;
             var syncService = new FakeGoogleDriveSyncService { IsConnected = true };
 
-            var tempFile = Path.Combine(Path.GetTempPath(), $"dranotch_autosync_crud_{Guid.NewGuid():N}.json");
+            var tempFile = Path.Combine(Path.GetTempPath(), $"tamanotch_autosync_crud_{Guid.NewGuid():N}.json");
             try
             {
                 File.WriteAllText(tempFile, "[]");

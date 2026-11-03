@@ -1,20 +1,20 @@
 <div align="center">
 
-# 🎵 DRANOTCH
+# 🎵 TAMANOTCH
 
 ### *Aesthetic Dynamic Island & Floating Productivity Companion for Windows*
 
-[![Latest Release](https://img.shields.io/github/v/release/dningratx/dranotch?style=for-the-badge&color=8A2BE2&logo=github)](https://github.com/dningratx/dranotch/releases/latest)
-[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6?style=for-the-badge&logo=windows)](https://github.com/dningratx/dranotch)
+[![Latest Release](https://img.shields.io/github/v/release/fajarsutomo/tamanotch?style=for-the-badge&color=8A2BE2&logo=github)](https://github.com/fajarsutomo/tamanotch/releases/latest)
+[![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6?style=for-the-badge&logo=windows)](https://github.com/fajarsutomo/tamanotch)
 [![.NET](https://img.shields.io/badge/.NET-10.0%20WPF-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 <br/>
 
-**DRANOTCH** menghadirkan pengalaman *Dynamic Island* modern, ramping, dan elegan langsung di bagian atas desktop Windows Anda.  
+**TAMANOTCH** menghadirkan pengalaman *Dynamic Island* modern, ramping, dan elegan langsung di bagian atas desktop Windows Anda.  
 Menggabungkan **pemutar musik pintar (YouTube Music & Spotify bawaan)**, **Live TV Indonesia & Dunia**, **Radio Online Indonesia & Dunia**, **Cuaca & Gempa Bumi BMKG (Presisi Kelurahan/Desa)**, **lirik sinkronisasi otomatis (Karaoke)**, **To-Do List produktif yang dapat dilepas (detachable)** dengan sinkronisasi Google Drive, **jadwal waktu sholat & pengingat adzan otomatis**, serta **Browser Mengambang**.
 
-[📥 **Unduh Versi Terbaru (v1.8.4)**](https://github.com/dningratx/dranotch/releases/latest) • [🌐 **Halaman Rilis Resmi**](https://dningratx.github.io/dranotch/) • [✨ Fitur Utama](#-fitur-utama) • [⌨️ Shortcut](#️-pintasan-keyboard-hotkeys) • [🛠️ Panduan Build](#️-cara-build-dari-source)
+[📥 **Unduh Versi Terbaru (v1.8.4)**](https://github.com/fajarsutomo/tamanotch/releases/latest) • [🌐 **Halaman Rilis Resmi**](https://fajarsutomo.github.io/tamanotch/) • [✨ Fitur Utama](#-fitur-utama) • [⌨️ Shortcut](#️-pintasan-keyboard-hotkeys) • [🛠️ Panduan Build](#️-cara-build-dari-source)
 
 </div>
 
@@ -46,7 +46,7 @@ Menggabungkan **pemutar musik pintar (YouTube Music & Spotify bawaan)**, **Live 
 Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 - 🎶 **Musik & To-Do List (Keduanya)**: Tampilan lengkap pemutar musik dan manajemen tugas.
 - 🎵 **Hanya Pemutar Musik**: Tampilan murni pemutar musik tanpa elemen To-Do.
-- ✅ **Hanya To-Do List**: Transformasi DRANOTCH menjadi widget produktivitas murni dengan notch ringkas dan ticker tugas.
+- ✅ **Hanya To-Do List**: Transformasi TAMANOTCH menjadi widget produktivitas murni dengan notch ringkas dan ticker tugas.
 
 ### 🖤 5. Tampilan Estetik OLED Monokrom & Kontrol Mandiri *(Baru di v1.2.1)*
 - **Deep Black Palette**: Desain antarmuka bernuansa hitam pekat (*true dark / OLED*) yang ramping, ramah di mata untuk penggunaan malam hari, dan hemat daya.
@@ -77,13 +77,13 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 - **Edit Tugas di Tempat (*Inline To-Do Editing*)**: Klik dua kali pada nama tugas (atau klik ikon pensil) untuk mengedit teks secara langsung. Tekan <kbd>Enter</kbd> untuk menyimpan perubahan atau <kbd>Esc</kbd> untuk membatalkan.
 - **Intelligent Hover Delay**: Peningkatan kenyamanan dengan jeda sengaja (650ms) saat mouse mendekati notch agar panel tidak terbuka secara tidak sengaja ketika kursor hanya melintas cepat.
 
-### 🌟 9. Logo DRANOTCH Terintegrasi & Waktu Sholat di Expanded Mode *(v1.4.2)*
-- **Logo Resmi DRANOTCH di Notch Capsule**: Menggantikan placeholder ikon musik `♪` dengan lambang resmi DRANOTCH saat notch dalam kondisi idle / standby, tampil estetik dan serasi dengan desain kapsul.
+### 🌟 9. Logo TAMANOTCH Terintegrasi & Waktu Sholat di Expanded Mode *(v1.4.2)*
+- **Logo Resmi TAMANOTCH di Notch Capsule**: Menggantikan placeholder ikon musik `♪` dengan lambang resmi TAMANOTCH saat notch dalam kondisi idle / standby, tampil estetik dan serasi dengan desain kapsul.
 - **Jadwal Waktu Sholat Terintegrasi di Expanded Mode**: Saat panel diperluas (*expanded*), jadwal waktu sholat kini tampil berdampingan secara otomatis di antara pemutar musik dan To-Do list, lengkap dengan kartu waktu sholat aktif, hitung mundur real-time, dan tombol lepas (*detach*).
 - **Pembaruan Ikon Desktop Otomatis**: Menjamin ikon shortcut desktop dan start menu langsung diperbarui ke desain ikon terbaru saat instalasi maupun saat update otomatis (*in-app update*), dengan pembersihan cache ikon Windows Shell secara instan.
 
 ### 🔄 10. Auto-Sync Realtime Lintas Komputer & Desain Tombol Minimalis *(v1.4.3)*
-- **Sinkronisasi Otomatis Realtime Antar Komputer**: Jika DRANOTCH terpasang di 2 atau lebih komputer dengan akun Google Drive yang sama, perubahan tugas (tambah, edit, centang selesai, atau hapus) di salah satu komputer akan otomatis terupdate di komputer lain dalam hitungan detik tanpa harus menekan tombol sinkronisasi.
+- **Sinkronisasi Otomatis Realtime Antar Komputer**: Jika TAMANOTCH terpasang di 2 atau lebih komputer dengan akun Google Drive yang sama, perubahan tugas (tambah, edit, centang selesai, atau hapus) di salah satu komputer akan otomatis terupdate di komputer lain dalam hitungan detik tanpa harus menekan tombol sinkronisasi.
 - **Deteksi Cerdas Metadata Cloud**: Memeriksa perubahan timestamp berkas cloud di latar belakang secara hemat daya dan hemat kuota tanpa mengunduh ulang jika tidak ada perubahan.
 - **Desain Tombol Pasang & Lepas Bersih**: Tombol Pasang (`⇲`) dan Lepas (`⧉`) kini tampil minimalis hanya dengan lambang ikon tanpa teks label panjang, membuat header jendela To-Do, Waktu Sholat, dan Notch terlihat jauh lebih rapi dan ringkas.
 
@@ -92,11 +92,11 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 - **Tutup Jendela Lepas Mandiri (*Decoupled Close*)**: Menutup jendela mengambang Waktu Sholat atau To-Do List dengan tombol `✕` tidak lagi memaksanya kembali menempel ke notch. Jendela tetap dalam status terlepas/tertutup hingga Anda memutuskan untuk memasangnya kembali melalui tombol pasang (`⇲`).
 - **Jendela Waktu Sholat Pas Vertikal (*Shrink-Wrap Fit*)**: Tampilan jendela lepas Waktu Sholat kini otomatis menyesuaikan tinggi konten secara presisi (*SizeToContent Height*), menghilangkan ruang kosong hitam di bagian bawah.
 - **Tata Letak Bebas Terpotong (*Zero-Clipping UI Guarantee*)**: Seluruh header dan tombol aksi kini menggunakan arsitektur `DockPanel` kanan yang terlindungi dari kelengkungan sudut notch (*corner radius*), memastikan tombol `✕`, tombol tambah `+`, dan ikon opsi tidak pernah terpotong.
-- **Desain Notch Simetris & Ikon Seragam**: Menghilangkan kekosongan ruang samping notch dengan proporsi simetris (1100px saat rapat) dan menyamakan ukuran ikon DRANOTCH saat expanded dengan mode minimize.
+- **Desain Notch Simetris & Ikon Seragam**: Menghilangkan kekosongan ruang samping notch dengan proporsi simetris (1100px saat rapat) dan menyamakan ukuran ikon TAMANOTCH saat expanded dengan mode minimize.
 - **Tombol Cepat YT Music & Scrollbar OLED**: Tombol `▶ YT Music` di barisan header atas untuk kemudahan mengganti lagu, serta scrollbar vertikal & horizontal kustom yang menyatu dengan tema gelap OLED.
 
 ### 🌐 12. Komponen ke-4: Browser Mengambang & Pemutar Streaming *(v1.5.0)*
-- **4 Komponen Layar Modular**: DRANOTCH kini resmi memiliki 4 komponen mandiri yang fleksibel: **Pemutar Musik**, **Waktu Sholat**, **To-Do List**, dan **Browser Mengambang**.
+- **4 Komponen Layar Modular**: TAMANOTCH kini resmi memiliki 4 komponen mandiri yang fleksibel: **Pemutar Musik**, **Waktu Sholat**, **To-Do List**, dan **Browser Mengambang**.
 - **Akses Web & Video Streaming Bebas**: Buka YouTube, situs film streaming (LK21), Twitch, Netflix, atau alamat web apa pun langsung dari notch atau menu tray.
 - **Windowed Fullscreen**: Mode layar penuh video otomatis dibatasi di dalam jendela mengambang (*in-window fullscreen*), tidak akan menutupi seluruh layar monitor komputer Anda.
 - **Navigasi & Drag Selalu Aktif**: Dilengkapi grip geser khusus (`⋮⋮ Geser`) dan batas luar pelindung resize, menjamin jendela selalu bisa dipindahkan dan di-resize bebas kapan pun meski film sedang diputar fullscreen.
@@ -104,7 +104,7 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 - **Mode Mengambang (Always On Top 📌)**: Fitur pin yang membuat jendela video tetap melayang di atas aplikasi lain (coding, game, office, dll).
 
 ### 🖥️ 13. Desain Bezel Notch Menyatu ke Atas Layar & UI Browser Minimalis *(v1.5.1)*
-- **Siluet Bezel Atas Menyatu (*Top-Mounted Hardware Notch*)**: Desain DRANOTCH kini menempel langsung (*flush*) di tepi paling atas layar Windows (`Top = 0`) dengan lengkungan bahu cekung (*concave fillet ears*) di sisi kiri-kanan atas dan sudut bawah membulat, tampak menyatu secara alami dengan bingkai atas monitor.
+- **Siluet Bezel Atas Menyatu (*Top-Mounted Hardware Notch*)**: Desain TAMANOTCH kini menempel langsung (*flush*) di tepi paling atas layar Windows (`Top = 0`) dengan lengkungan bahu cekung (*concave fillet ears*) di sisi kiri-kanan atas dan sudut bawah membulat, tampak menyatu secara alami dengan bingkai atas monitor.
 - **Auto-Dock & Snap ke Tepi Atas**: Jendela notch otomatis menempel rapat ke tepi atas monitor saat aplikasi dijalankan, saat beralih mode (*Compact* / *Expanded* / *Lyrics*), maupun setelah digeser secara horizontal.
 - **Antarmuka Browser Mengambang Lebih Bersih & Ringkas**: Menghapus tombol-tombol pintasan situs di samping kolom URL agar bar pencarian/alamat membentang penuh, menyederhanakan header kiri dengan menyisakan grip `⋮⋮ Geser`, serta merampingkan tombol Pin menjadi hanya ikon `📌`.
 
@@ -114,7 +114,7 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 - **4 Komponen Terpisah dengan Pembatas di Notch**: Kapsul komponen ke-4 (**`Browser`**) kini ditempatkan langsung di sebelah kanan komponen **To-Do List** lengkap dengan garis pembatas vertikal (`|`), menandakan 4 komponen modular yang terpisah secara jelas:
   `[ Pemutar Musik ]` ╎ `[ Waktu Sholat ]` ╎ `[ To-Do List ]` ╎ `[ Browser ]`
   *(Tombol Browser di dalam Music Player dihapus agar tidak duplikat).*
-- **Ikon Vektor Kustom Berwarna Silver Metallic**: Menggantikan emoji bawaan Windows dengan **ikon vektor SVG kustom** berlapis gradien **Silver Metallic** (`#FFFFFF` → `#E2E6F0` → `#949BA8` → `#D4D9E6`) yang serasi dengan logo resmi DRANOTCH di dalam lencana *squircle* `28×28` untuk **Waktu Sholat** (Bulan Sabit & Bintang Berlian), **To-Do List** (Bingkai & Centang Tugas), **Browser** (Bola Dunia Meridian), dan **Musik**.
+- **Ikon Vektor Kustom Berwarna Silver Metallic**: Menggantikan emoji bawaan Windows dengan **ikon vektor SVG kustom** berlapis gradien **Silver Metallic** (`#FFFFFF` → `#E2E6F0` → `#949BA8` → `#D4D9E6`) yang serasi dengan logo resmi TAMANOTCH di dalam lencana *squircle* `28×28` untuk **Waktu Sholat** (Bulan Sabit & Bintang Berlian), **To-Do List** (Bingkai & Centang Tugas), **Browser** (Bola Dunia Meridian), dan **Musik**.
 - **Panggung Lirik Karaoke Lebih Mewah & Bersih**: Memperbesar mode *Lyrics* menjadi `640×400` dengan efek panggung *radial gradient*, kontrol media vektor bertema *Satin Glass*, serta menghapus tombol *Click-Through* agar antarmuka lirik lebih fokus dan elegan.
 
 ### 📻 15. Komponen ke-5: Radio Online Indonesia & Dunia, Mode Notch Cerdas (Mini/Idle), & Kunci Pin *(v1.6.0)*
@@ -133,16 +133,16 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
   - Saat tombol **Pin (`📌`)** diaktifkan, Notch dikunci agar tidak mengecil otomatis ketika *idle*.
   - Menonaktifkan pembukaan panel otomatis saat kursor melintas (*Expand on Hover*) agar tidak mengganggu aktivitas kerja di bagian atas layar.
 
-### ✨ 16. Mode Idle Simetris Berpusat pada Logo DRANOTCH, Jendela Lepas Pemutar Musik, & Transformasi Ikon Pintar *(v1.6.1)*
-- **Tampilan Idle Minimalis (Logo DRANOTCH, Waktu Sholat, & Pemutar Musik saat Memutar Lagu)**:
-  - Saat kondisi *idle*, notch menampilkan **Logo DRANOTCH**, **Waktu Sholat** tepat di sampingnya (dapat diatur tampil atau disembunyikan melalui Pengaturan), serta **Pemutar Musik** otomatis tetap tampil jika lagu sedang dimainkan (`IsPlaying == true`).
+### ✨ 16. Mode Idle Simetris Berpusat pada Logo TAMANOTCH, Jendela Lepas Pemutar Musik, & Transformasi Ikon Pintar *(v1.6.1)*
+- **Tampilan Idle Minimalis (Logo TAMANOTCH, Waktu Sholat, & Pemutar Musik saat Memutar Lagu)**:
+  - Saat kondisi *idle*, notch menampilkan **Logo TAMANOTCH**, **Waktu Sholat** tepat di sampingnya (dapat diatur tampil atau disembunyikan melalui Pengaturan), serta **Pemutar Musik** otomatis tetap tampil jika lagu sedang dimainkan (`IsPlaying == true`).
   - Saat kursor diarahkan (*hover*) ke notch, 5 komponen mengembang secara simetris: **Pemutar Musik** & **Radio Online** di sisi kiri, **Browser** & **To-Do List** di sisi kanan, serta **Pengaturan (`⚙`)**, **Waktu Sholat**, & **Tombol Versi** di baris bawah.
 - **Mode Pelepasan Pemutar Musik & Lirik (`MusicWindow`)**:
   - Mengklik pemutar musik membuka jendela melayang mandiri yang menampilkan lirik *real-time* 3 baris, *progress bar*, kontrol media & offset satu baris, tombol **`🎤 Karaoke` (Penghilang Vokal *Real-Time* berbasis Web Audio DSP dengan pelestarian Bass)**, tombol **`▶ YT Music`**, tombol minimize (`▴`) yang tetap menampilkan lirik secara ringkas saat dikecilkan, serta tombol satukan kembali ke notch utama (`⇲`), sementara notch utama tetap tampil di atas layar.
 - **Transformasi Otomatis menjadi Tombol Ikon saat Mode Pelebaran**:
   - Ketika **Pemutar Musik** atau **To-Do List** sedang dibuka ke jendela pelebaran/pelepasan, komponen tersebut di notch utama otomatis berubah menjadi **tombol ikon ringkas (`42×42`)** dengan indikator aktif hijau, dan kembali menjadi *pill* lengkap saat disatukan kembali (`⇲`).
-- **Kartu Info Tentang DRANOTCH (`AboutWindow`) & Auto-Update 1-Klik**:
-  - Mengklik tombol **Logo DRANOTCH** memunculkan kartu info ringkas dengan tombol cek pembaruan dan tautan ke [Halaman Rilis Resmi](https://dningratx.github.io/dranotch/).
+- **Kartu Info Tentang TAMANOTCH (`AboutWindow`) & Auto-Update 1-Klik**:
+  - Mengklik tombol **Logo TAMANOTCH** memunculkan kartu info ringkas dengan tombol cek pembaruan dan tautan ke [Halaman Rilis Resmi](https://fajarsutomo.github.io/tamanotch/).
   - Mengklik tombol versi (`v1.6.1`) langsung memeriksa pembaruan, mengunduh installer terbaru, dan menjalankan instalasi otomatis.
 - **Perbaikan Hitung Mundur Subuh Hari Berikutnya & Penyederhanaan Pengaturan**:
   - Memperbaiki perhitungan hitung mundur menuju waktu **Subuh hari berikutnya** setelah waktu Isya berlalu.
@@ -242,8 +242,8 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 - **Ikon Vektor Cuaca Berwarna Terang & Banner Peringatan Dini**:
   - Seluruh ikon cuaca (Cerah, Cerah Berawan, Berawan, Udara Kabur/Kabut, Hujan, Hujan Petir) dan indikator dirancang menggunakan **ikon vektor SVG berwarna kontras tinggi** di atas tema gelap OLED.
   - Dilengkapi **Banner Peringatan Dini Dynamic Island** otomatis saat terdeteksi gempa bumi baru atau peringatan cuaca ekstrem (hujan lebat/petir).
-- **Mode Idle Minimalis (Hanya Logo DRANOTCH)**:
-  - Saat kondisi *idle* (kursor tidak diarahkan dan notch tidak di-pin), Dynamic Notch hanya menampilkan **Logo DRANOTCH** yang bersih dan minimalis di tengah atas layar. Saat di-*hover*, seluruh 7 komponen dan informasi ringkas (Waktu Sholat & Cuaca/Gempa BMKG) muncul secara simetris.
+- **Mode Idle Minimalis (Hanya Logo TAMANOTCH)**:
+  - Saat kondisi *idle* (kursor tidak diarahkan dan notch tidak di-pin), Dynamic Notch hanya menampilkan **Logo TAMANOTCH** yang bersih dan minimalis di tengah atas layar. Saat di-*hover*, seluruh 7 komponen dan informasi ringkas (Waktu Sholat & Cuaca/Gempa BMKG) muncul secara simetris.
 
 ---
 
@@ -263,7 +263,7 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 
 | Shortcut | Aksi |
 | :--- | :--- |
-| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd> | Tampilkan / Sembunyikan panel DRANOTCH |
+| <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>N</kbd> | Tampilkan / Sembunyikan panel TAMANOTCH |
 | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>L</kbd> | Buka / Tutup Mode Lirik (*Lyrics Mode*) |
 | <kbd>Enter</kbd> | Tambah tugas baru saat mengetik di input To-Do |
 
@@ -273,16 +273,16 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 
 ## 📥 Pemasangan (Instalasi)
 
-1. Unduh installer setup terbaru: [**`DRANOTCH-Setup-1.8.4.exe`**](https://github.com/dningratx/dranotch/releases/latest).
+1. Unduh installer setup terbaru: [**`TAMANOTCH-Setup-1.8.4.exe`**](https://github.com/fajarsutomo/tamanotch/releases/latest).
 2. Jalankan berkas installer dan ikuti petunjuk pemasangan.
-3. DRANOTCH akan muncul di bagian atas layar desktop Anda.
+3. TAMANOTCH akan muncul di bagian atas layar desktop Anda.
 
 > **🛡️ Notifikasi Keamanan Windows SmartScreen ("Windows protected your PC"):**  
-> Karena DRANOTCH adalah proyek independen yang ditandatangani secara digital dengan *Self-Signed Certificate*, Windows SmartScreen mungkin menampilkan layar biru peringatan.  
+> Karena TAMANOTCH adalah proyek independen yang ditandatangani secara digital dengan *Self-Signed Certificate*, Windows SmartScreen mungkin menampilkan layar biru peringatan.  
 > Anda dapat melewatinya dengan salah satu cara berikut:
 > - **Cara Cepat**: Klik **"More info"** (*Info selengkapnya*) lalu klik **"Run anyway"** (*Tetap jalankan*).
 > - **Atau Buka Blokir**: Klik kanan file installer -> **Properties** -> centang **"Unblock"** -> **OK**.
-> - **Permanen Tepercaya**: Jalankan berkas **`Install-Certificate.bat`** (yang disertakan di folder rilis/dist) sekali saja untuk mendaftarkan sertifikat DRANOTCH ke *Trusted Root Certification Authorities* di komputer Anda.
+> - **Permanen Tepercaya**: Jalankan berkas **`Install-Certificate.bat`** (yang disertakan di folder rilis/dist) sekali saja untuk mendaftarkan sertifikat TAMANOTCH ke *Trusted Root Certification Authorities* di komputer Anda.
 
 > **Catatan Sistem**: Memerlukan Windows 10 (versi 1809 atau lebih baru) atau Windows 11 (64-bit).
 
@@ -298,8 +298,8 @@ Sesuaikan apa yang ingin Anda tampilkan melalui menu Pengaturan:
 
 1. Clone repositori:
    ```bash
-   git clone https://github.com/dningratx/dranotch.git
-   cd dranotch
+   git clone https://github.com/fajarsutomo/tamanotch.git
+   cd tamanotch
    ```
 
 2. Jalankan pengujian unit:

@@ -1561,14 +1561,14 @@ public class MainViewModel : ViewModelBase
             var dt = NewTodoDueDate.Value;
             var today = DateTime.Today;
             if (dt.Date == today)
-                return $"Hari ini {dt:HH:mm}";
+                return $"Hari ini {dt:HH':'mm}";
             if (dt.Date == today.AddDays(1))
-                return $"Besok {dt:HH:mm}";
+                return $"Besok {dt:HH':'mm}";
             if (dt.Date == today.AddDays(-1))
-                return $"Kemarin {dt:HH:mm}";
+                return $"Kemarin {dt:HH':'mm}";
             if (dt.Year == today.Year)
-                return dt.ToString("d MMM HH:mm");
-            return dt.ToString("d MMM yyyy HH:mm");
+                return dt.ToString("d MMM HH':'mm");
+            return dt.ToString("d MMM yyyy HH':'mm");
         }
     }
 

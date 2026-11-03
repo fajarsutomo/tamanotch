@@ -453,8 +453,55 @@
                                                 Background="#25252C" Foreground="#FFFFFF" BorderThickness="0" Padding="10,4"
                                                 Cursor="Hand" ToolTip="Deteksi lokasi kota dan koordinat otomatis lewat IP"/>
                                     </Grid>
-                                    <TextBlock Text="{Binding LocationDetectStatus}" Foreground="#AAAAAA" FontSize="10.5" 
+                                    <TextBlock Text="{Binding LocationDetectStatus}" Foreground="#AAAAAA" FontSize="10.5"
                                                Visibility="{Binding LocationDetectStatus, Converter={StaticResource StringNotEmptyToVis}}" Margin="0,2,0,4"/>
+
+                                    <!-- Cari lokasi lebih spesifik (kelurahan/desa/kecamatan) -->
+                                    <TextBlock Text="Atau cari lokasi lebih spesifik (kelurahan, desa, kecamatan):" Foreground="#CCCCCC" FontSize="11" Margin="0,6,0,4"/>
+                                    <Grid Visibility="{Binding CanSearchLocation, Converter={StaticResource BoolToVis}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding LocationSearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="#0E0E12" Foreground="#FFFFFF" BorderBrush="#3A3A4A" Padding="6,4" Margin="0,0,8,0">
+                                            <TextBox.InputBindings>
+                                                <KeyBinding Key="Enter" Command="{Binding SearchLocationCommand}"/>
+                                            </TextBox.InputBindings>
+                                        </TextBox>
+                                        <Button Grid.Column="1" Content="Cari" Command="{Binding SearchLocationCommand}"
+                                                IsEnabled="{Binding IsSearchingLocation, Converter={StaticResource InverseBoolToVis}}"
+                                                Background="#25252C" Foreground="#FFFFFF" BorderThickness="0" Padding="14,4" Cursor="Hand"/>
+                                    </Grid>
+
+                                    <Border Visibility="{Binding HasLocationSearchResults, Converter={StaticResource BoolToVis}}"
+                                            Background="#0E0E12" BorderBrush="#3A3A4A" BorderThickness="1" CornerRadius="6" Padding="4" Margin="0,6,0,0">
+                                        <StackPanel>
+                                            <DockPanel Margin="2,0,2,4">
+                                                <Button DockPanel.Dock="Right" Content="&#x2715;" Command="{Binding ClearLocationSearchCommand}"
+                                                        Background="Transparent" Foreground="#AAAAAA" BorderThickness="0" Padding="6,0" Cursor="Hand"/>
+                                                <TextBlock Text="Hasil pencarian:" Foreground="#AAAAAA" FontSize="10.5" VerticalAlignment="Center"/>
+                                            </DockPanel>
+                                            <ScrollViewer MaxHeight="160" VerticalScrollBarVisibility="Auto">
+                                                <ItemsControl ItemsSource="{Binding LocationSearchResults}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Button Command="{Binding DataContext.SelectLocationResultCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                    CommandParameter="{Binding}" Cursor="Hand" Margin="0,0,0,3"
+                                                                    Background="#1A1A22" BorderBrush="#2C2C3A" BorderThickness="1" HorizontalContentAlignment="Stretch" Padding="8,5">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="{Binding DisplayTitle}" Foreground="#FFFFFF" FontSize="11.5" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                                    <TextBlock Text="{Binding DisplaySubtitle}" Foreground="#999999" FontSize="10" TextTrimming="CharacterEllipsis"/>
+                                                                </StackPanel>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <TextBlock Text="{Binding CurrentLocationText}" Foreground="#8FD0A5" FontSize="11" Margin="0,8,0,2" TextWrapping="Wrap"/>
                                     <TextBlock Text="{Binding TodayPrayerSchedule.HijriDate, StringFormat='Kalender Hijriah: {0}'}" 
                                                Foreground="#8888AA" FontSize="11"/>
                                 </StackPanel>

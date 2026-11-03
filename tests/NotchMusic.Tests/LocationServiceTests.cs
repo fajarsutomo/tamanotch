@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using NotchMusic.Services.Bmkg;
 using NotchMusic.Models;
 using NotchMusic.Services.Location;
 using NotchMusic.Services.Prayer;
@@ -137,5 +141,108 @@ public class LocationServiceTests
         Assert.Equal("Bandung", settings.CurrentSettings.PrayerCity);
         Assert.Equal(bandung.BmkgAdm4Code, settings.CurrentSettings.BmkgCustomAdm4Code);
         Assert.Equal("Bandung", vm.SelectedCity?.Name);
+    }
+
+    [Fact]
+    public void ApplyPrecise_FromPrayer_WithoutFollow_UpdatesPrayerOnly()
+    {
+        var (service, settings, reminder) = Create(follow: false);
+        settings.CurrentSettings.BmkgCustomAdm4Code = "99.99.99.9999";
+        settings.CurrentSettings.BmkgSelectedCity = "Medan";
+
+        service.ApplyPrecise("Dago, Kota Bandung", "32.73.07.1002", -6.88, 107.61, 7.0, LocationOrigin.Prayer);
+
+        var s = settings.CurrentSettings;
+        Assert.Equal("Dago, Kota Bandung", s.PrayerCity);
+        Assert.Equal(-6.88, s.PrayerLatitude);
+        Assert.Equal("99.99.99.9999", s.BmkgCustomAdm4Code);
+        Assert.Equal("Medan", s.BmkgSelectedCity);
+        Assert.Equal(1, reminder.RefreshCount);
+    }
+
+    private class FakeBmkgService : IBmkgService
+    {
+        public List<BmkgLocationSearchResult> Results { get; } = new();
+        public string? LastQuery { get; private set; }
+        public BmkgWeatherData? CurrentWeatherData => null;
+        public BmkgEarthquakeItem? LatestEarthquake => null;
+        public IReadOnlyList<BmkgEarthquakeItem> RecentEarthquakes => Array.Empty<BmkgEarthquakeItem>();
+        public IReadOnlyList<BmkgEarthquakeItem> FeltEarthquakes => Array.Empty<BmkgEarthquakeItem>();
+        public bool IsLoadingWeather => false;
+        public bool IsLoadingEarthquake => false;
+        public string StatusMessage => string.Empty;
+        public event EventHandler? DataUpdated { add { } remove { } }
+        public event EventHandler<BmkgNotificationEvent>? NotificationTriggered { add { } remove { } }
+        public void Start() { }
+        public void Stop() { }
+        public Task RefreshAllAsync(bool forceWeather = false, CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public Task<BmkgWeatherData?> RefreshWeatherAsync(CancellationToken cancellationToken = default) => Task.FromResult<BmkgWeatherData?>(null);
+        public Task RefreshEarthquakesAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public string GetActiveAdm4Code() => string.Empty;
+        public string GetActiveCityName() => string.Empty;
+        public void TriggerTestEarthquakeAlert() { }
+        public IReadOnlyList<BmkgRegionItem> GetProvinces() => Array.Empty<BmkgRegionItem>();
+        public Task<IReadOnlyList<BmkgRegionItem>> GetRegenciesAsync(string provinceCode, CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<BmkgRegionItem>>(Array.Empty<BmkgRegionItem>());
+        public Task<IReadOnlyList<BmkgRegionItem>> GetDistrictsAsync(string regencyCode, CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<BmkgRegionItem>>(Array.Empty<BmkgRegionItem>());
+        public Task<IReadOnlyList<BmkgRegionItem>> GetVillagesAsync(string districtCode, CancellationToken cancellationToken = default) => Task.FromResult<IReadOnlyList<BmkgRegionItem>>(Array.Empty<BmkgRegionItem>());
+        public Task<IReadOnlyList<BmkgLocationSearchResult>> SearchPreciseLocationsAsync(string query, CancellationToken cancellationToken = default)
+        {
+            LastQuery = query;
+            return Task.FromResult<IReadOnlyList<BmkgLocationSearchResult>>(Results.ToList());
+        }
+        public Task<BmkgLocationSearchResult?> ResolveCoordinatesToPreciseAdm4Async(double latitude, double longitude, string? fallbackCityName = null, CancellationToken cancellationToken = default) => Task.FromResult<BmkgLocationSearchResult?>(null);
+        public void Dispose() { }
+    }
+
+    private static BmkgLocationSearchResult Dago() => new()
+    {
+        Adm4Code = "32.73.07.1002",
+        VillageName = "Dago",
+        DistrictName = "Coblong",
+        RegencyName = "Kota Bandung",
+        ProvinceName = "Jawa Barat",
+        Latitude = -6.88,
+        Longitude = 107.61,
+        Timezone = 7.0
+    };
+
+    [Fact]
+    public async Task SettingsViewModel_SearchLocation_FillsResultsAndSelectApplies()
+    {
+        var settings = new FakeSettingsService();
+        settings.CurrentSettings.BmkgFollowPrayerCity = false;
+        var bmkg = new FakeBmkgService();
+        bmkg.Results.Add(Dago());
+        var vm = new SettingsViewModel(settings, _ => { }, bmkgService: bmkg);
+
+        vm.LocationSearchQuery = "dago";
+        await vm.SearchLocationAsync();
+
+        Assert.Equal("dago", bmkg.LastQuery);
+        Assert.Single(vm.LocationSearchResults);
+        Assert.True(vm.HasLocationSearchResults);
+
+        vm.SelectLocationResult(vm.LocationSearchResults[0]);
+
+        Assert.Equal("Dago, Kota Bandung", settings.CurrentSettings.PrayerCity);
+        Assert.Equal(-6.88, settings.CurrentSettings.PrayerLatitude);
+        Assert.Equal(107.61, settings.CurrentSettings.PrayerLongitude);
+        Assert.Empty(vm.LocationSearchResults);
+        Assert.Null(vm.SelectedCity);
+        Assert.Contains("Dago, Kota Bandung", vm.CurrentLocationText);
+    }
+
+    [Fact]
+    public async Task SettingsViewModel_SearchLocation_ShortQuery_DoesNotCallService()
+    {
+        var bmkg = new FakeBmkgService();
+        var vm = new SettingsViewModel(new FakeSettingsService(), _ => { }, bmkgService: bmkg);
+
+        vm.LocationSearchQuery = "da";
+        await vm.SearchLocationAsync();
+
+        Assert.Null(bmkg.LastQuery);
+        Assert.Empty(vm.LocationSearchResults);
+        Assert.False(string.IsNullOrEmpty(vm.LocationDetectStatus));
     }
 }

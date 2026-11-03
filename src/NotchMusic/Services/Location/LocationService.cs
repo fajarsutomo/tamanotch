@@ -24,7 +24,7 @@ public interface ILocationService
     void ApplyCity(CityLocation city, LocationOrigin origin);
 
     /// <summary>Pilih lokasi presisi (kelurahan/desa) dengan kode ADM4 sendiri.</summary>
-    void ApplyPrecise(string name, string adm4Code, double latitude, double longitude, double timezone);
+    void ApplyPrecise(string name, string adm4Code, double latitude, double longitude, double timezone, LocationOrigin origin = LocationOrigin.Bmkg);
 }
 
 public class LocationService : ILocationService
@@ -68,14 +68,19 @@ public class LocationService : ILocationService
         LocationChanged?.Invoke();
     }
 
-    public void ApplyPrecise(string name, string adm4Code, double latitude, double longitude, double timezone)
+    public void ApplyPrecise(string name, string adm4Code, double latitude, double longitude, double timezone, LocationOrigin origin = LocationOrigin.Bmkg)
     {
         var settings = _settingsService.CurrentSettings;
-        settings.BmkgCustomAdm4Code = adm4Code;
-        settings.BmkgSelectedCity = name;
+        bool follow = settings.BmkgFollowPrayerCity;
+
+        if (origin == LocationOrigin.Bmkg || follow)
+        {
+            settings.BmkgCustomAdm4Code = adm4Code;
+            settings.BmkgSelectedCity = name;
+        }
 
         bool hasCoordinates = Math.Abs(latitude) > 0.001 && Math.Abs(longitude) > 0.001;
-        if (settings.BmkgFollowPrayerCity && hasCoordinates)
+        if ((origin == LocationOrigin.Prayer || follow) && hasCoordinates)
         {
             _prayerService.UpdateLocation(name, latitude, longitude, timezone);
             _reminderService?.RefreshSchedule();

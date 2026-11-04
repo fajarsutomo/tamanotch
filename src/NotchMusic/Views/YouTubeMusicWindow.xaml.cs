@@ -1,3 +1,4 @@
+using NotchMusic.Services.Dns;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
@@ -92,7 +93,7 @@ public partial class YouTubeMusicWindow : Window
             }
             Directory.CreateDirectory(userDataFolder);
 
-            var options = new CoreWebView2EnvironmentOptions("--autoplay-policy=no-user-gesture-required");
+            var options = new CoreWebView2EnvironmentOptions(WebViewDns.BuildArguments("--autoplay-policy=no-user-gesture-required"));
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: userDataFolder, options: options);
             await webView.EnsureCoreWebView2Async(env);
 
@@ -446,7 +447,21 @@ public partial class YouTubeMusicWindow : Window
     protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
     {
         base.OnRenderSizeChanged(sizeInfo);
+        ApplyResponsiveLayout();
         SaveWindowBounds();
+    }
+
+    // Di lebar sempit (ukuran HP) judul-bar meluap sehingga tombol tutup terpotong; sembunyikan elemen non-esensial.
+    private const double NarrowTitleBarWidth = 460;
+
+    private void ApplyResponsiveLayout()
+    {
+        if (GripChip == null) return;
+
+        var compact = ActualWidth < NarrowTitleBarWidth ? Visibility.Collapsed : Visibility.Visible;
+        GripChip.Visibility = compact;
+        TitleText.Visibility = compact;
+        MaximizeButton.Visibility = compact;
     }
 
     private void SaveWindowBounds()

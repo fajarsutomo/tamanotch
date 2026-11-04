@@ -70,10 +70,12 @@ public partial class MainViewModel
                 if (value)
                 {
                     _bmkgService.Start();
+                    if (Settings.ShowAirQualityInIsland) _airQualityService.Start();
                 }
                 else
                 {
                     _bmkgService.Stop();
+                    _airQualityService.Stop();
                     ActiveBmkgNotification = null;
                 }
                 RequestComponentLayoutChanged?.Invoke();
@@ -368,6 +370,38 @@ public partial class MainViewModel
 
     public bool HasLatestEarthquake => _bmkgService.LatestEarthquake != null;
 
+    /// <summary>Lencana gempa terbaru di island hanya tampil sampai batas ini; setelahnya hanya ada di jendela Cuaca &amp; Gempa.</summary>
+    public static readonly TimeSpan IslandEarthquakeMaxAge = TimeSpan.FromHours(3);
+
+    private DispatcherTimer? _islandEarthquakeExpiryTimer;
+
+    public bool ShowIslandEarthquakeBadge => IsRecentEarthquake(LatestEarthquake, DateTimeOffset.UtcNow);
+
+    public static bool IsRecentEarthquake(BmkgEarthquakeItem? eq, DateTimeOffset utcNow)
+        => eq != null && (!eq.EventDateTime.HasValue || utcNow - eq.EventDateTime.Value.ToUniversalTime() <= IslandEarthquakeMaxAge);
+
+    // Lencana perlu hilang tepat saat melewati batas walau data BMKG belum disegarkan.
+    private void ScheduleIslandEarthquakeExpiry()
+    {
+        _islandEarthquakeExpiryTimer?.Stop();
+        _islandEarthquakeExpiryTimer = null;
+
+        var time = LatestEarthquake?.EventDateTime;
+        if (!time.HasValue) return;
+
+        var remaining = time.Value.ToUniversalTime() + IslandEarthquakeMaxAge - DateTimeOffset.UtcNow;
+        if (remaining <= TimeSpan.Zero) return;
+
+        // DispatcherTimer.Interval dibatasi ~24 hari; batas 3 jam jauh di bawahnya.
+        _islandEarthquakeExpiryTimer = new DispatcherTimer { Interval = remaining + TimeSpan.FromSeconds(1) };
+        _islandEarthquakeExpiryTimer.Tick += (s, e) =>
+        {
+            _islandEarthquakeExpiryTimer?.Stop();
+            OnPropertyChanged(nameof(ShowIslandEarthquakeBadge));
+        };
+        _islandEarthquakeExpiryTimer.Start();
+    }
+
     public string LatestEarthquakeBadge => LatestEarthquake != null ? $"M {LatestEarthquake.Magnitude}" : "Gempa";
 
     public string LatestEarthquakeCompactText => LatestEarthquake != null
@@ -390,11 +424,68 @@ public partial class MainViewModel
                 ? $"🌋 Gempa Terbaru: M {LatestEarthquake.Magnitude} • {LatestEarthquake.Wilayah} ({LatestEarthquake.Jam}, Kedalaman {LatestEarthquake.Kedalaman})"
                 : "🌋 Gempa Bumi BMKG: Siap memantau...";
 
-            return $"{weatherLine}\n{eqLine}\nKlik untuk membuka jendela Cuaca & Gempa Bumi BMKG";
+            var aqLine = ShowAirQualityBadge ? $"{AirQualityTooltip.Split('\n')[0]}\n" : string.Empty;
+            return $"{weatherLine}\n{aqLine}{eqLine}\nKlik untuk membuka jendela Cuaca & Gempa Bumi BMKG";
         }
     }
 
     public bool HasActiveBmkgNotification => EnableBmkg && _activeBmkgNotification != null;
+
+    // --- Notch notifikasi: peringatan berat (gempa M >= 5 / tsunami, cuaca ekstrem) menggantikan mata idle ---
+    private static readonly System.Windows.Media.Color AlertRed = System.Windows.Media.Color.FromRgb(0xFF, 0x3B, 0x4E);
+
+    /// <summary>Peringatan aktif yang cukup berat untuk tampil sebagai notch notifikasi (bukan banner).</summary>
+    public bool IsAlertNotchNotification => HasActiveBmkgNotification && _activeBmkgNotification!.IsHighSeverity;
+
+    /// <summary>Notch idle berubah jadi satu baris pesan berframe merah; saat hover atau mode lain banner penuh dipakai.</summary>
+    public bool ShowAlertNotch => IsAlertNotchNotification && IsCompactMode && ShowIdleEyes;
+
+    public bool ShowBmkgBanner => HasActiveBmkgNotification && !ShowAlertNotch;
+
+    public bool ShowEyesInIdle => ShowIdleEyes && !ShowAlertNotch && !ShowPrayerNotch;
+
+    public string AlertNotchText
+    {
+        get
+        {
+            var n = _activeBmkgNotification;
+            if (n == null) return string.Empty;
+            return n.IsEarthquake ? $"⚠ {n.MagnitudeBadge} • {n.Message}" : $"{n.Title} • {n.Message}";
+        }
+    }
+
+    // NaN = lebar mengikuti panjang pesan (tinggi tetap mengikuti frame idle).
+    public double AlertNotchWidth => double.NaN;
+
+    public double AlertNotchMaxTextWidth => Math.Max(240, System.Windows.SystemParameters.PrimaryScreenWidth * 0.6);
+
+    public System.Windows.Media.Brush AlertFrameBrush { get; } = NotchMusic.Helpers.NeonPalette.Freeze(new System.Windows.Media.SolidColorBrush(AlertRed));
+
+    public System.Windows.Media.Effects.Effect AlertGlowEffect { get; } = CreateAlertGlow();
+
+    private static System.Windows.Media.Effects.Effect CreateAlertGlow()
+    {
+        var effect = new System.Windows.Media.Effects.DropShadowEffect { Color = AlertRed, BlurRadius = 14, ShadowDepth = 0, Opacity = 0.9 };
+        effect.Freeze();
+        return effect;
+    }
+
+    protected override void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string? propertyName = null)
+    {
+        base.OnPropertyChanged(propertyName);
+        if (propertyName is nameof(ShowComponentIcons) or nameof(ShowIdleEyes) or nameof(ShowCompactView)
+            or nameof(HasActiveBmkgNotification) or nameof(HasActivePrayerNotification))
+        {
+            base.OnPropertyChanged(nameof(IsAlertNotchNotification));
+            base.OnPropertyChanged(nameof(ShowAlertNotch));
+            base.OnPropertyChanged(nameof(ShowBmkgBanner));
+            base.OnPropertyChanged(nameof(ShowEyesInIdle));
+            base.OnPropertyChanged(nameof(AlertNotchText));
+            base.OnPropertyChanged(nameof(ShowPrayerNotch));
+            base.OnPropertyChanged(nameof(ShowPrayerBanner));
+            base.OnPropertyChanged(nameof(PrayerNotchText));
+        }
+    }
 
     public BmkgNotificationEvent? ActiveBmkgNotification
     {
@@ -404,6 +495,8 @@ public partial class MainViewModel
             if (SetProperty(ref _activeBmkgNotification, value))
             {
                 OnPropertyChanged(nameof(HasActiveBmkgNotification));
+                // Notifikasi menahan island terbuka saat disorot; setelah hilang, kembali ke idle bila kursor sudah pergi.
+                if (value == null) ScheduleHoverCollapse();
             }
         }
     }
@@ -508,6 +601,8 @@ public partial class MainViewModel
             OnPropertyChanged(nameof(RecentEarthquakes));
             OnPropertyChanged(nameof(FeltEarthquakes));
             OnPropertyChanged(nameof(HasLatestEarthquake));
+            OnPropertyChanged(nameof(ShowIslandEarthquakeBadge));
+            ScheduleIslandEarthquakeExpiry();
             OnPropertyChanged(nameof(LatestEarthquakeBadge));
             OnPropertyChanged(nameof(LatestEarthquakeCompactText));
             OnPropertyChanged(nameof(BmkgStatusMessage));
@@ -530,20 +625,22 @@ public partial class MainViewModel
 
     private void OnBmkgNotificationTriggered(BmkgNotificationEvent evt)
     {
-        System.Windows.Application.Current?.Dispatcher?.Invoke(() =>
-        {
-            ActiveBmkgNotification = evt;
-            RequestShowTrayNotification?.Invoke(evt.Title, evt.Message);
+        System.Windows.Application.Current?.Dispatcher?.Invoke(() => ShowBmkgNotification(evt));
+    }
 
+    /// <summary>Tampilkan peringatan BMKG di island/notch (tanpa notifikasi tray Windows) lalu tutup otomatis.</summary>
+    public void ShowBmkgNotification(BmkgNotificationEvent evt)
+    {
+        ActiveBmkgNotification = evt;
+
+        _bmkgNotificationDismissTimer?.Stop();
+        _bmkgNotificationDismissTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(22) };
+        _bmkgNotificationDismissTimer.Tick += (s, e) =>
+        {
             _bmkgNotificationDismissTimer?.Stop();
-            _bmkgNotificationDismissTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(22) };
-            _bmkgNotificationDismissTimer.Tick += (s, e) =>
-            {
-                _bmkgNotificationDismissTimer?.Stop();
-                ActiveBmkgNotification = null;
-            };
-            _bmkgNotificationDismissTimer.Start();
-        });
+            ActiveBmkgNotification = null;
+        };
+        _bmkgNotificationDismissTimer.Start();
     }
 
     private async Task DetectBmkgLocationAsync()

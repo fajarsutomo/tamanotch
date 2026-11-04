@@ -112,7 +112,7 @@
                     <!-- Left: Drag Grip Handle, Branding & Nav Controls -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="6,0,0,0">
                         <!-- Dedicated Drag Grip with SizeAll cursor -->
-                        <Border Background="#20202E" CornerRadius="4" Padding="5,2" Margin="0,0,7,0" Cursor="SizeAll" ToolTip="Tahan dan geser untuk memindahkan jendela">
+                        <Border x:Name="GripChip" Background="#20202E" CornerRadius="4" Padding="5,2" Margin="0,0,7,0" Cursor="SizeAll" ToolTip="Tahan dan geser untuk memindahkan jendela">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⋮⋮" Foreground="#FF4D6D" FontWeight="Bold" FontSize="11" VerticalAlignment="Center" Margin="0,0,4,0"/>
                                 <TextBlock Text="Geser" Foreground="#AAAAAA" FontSize="9.5" FontWeight="SemiBold" VerticalAlignment="Center"/>
@@ -123,7 +123,7 @@
                         <Border Width="22" Height="22" CornerRadius="11" Background="#FF0033" Margin="0,0,7,0">
                             <TextBlock Text="▶" Foreground="#FFFFFF" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1,0,0,0"/>
                         </Border>
-                        <TextBlock Text="YouTube Music" Foreground="#FFFFFF" FontWeight="Bold" FontSize="12.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock x:Name="TitleText" Text="YouTube Music" Foreground="#FFFFFF" FontWeight="Bold" FontSize="12.5" VerticalAlignment="Center" Margin="0,0,6,0"/>
 
                         <!-- Nav Controls -->
                         <StackPanel Orientation="Horizontal" WindowChrome.IsHitTestVisibleInChrome="True">

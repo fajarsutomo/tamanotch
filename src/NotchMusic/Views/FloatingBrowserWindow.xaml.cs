@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using NotchMusic.Services.Dns;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -73,7 +74,7 @@ public partial class FloatingBrowserWindow : Window
             var userDataFolder = Path.Combine(localAppData, "TAMANOTCH", "FloatingBrowserProfile");
             Directory.CreateDirectory(userDataFolder);
 
-            var options = new CoreWebView2EnvironmentOptions("--autoplay-policy=no-user-gesture-required");
+            var options = new CoreWebView2EnvironmentOptions(WebViewDns.BuildArguments("--autoplay-policy=no-user-gesture-required"));
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: userDataFolder, options: options);
             await webView.EnsureCoreWebView2Async(env);
 

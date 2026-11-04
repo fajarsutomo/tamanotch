@@ -248,6 +248,33 @@ public partial class MainViewModel
 
     public bool HasActivePrayerNotification => EnablePrayerTimes && _activePrayerNotification != null;
 
+    // --- Notch notifikasi hijau: pengingat sholat/adzan menggantikan mata idle (peringatan BMKG berat didahulukan) ---
+    private static readonly System.Windows.Media.Color PrayerGreen = System.Windows.Media.Color.FromRgb(0x30, 0xD1, 0x58);
+
+    public bool ShowPrayerNotch => HasActivePrayerNotification && IsCompactMode && ShowIdleEyes && !ShowAlertNotch;
+
+    public bool ShowPrayerBanner => HasActivePrayerNotification && !ShowPrayerNotch;
+
+    public string PrayerNotchText
+    {
+        get
+        {
+            var n = _activePrayerNotification;
+            return n == null ? string.Empty : $"{n.Title} • {n.Message}";
+        }
+    }
+
+    public System.Windows.Media.Brush PrayerFrameBrush { get; } = NotchMusic.Helpers.NeonPalette.Freeze(new System.Windows.Media.SolidColorBrush(PrayerGreen));
+
+    public System.Windows.Media.Effects.Effect PrayerGlowEffect { get; } = CreatePrayerGlow();
+
+    private static System.Windows.Media.Effects.Effect CreatePrayerGlow()
+    {
+        var effect = new System.Windows.Media.Effects.DropShadowEffect { Color = PrayerGreen, BlurRadius = 14, ShadowDepth = 0, Opacity = 0.9 };
+        effect.Freeze();
+        return effect;
+    }
+
     public PrayerNotificationEvent? ActivePrayerNotification
     {
         get => _activePrayerNotification;
@@ -256,6 +283,8 @@ public partial class MainViewModel
             if (SetProperty(ref _activePrayerNotification, value))
             {
                 OnPropertyChanged(nameof(HasActivePrayerNotification));
+                // Notifikasi menahan island terbuka saat disorot; setelah hilang, kembali ke idle bila kursor sudah pergi.
+                if (value == null) ScheduleHoverCollapse();
             }
         }
     }
@@ -293,36 +322,38 @@ public ICommand TogglePrayerPanelCommand { get; }
 
     private void OnPrayerReminderTriggered(PrayerNotificationEvent evt)
     {
-        System.Windows.Application.Current?.Dispatcher?.Invoke(() =>
+        System.Windows.Application.Current?.Dispatcher?.Invoke(() => ShowPrayerNotification(evt));
+    }
+
+    /// <summary>Tampilkan pengingat sholat di island/notch (tanpa notifikasi tray Windows) lalu tutup otomatis.</summary>
+    public void ShowPrayerNotification(PrayerNotificationEvent evt)
+    {
+        ActivePrayerNotification = evt;
+
+        if (evt.AutoPauseRequested)
         {
-            ActivePrayerNotification = evt;
-            RequestShowTrayNotification?.Invoke(evt.Title, evt.Message);
-
-            if (evt.AutoPauseRequested)
+            if (IsPlaying)
             {
-                if (IsPlaying)
-                {
-                    _ = _mediaService.PauseAsync();
-                }
-                if (IsRadioPlaying || IsRadioBuffering)
-                {
-                    _radioService.Stop();
-                }
-                if (IsLiveTvPlaying || IsLiveTvBuffering)
-                {
-                    _liveTvService.Stop();
-                }
+                _ = _mediaService.PauseAsync();
             }
-
-            // Auto dismiss notification banner after 20 seconds
-            _notificationDismissTimer?.Stop();
-            _notificationDismissTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(20) };
-            _notificationDismissTimer.Tick += (s, e) =>
+            if (IsRadioPlaying || IsRadioBuffering)
             {
-                _notificationDismissTimer?.Stop();
-                ActivePrayerNotification = null;
-            };
-            _notificationDismissTimer.Start();
-        });
+                _radioService.Stop();
+            }
+            if (IsLiveTvPlaying || IsLiveTvBuffering)
+            {
+                _liveTvService.Stop();
+            }
+        }
+
+        // Auto dismiss notification banner after 20 seconds
+        _notificationDismissTimer?.Stop();
+        _notificationDismissTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(20) };
+        _notificationDismissTimer.Tick += (s, e) =>
+        {
+            _notificationDismissTimer?.Stop();
+            ActivePrayerNotification = null;
+        };
+        _notificationDismissTimer.Start();
     }
 }

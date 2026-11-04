@@ -35,6 +35,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         _settingsService = new SettingsService();
+        Services.Dns.WebViewDns.Settings = _settingsService;
         var lyricsService = new LyricsService(_settingsService);
         var mediaService = new WindowsMediaSessionService();
         _trayService = new TrayIconService();
@@ -89,7 +90,7 @@ public partial class MainWindow : Window
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    WindowHelper.CenterAtTopBezel(this);
+                    PositionCompactWindow();
                     _settingsService.CurrentSettings.PanelLeft = Left;
                     _settingsService.CurrentSettings.PanelTop = Top;
                 }), System.Windows.Threading.DispatcherPriority.Loaded);
@@ -102,7 +103,7 @@ public partial class MainWindow : Window
             {
                 if (_viewModel.IsCompactMode || _viewModel.IsLyricsMode)
                 {
-                    WindowHelper.CenterAtTopBezel(this);
+                    PositionCompactWindow();
                 }
                 else if (ev.PreviousSize.Width > 0 && Math.Abs(ev.PreviousSize.Width - ev.NewSize.Width) > 1)
                 {
@@ -114,6 +115,24 @@ public partial class MainWindow : Window
         };
 
         SetupTray();
+    }
+
+    // Tepi kanan notch saat idle; notch notifikasi (merah/hijau) melebar ke kiri dari tepi ini.
+    private double _idleRightEdge = double.NaN;
+
+    private void PositionCompactWindow()
+    {
+        bool alertNotch = _viewModel.ShowAlertNotch || _viewModel.ShowPrayerNotch;
+        if (alertNotch && !double.IsNaN(_idleRightEdge) && ActualWidth > 0)
+        {
+            var area = WindowHelper.GetWorkAreaSize(this);
+            Left = Math.Clamp(_idleRightEdge - ActualWidth, 0, Math.Max(0, area.Width - ActualWidth));
+            Top = 0;
+            return;
+        }
+
+        WindowHelper.CenterAtTopBezel(this);
+        if (_viewModel.ShowEyesInIdle && ActualWidth > 0) _idleRightEdge = Left + ActualWidth;
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -466,7 +485,7 @@ public partial class MainWindow : Window
     private void ApplyNotchHorizontalOffset()
     {
         WindowHelper.HorizontalOffsetPercent = _settingsService.CurrentSettings.NotchHorizontalOffsetPercent;
-        WindowHelper.CenterAtTopBezel(this);
+        PositionCompactWindow();
         _settingsService.CurrentSettings.PanelLeft = Left;
         _settingsService.CurrentSettings.PanelTop = Top;
     }

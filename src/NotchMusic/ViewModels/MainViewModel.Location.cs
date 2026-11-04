@@ -20,5 +20,6 @@ public partial class MainViewModel
         OnPropertyChanged(nameof(BmkgActiveAdm4Text));
         OnPropertyChanged(nameof(BmkgWeatherCityText));
         _ = _bmkgService.RefreshWeatherAsync();
+        RefreshAirQuality(fetch: true);
     }
 }

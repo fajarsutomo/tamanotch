@@ -1,3 +1,4 @@
+using NotchMusic.Services.Dns;
 using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
@@ -105,8 +106,8 @@ public partial class LiveTvWindow : Window
             var playerHtmlPath = Path.Combine(playerAssetsFolder, "player.html");
             await File.WriteAllTextAsync(playerHtmlPath, GetEmbeddedPlayerHtml());
 
-            var options = new CoreWebView2EnvironmentOptions(
-                "--autoplay-policy=no-user-gesture-required --disable-web-security --allow-running-insecure-content");
+            var options = new CoreWebView2EnvironmentOptions(WebViewDns.BuildArguments(
+                "--autoplay-policy=no-user-gesture-required --disable-web-security --allow-running-insecure-content"));
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: userDataFolder, options: options);
             await tvWebView.EnsureCoreWebView2Async(env);
 

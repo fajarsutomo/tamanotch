@@ -54,9 +54,22 @@ internal static class ViewModelTestFactory
         public SongLyrics LoadFromLocalFile(string filePath) => new SongLyrics();
     }
 
-    public static MainViewModel CreateMain(MemorySettings? settings = null)
+    public sealed class StubAirQuality : NotchMusic.Services.AirQuality.IAirQualityService
     {
-        var vm = new MainViewModel(new StubMedia(), new StubLyrics(), settings ?? new MemorySettings());
+        public NotchMusic.Services.AirQuality.AirQualityReading? Current { get; set; }
+        public int Refreshes { get; private set; }
+        public event EventHandler? Updated;
+        public void Start() { }
+        public void Stop() { Current = null; Updated?.Invoke(this, EventArgs.Empty); }
+        public Task RefreshAsync(CancellationToken cancellationToken = default) { Refreshes++; return Task.CompletedTask; }
+        public void Raise() => Updated?.Invoke(this, EventArgs.Empty);
+        public void Dispose() { }
+    }
+
+    public static MainViewModel CreateMain(MemorySettings? settings = null, NotchMusic.Services.AirQuality.IAirQualityService? airQuality = null)
+    {
+        var vm = new MainViewModel(new StubMedia(), new StubLyrics(), settings ?? new MemorySettings(),
+            airQualityService: airQuality ?? new StubAirQuality());
         vm.CurrentMode = PanelMode.Compact;
         return vm;
     }

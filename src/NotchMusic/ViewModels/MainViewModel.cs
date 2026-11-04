@@ -3,6 +3,7 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using NotchMusic.Helpers;
 using NotchMusic.Models;
+using NotchMusic.Services.AirQuality;
 using NotchMusic.Services.Bmkg;
 using NotchMusic.Services.Location;
 using NotchMusic.Services.Lyrics;
@@ -39,7 +40,8 @@ public partial class MainViewModel : ViewModelBase
         ILiveTvService? liveTvService = null,
         IBmkgService? bmkgService = null,
         ILocationService? locationService = null,
-        IWellnessReminderService? wellnessService = null)
+        IWellnessReminderService? wellnessService = null,
+        IAirQualityService? airQualityService = null)
     {
         _mediaService = mediaService;
         _lyricsService = lyricsService;
@@ -62,6 +64,10 @@ public partial class MainViewModel : ViewModelBase
             if (e.PropertyName == nameof(ShowComponentIcons)) RaiseCenterIconChanged();
         };
 
+        _airQualityService = airQualityService ?? new AirQualityService(
+            () => (settingsService.CurrentSettings.PrayerLatitude, settingsService.CurrentSettings.PrayerLongitude),
+            () => settingsService.CurrentSettings.EnableBmkg && settingsService.CurrentSettings.ShowAirQualityInIsland);
+        _airQualityService.Updated += (s, e) => OnAirQualityUpdated();
         _bmkgService.DataUpdated += (s, e) => OnBmkgDataUpdated();
         _bmkgService.NotificationTriggered += (s, evt) => OnBmkgNotificationTriggered(evt);
 
@@ -790,6 +796,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
         if (Settings.EnableBmkg)
         {
             _bmkgService.Start();
+            if (Settings.ShowAirQualityInIsland) _airQualityService.Start();
         }
 
         if (_googleDriveSyncService.IsConnected && Settings.GoogleDriveAutoSync)

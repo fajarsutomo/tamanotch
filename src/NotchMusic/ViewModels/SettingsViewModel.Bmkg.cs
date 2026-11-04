@@ -35,6 +35,20 @@ public partial class SettingsViewModel
         }
     }
 
+    public bool ShowAirQualityInIsland
+    {
+        get => Settings.ShowAirQualityInIsland;
+        set
+        {
+            if (Settings.ShowAirQualityInIsland != value)
+            {
+                Settings.ShowAirQualityInIsland = value;
+                _settingsService.Save();
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public bool BmkgNotifyNewEarthquake
     {
         get => Settings.BmkgNotifyNewEarthquake;

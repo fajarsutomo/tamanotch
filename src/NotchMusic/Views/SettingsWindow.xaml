@@ -455,6 +455,20 @@
                     </StackPanel>
                 </Border>
 
+                <!-- DNS-over-HTTPS -->
+                <Border Background="#202026" CornerRadius="8" Padding="14" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="DNS publik (DoH) untuk jendela web" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="0,0,0,8"/>
+                        <TextBlock Text="Jendela pemutar (Jellyfin, Spotify, YouTube Music, Live TV, browser) me-resolve alamat https lewat DNS-over-HTTPS publik, tidak lewat DNS Windows atau jaringan. Berguna bila DNS jaringan tidak bisa me-resolve alamat Anda. Pengaturan Windows tidak diubah. Berlaku setelah TAMANOTCH dimulai ulang; log di %LOCALAPPDATA%\TAMANOTCH\doh.log."
+                                   TextWrapping="Wrap" FontSize="11" Foreground="#999999" Margin="0,0,0,8"/>
+                        <CheckBox Content="Pakai DNS-over-HTTPS publik" IsChecked="{Binding DohEnabled}" Margin="0,0,0,8"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Penyedia utama:" Foreground="#CCCCCC" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding DohProviders}" SelectedItem="{Binding DohProvider}" Width="140"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
                 <!-- Jellyfin -->
                 <Border Background="#202026" CornerRadius="8" Padding="14" Margin="0,0,0,12">
                     <StackPanel>
@@ -1071,7 +1085,9 @@
                                 <StackPanel>
                                     <CheckBox Content="Tampilkan pill cuaca &amp; gempa di samping logo TAMANOTCH saat idle" 
                                               IsChecked="{Binding ShowWeatherInCompactNotch}"/>
-                                    <CheckBox Content="Ikuti kota Waktu Sholat / deteksi IP otomatis untuk prakiraan cuaca" 
+                                    <CheckBox Content="Tampilkan kualitas udara (AQI) di pill cuaca (estimasi model Open-Meteo)"
+                                              IsChecked="{Binding ShowAirQualityInIsland}"/>
+                                    <CheckBox Content="Ikuti kota Waktu Sholat / deteksi IP otomatis untuk prakiraan cuaca"
                                               IsChecked="{Binding BmkgFollowPrayerCity}"/>
                                     <CheckBox Content="Notifikasi otomatis saat ada gempa bumi baru dari BMKG" 
                                               IsChecked="{Binding BmkgNotifyNewEarthquake}"/>

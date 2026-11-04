@@ -166,6 +166,10 @@ public class AppSettings
     public bool JellyfinAlwaysOnTop { get; set; } = false;
     public bool JellyfinMobileMode { get; set; } = true;
 
+    // DNS-over-HTTPS untuk jendela WebView2 (lewati DNS jaringan; berlaku setelah aplikasi dimulai ulang)
+    public bool DohEnabled { get; set; } = false;
+    public string DohProvider { get; set; } = "Cloudflare";
+
     // Live TV (Komponen ke-6)
     public bool IsLiveTvWindowOpen { get; set; } = false;
     public double LiveTvWindowLeft { get; set; } = -1;
@@ -190,6 +194,7 @@ public class AppSettings
     public double BmkgWindowHeight { get; set; } = 600;
     public bool IsBmkgWindowCompact { get; set; } = false;
     public bool ShowWeatherInCompactNotch { get; set; } = true;
+    public bool ShowAirQualityInIsland { get; set; } = true;
     public bool BmkgFollowPrayerCity { get; set; } = true;
     public string BmkgSelectedCity { get; set; } = "Jakarta";
     public string BmkgCustomAdm4Code { get; set; } = string.Empty;

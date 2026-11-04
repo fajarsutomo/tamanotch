@@ -369,6 +369,8 @@ public partial class MainViewModel
         {
             _ = _bmkgService.RefreshAllAsync(forceWeather: false);
         }
+        OnPropertyChanged(nameof(ShowAirQualityInIsland));
+        RefreshAirQuality(fetch: true);
         RequestComponentLayoutChanged?.Invoke();
     }
 

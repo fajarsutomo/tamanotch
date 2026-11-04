@@ -1,3 +1,4 @@
+using NotchMusic.Services.Dns;
 using Button = System.Windows.Controls.Button;
 using System.ComponentModel;
 using System.IO;
@@ -110,7 +111,7 @@ public abstract class WebPlayerWindowBase : Window
             var userDataFolder = Path.Combine(localAppData, "TAMANOTCH", Options.ProfileFolderName);
             Directory.CreateDirectory(userDataFolder);
 
-            var envOptions = new CoreWebView2EnvironmentOptions("--autoplay-policy=no-user-gesture-required");
+            var envOptions = new CoreWebView2EnvironmentOptions(WebViewDns.BuildArguments("--autoplay-policy=no-user-gesture-required"));
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: userDataFolder, options: envOptions);
             await Web.EnsureCoreWebView2Async(env);
 

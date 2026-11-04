@@ -1,3 +1,4 @@
+using NotchMusic.Services.Dns;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
@@ -94,7 +95,7 @@ public partial class SpotifyWindow : Window
             }
             Directory.CreateDirectory(userDataFolder);
 
-            var options = new CoreWebView2EnvironmentOptions("--autoplay-policy=no-user-gesture-required");
+            var options = new CoreWebView2EnvironmentOptions(WebViewDns.BuildArguments("--autoplay-policy=no-user-gesture-required"));
             var env = await CoreWebView2Environment.CreateAsync(userDataFolder: userDataFolder, options: options);
             await webView.EnsureCoreWebView2Async(env);
 

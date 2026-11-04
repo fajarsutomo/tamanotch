@@ -73,7 +73,8 @@ public partial class MainViewModel
     public bool ShowComponentIcons => IsCompactMode && (_isHovering || IsPinned);
 
     // Slot tengah notch: saat idle berisi mata menyala; saat hover (komponen terbuka) slot ini disembunyikan.
-    public bool ShowIdleEyes => !ShowComponentIcons;
+    // Hanya mode compact: di mode lain island tidak boleh dipaksa ke ukuran kapsul idle (isinya terpotong habis).
+    public bool ShowIdleEyes => IsCompactMode && !ShowComponentIcons;
 
     public double CenterIconSize => Math.Clamp(Settings.IdleIconSize, 24, 48);
 
@@ -243,7 +244,7 @@ public partial class MainViewModel
         }
     }
 
-    public bool IsNotchActive => IsAudioActive || IsRadioBuffering || IsRadioWindowOpen || IsLiveTvBuffering || IsLiveTvWindowOpen || IsBrowserWindowOpen || CurrentMode != PanelMode.Compact || IsComponentsMenuOpen || HasActivePrayerNotification || _isHovering;
+    public bool IsNotchActive => IsAudioActive || IsQuranLoading || IsQuranWindowOpen || IsRadioBuffering || IsRadioWindowOpen || IsLiveTvBuffering || IsLiveTvWindowOpen || IsBrowserWindowOpen || CurrentMode != PanelMode.Compact || IsComponentsMenuOpen || HasActivePrayerNotification || _isHovering;
 
     public bool IsPinned
     {
@@ -352,6 +353,7 @@ public partial class MainViewModel
         OnPropertyChanged(nameof(NextPrayerTimeFormatted));
         OnPropertyChanged(nameof(NextPrayerCountdownBadge));
         OnPropertyChanged(nameof(PrayerScheduleTooltip));
+        OnPropertyChanged(nameof(IsQuranWindowOpen));
         OnPropertyChanged(nameof(IsRadioWindowOpen));
         OnPropertyChanged(nameof(IsRadioActiveOrOpen));
         OnPropertyChanged(nameof(RadioStatusSummary));

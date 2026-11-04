@@ -22,6 +22,7 @@ public partial class MainWindow : Window
     private JellyfinWindow? _jellyfinWindow;
     private FloatingBrowserWindow? _floatingBrowserWindow;
     private RadioWindow? _radioWindow;
+    private QuranWindow? _quranWindow;
     private LiveTvWindow? _liveTvWindow;
     private MusicWindow? _musicWindow;
     private TodoWindow? _todoWindow;
@@ -63,6 +64,14 @@ public partial class MainWindow : Window
         _viewModel.RequestVocalRemoverChanged += OnVocalRemoverChanged;
         _viewModel.RequestOpenFloatingBrowser += OpenFloatingBrowser;
         _viewModel.RequestOpenRadio += OpenRadio;
+        _viewModel.RequestOpenPrayerSchedule += OpenPrayerSchedule;
+        _viewModel.RequestOpenQuran += OpenQuran;
+        _viewModel.PlaybackStartedOnQuran += () => Dispatcher.Invoke(() =>
+        {
+            PauseYouTubeMusicPlayback();
+            PauseSpotifyPlayback();
+            PauseJellyfinPlayback();
+        });
         _viewModel.RequestOpenLiveTv += OpenLiveTv;
         _viewModel.RequestOpenMusic += OpenMusic;
         _viewModel.RequestOpenBmkg += OpenBmkg;
@@ -75,6 +84,7 @@ public partial class MainWindow : Window
             UpdateMusicWindowState();
             UpdateBrowserWindowState();
             UpdateRadioWindowState();
+            UpdateQuranWindowState();
             UpdateLiveTvWindowState();
         });
         _viewModel.RequestShowTrayNotification += (title, msg) => Dispatcher.Invoke(() => _trayService.ShowNotification(title, msg));
@@ -257,6 +267,7 @@ public partial class MainWindow : Window
         _trayService.OpenSpotifyRequested += () => Dispatcher.Invoke(OpenSpotify);
         _trayService.OpenJellyfinRequested += () => Dispatcher.Invoke(OpenJellyfin);
         _trayService.OpenRadioRequested += () => Dispatcher.Invoke(OpenRadio);
+        _trayService.OpenQuranRequested += () => Dispatcher.Invoke(OpenQuran);
         _trayService.OpenLiveTvRequested += () => Dispatcher.Invoke(OpenLiveTv);
         _trayService.OpenBmkgRequested += () => Dispatcher.Invoke(OpenBmkg);
         _trayService.OpenFloatingBrowserRequested += () => Dispatcher.Invoke(OpenFloatingBrowser);
@@ -354,10 +365,31 @@ public partial class MainWindow : Window
                 _prayerWindow.Show();
             }
         }
-        else
+        else if (_viewModel.IsPrayerDetached || !_viewModel.EnablePrayerTimes)
         {
+            // Terpasang di notch: jendela yang dibuka dari pill dibiarkan sampai ditutup sendiri.
             _prayerWindow?.Hide();
         }
+    }
+
+    private void OpenPrayerSchedule()
+    {
+        if (!_viewModel.EnablePrayerTimes) return;
+
+        if (_prayerWindow == null)
+        {
+            _prayerWindow = new PrayerWindow(_viewModel, _settingsService);
+            _prayerWindow.Closed += (s, e) => _prayerWindow = null;
+        }
+        if (_prayerWindow.WindowState == WindowState.Minimized)
+        {
+            _prayerWindow.WindowState = WindowState.Normal;
+        }
+        if (!_prayerWindow.IsVisible)
+        {
+            _prayerWindow.Show();
+        }
+        _prayerWindow.Activate();
     }
 
     private void UpdateBrowserWindowState()
@@ -424,6 +456,18 @@ public partial class MainWindow : Window
         else
         {
             _radioWindow?.Hide();
+        }
+    }
+
+    private void UpdateQuranWindowState()
+    {
+        if (_viewModel.IsQuranWindowOpen)
+        {
+            OpenQuran();
+        }
+        else
+        {
+            _quranWindow?.Hide();
         }
     }
 
@@ -961,6 +1005,37 @@ public partial class MainWindow : Window
         }
     }
 
+    public void OpenQuran()
+    {
+        try
+        {
+            _viewModel.CurrentMode = PanelMode.Compact;
+            _viewModel.IsQuranWindowOpen = true;
+
+            if (_quranWindow == null)
+            {
+                _quranWindow = new QuranWindow(_viewModel, _settingsService);
+                _quranWindow.Closed += (s, e) => _quranWindow = null;
+            }
+
+            if (_quranWindow.WindowState == WindowState.Minimized)
+            {
+                _quranWindow.WindowState = WindowState.Normal;
+            }
+
+            _quranWindow.Show();
+            _quranWindow.Activate();
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                $"Tidak dapat membuka pemutar Al-Qur'an:\n{ex.Message}",
+                "TAMANOTCH - Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
     public void OpenLiveTv()
     {
         try
@@ -1059,9 +1134,11 @@ public partial class MainWindow : Window
         _jellyfinWindow?.ForceClose();
         _floatingBrowserWindow?.ForceClose();
         _radioWindow?.ForceClose();
+        _quranWindow?.ForceClose();
         _liveTvWindow?.ForceClose();
         _musicWindow?.ForceClose();
         _viewModel.RadioService.Dispose();
+        _viewModel.QuranService.Dispose();
         _viewModel.LiveTvService.Dispose();
         _viewModel.BmkgService.Dispose();
         _bmkgWindow?.ForceClose();

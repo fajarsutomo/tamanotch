@@ -14,6 +14,9 @@ public partial class MainViewModel
 
     private PrayerNotificationEvent? _activePrayerNotification;
 
+    /// <summary>Buka jendela Waktu Sholat tanpa melepasnya dari notch (pill di notch tetap tampil).</summary>
+    public event Action? RequestOpenPrayerSchedule;
+
     private bool _isPrayerPanelOpen;
 
     public bool IsPrayerDetached
@@ -344,6 +347,7 @@ public ICommand TogglePrayerPanelCommand { get; }
             {
                 _liveTvService.Stop();
             }
+            StopQuranForOtherPlayback();
         }
 
         // Auto dismiss notification banner after 20 seconds

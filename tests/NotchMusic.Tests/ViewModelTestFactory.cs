@@ -66,10 +66,14 @@ internal static class ViewModelTestFactory
         public void Dispose() { }
     }
 
-    public static MainViewModel CreateMain(MemorySettings? settings = null, NotchMusic.Services.AirQuality.IAirQualityService? airQuality = null)
+    public static MainViewModel CreateMain(
+        MemorySettings? settings = null,
+        NotchMusic.Services.AirQuality.IAirQualityService? airQuality = null,
+        NotchMusic.Services.Quran.IQuranService? quran = null)
     {
         var vm = new MainViewModel(new StubMedia(), new StubLyrics(), settings ?? new MemorySettings(),
-            airQualityService: airQuality ?? new StubAirQuality());
+            airQualityService: airQuality ?? new StubAirQuality(),
+            quranService: quran);
         vm.CurrentMode = PanelMode.Compact;
         return vm;
     }

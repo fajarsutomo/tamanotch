@@ -1,0 +1,914 @@
+[
+    {
+        "number":  1,
+        "nameSimple":  "Al-Fatihah",
+        "nameArabic":  "الفاتحة",
+        "translatedName":  "Pembukaan",
+        "versesCount":  7,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  2,
+        "nameSimple":  "Al-Baqarah",
+        "nameArabic":  "البقرة",
+        "translatedName":  "Sapi Betina",
+        "versesCount":  286,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  3,
+        "nameSimple":  "Ali \u0027Imran",
+        "nameArabic":  "آل عمران",
+        "translatedName":  "Keluarga Imran",
+        "versesCount":  200,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  4,
+        "nameSimple":  "An-Nisa",
+        "nameArabic":  "النساء",
+        "translatedName":  "Wanita",
+        "versesCount":  176,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  5,
+        "nameSimple":  "Al-Ma\u0027idah",
+        "nameArabic":  "المائدة",
+        "translatedName":  "Jamuan (Hidangan Makanan)",
+        "versesCount":  120,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  6,
+        "nameSimple":  "Al-An\u0027am",
+        "nameArabic":  "الأنعام",
+        "translatedName":  "Binatang Ternak",
+        "versesCount":  165,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  7,
+        "nameSimple":  "Al-A\u0027raf",
+        "nameArabic":  "الأعراف",
+        "translatedName":  "Tempat-tempat Tinggi",
+        "versesCount":  206,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  8,
+        "nameSimple":  "Al-Anfal",
+        "nameArabic":  "الأنفال",
+        "translatedName":  "Rampasan Perang",
+        "versesCount":  75,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  9,
+        "nameSimple":  "At-Tawbah",
+        "nameArabic":  "التوبة",
+        "translatedName":  "Pengampunan",
+        "versesCount":  129,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  10,
+        "nameSimple":  "Yunus",
+        "nameArabic":  "يونس",
+        "translatedName":  "Yunus",
+        "versesCount":  109,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  11,
+        "nameSimple":  "Hud",
+        "nameArabic":  "هود",
+        "translatedName":  "Hud",
+        "versesCount":  123,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  12,
+        "nameSimple":  "Yusuf",
+        "nameArabic":  "يوسف",
+        "translatedName":  "Yusuf",
+        "versesCount":  111,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  13,
+        "nameSimple":  "Ar-Ra\u0027d",
+        "nameArabic":  "الرعد",
+        "translatedName":  "Guruh (Petir)",
+        "versesCount":  43,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  14,
+        "nameSimple":  "Ibrahim",
+        "nameArabic":  "ابراهيم",
+        "translatedName":  "Ibrahim",
+        "versesCount":  52,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  15,
+        "nameSimple":  "Al-Hijr",
+        "nameArabic":  "الحجر",
+        "translatedName":  "Bukit",
+        "versesCount":  99,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  16,
+        "nameSimple":  "An-Nahl",
+        "nameArabic":  "النحل",
+        "translatedName":  "Lebah Madu",
+        "versesCount":  128,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  17,
+        "nameSimple":  "Al-Isra",
+        "nameArabic":  "الإسراء",
+        "translatedName":  "Perjalanan Malam",
+        "versesCount":  111,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  18,
+        "nameSimple":  "Al-Kahf",
+        "nameArabic":  "الكهف",
+        "translatedName":  "Para Penghuni Gua",
+        "versesCount":  110,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  19,
+        "nameSimple":  "Maryam",
+        "nameArabic":  "مريم",
+        "translatedName":  "Maryam",
+        "versesCount":  98,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  20,
+        "nameSimple":  "Taha",
+        "nameArabic":  "طه",
+        "translatedName":  "Tha-Ha",
+        "versesCount":  135,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  21,
+        "nameSimple":  "Al-Anbya",
+        "nameArabic":  "الأنبياء",
+        "translatedName":  "Para Nabi",
+        "versesCount":  112,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  22,
+        "nameSimple":  "Al-Hajj",
+        "nameArabic":  "الحج",
+        "translatedName":  "Haji",
+        "versesCount":  78,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  23,
+        "nameSimple":  "Al-Mu\u0027minun",
+        "nameArabic":  "المؤمنون",
+        "translatedName":  "Orang-orang Mukmin",
+        "versesCount":  118,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  24,
+        "nameSimple":  "An-Nur",
+        "nameArabic":  "النور",
+        "translatedName":  "Cahaya",
+        "versesCount":  64,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  25,
+        "nameSimple":  "Al-Furqan",
+        "nameArabic":  "الفرقان",
+        "translatedName":  "Pembeda",
+        "versesCount":  77,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  26,
+        "nameSimple":  "Ash-Shu\u0027ara",
+        "nameArabic":  "الشعراء",
+        "translatedName":  "Penyair",
+        "versesCount":  227,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  27,
+        "nameSimple":  "An-Naml",
+        "nameArabic":  "النمل",
+        "translatedName":  "Semut",
+        "versesCount":  93,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  28,
+        "nameSimple":  "Al-Qasas",
+        "nameArabic":  "القصص",
+        "translatedName":  "Kisah-kisah",
+        "versesCount":  88,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  29,
+        "nameSimple":  "Al-\u0027Ankabut",
+        "nameArabic":  "العنكبوت",
+        "translatedName":  "Laba-laba",
+        "versesCount":  69,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  30,
+        "nameSimple":  "Ar-Rum",
+        "nameArabic":  "الروم",
+        "translatedName":  "Bangsa Romawi",
+        "versesCount":  60,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  31,
+        "nameSimple":  "Luqman",
+        "nameArabic":  "لقمان",
+        "translatedName":  "Luqman",
+        "versesCount":  34,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  32,
+        "nameSimple":  "As-Sajdah",
+        "nameArabic":  "السجدة",
+        "translatedName":  "Sujud",
+        "versesCount":  30,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  33,
+        "nameSimple":  "Al-Ahzab",
+        "nameArabic":  "الأحزاب",
+        "translatedName":  "Golongan yang Bersekutu",
+        "versesCount":  73,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  34,
+        "nameSimple":  "Saba",
+        "nameArabic":  "سبإ",
+        "translatedName":  "Saba\\\u0027",
+        "versesCount":  54,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  35,
+        "nameSimple":  "Fatir",
+        "nameArabic":  "فاطر",
+        "translatedName":  "Pencipta",
+        "versesCount":  45,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  36,
+        "nameSimple":  "Ya-Sin",
+        "nameArabic":  "يس",
+        "translatedName":  "Yas Sin",
+        "versesCount":  83,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  37,
+        "nameSimple":  "As-Saffat",
+        "nameArabic":  "الصافات",
+        "translatedName":  "Barisan-barisan",
+        "versesCount":  182,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  38,
+        "nameSimple":  "Sad",
+        "nameArabic":  "ص",
+        "translatedName":  "Shad",
+        "versesCount":  88,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  39,
+        "nameSimple":  "Az-Zumar",
+        "nameArabic":  "الزمر",
+        "translatedName":  "Para Rombongan",
+        "versesCount":  75,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  40,
+        "nameSimple":  "Ghafir",
+        "nameArabic":  "غافر",
+        "translatedName":  "Sang Maha Pengampun",
+        "versesCount":  85,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  41,
+        "nameSimple":  "Fussilat",
+        "nameArabic":  "فصلت",
+        "translatedName":  "Yang Dijelaskan",
+        "versesCount":  54,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  42,
+        "nameSimple":  "Ash-Shuraa",
+        "nameArabic":  "الشورى",
+        "translatedName":  "Musyawarah",
+        "versesCount":  53,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  43,
+        "nameSimple":  "Az-Zukhruf",
+        "nameArabic":  "الزخرف",
+        "translatedName":  "Perhiasan",
+        "versesCount":  89,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  44,
+        "nameSimple":  "Ad-Dukhan",
+        "nameArabic":  "الدخان",
+        "translatedName":  "Kabut",
+        "versesCount":  59,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  45,
+        "nameSimple":  "Al-Jathiyah",
+        "nameArabic":  "الجاثية",
+        "translatedName":  "Yang Bertekuk Lutut",
+        "versesCount":  37,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  46,
+        "nameSimple":  "Al-Ahqaf",
+        "nameArabic":  "الأحقاف",
+        "translatedName":  "Bukit-bukir Pasir",
+        "versesCount":  35,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  47,
+        "nameSimple":  "Muhammad",
+        "nameArabic":  "محمد",
+        "translatedName":  "Muhammad",
+        "versesCount":  38,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  48,
+        "nameSimple":  "Al-Fath",
+        "nameArabic":  "الفتح",
+        "translatedName":  "Kemenangan",
+        "versesCount":  29,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  49,
+        "nameSimple":  "Al-Hujurat",
+        "nameArabic":  "الحجرات",
+        "translatedName":  "Kamar-kamar",
+        "versesCount":  18,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  50,
+        "nameSimple":  "Qaf",
+        "nameArabic":  "ق",
+        "translatedName":  "Qaf",
+        "versesCount":  45,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  51,
+        "nameSimple":  "Adh-Dhariyat",
+        "nameArabic":  "الذاريات",
+        "translatedName":  "Angin yang Menerbangkan",
+        "versesCount":  60,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  52,
+        "nameSimple":  "At-Tur",
+        "nameArabic":  "الطور",
+        "translatedName":  "Bukit",
+        "versesCount":  49,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  53,
+        "nameSimple":  "An-Najm",
+        "nameArabic":  "النجم",
+        "translatedName":  "Bintang",
+        "versesCount":  62,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  54,
+        "nameSimple":  "Al-Qamar",
+        "nameArabic":  "القمر",
+        "translatedName":  "Bulan",
+        "versesCount":  55,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  55,
+        "nameSimple":  "Ar-Rahman",
+        "nameArabic":  "الرحمن",
+        "translatedName":  "Yang Maha Pemurah",
+        "versesCount":  78,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  56,
+        "nameSimple":  "Al-Waqi\u0027ah",
+        "nameArabic":  "الواقعة",
+        "translatedName":  "Hari Kiamat",
+        "versesCount":  96,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  57,
+        "nameSimple":  "Al-Hadid",
+        "nameArabic":  "الحديد",
+        "translatedName":  "Besi",
+        "versesCount":  29,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  58,
+        "nameSimple":  "Al-Mujadila",
+        "nameArabic":  "المجادلة",
+        "translatedName":  "Wanita yang Menggugat",
+        "versesCount":  22,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  59,
+        "nameSimple":  "Al-Hashr",
+        "nameArabic":  "الحشر",
+        "translatedName":  "Pengusiran",
+        "versesCount":  24,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  60,
+        "nameSimple":  "Al-Mumtahanah",
+        "nameArabic":  "الممتحنة",
+        "translatedName":  "Wanita yang Diuji",
+        "versesCount":  13,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  61,
+        "nameSimple":  "As-Saf",
+        "nameArabic":  "الصف",
+        "translatedName":  "Barisan",
+        "versesCount":  14,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  62,
+        "nameSimple":  "Al-Jumu\u0027ah",
+        "nameArabic":  "الجمعة",
+        "translatedName":  "Hari Jum\\\u0027at",
+        "versesCount":  11,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  63,
+        "nameSimple":  "Al-Munafiqun",
+        "nameArabic":  "المنافقون",
+        "translatedName":  "Kaum Munafik",
+        "versesCount":  11,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  64,
+        "nameSimple":  "At-Taghabun",
+        "nameArabic":  "التغابن",
+        "translatedName":  "Hari Dinampakkan Kesalahan",
+        "versesCount":  18,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  65,
+        "nameSimple":  "At-Talaq",
+        "nameArabic":  "الطلاق",
+        "translatedName":  "Perceraian",
+        "versesCount":  12,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  66,
+        "nameSimple":  "At-Tahrim",
+        "nameArabic":  "التحريم",
+        "translatedName":  "Mengharamkan",
+        "versesCount":  12,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  67,
+        "nameSimple":  "Al-Mulk",
+        "nameArabic":  "الملك",
+        "translatedName":  "Kerajaan",
+        "versesCount":  30,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  68,
+        "nameSimple":  "Al-Qalam",
+        "nameArabic":  "القلم",
+        "translatedName":  "Pena",
+        "versesCount":  52,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  69,
+        "nameSimple":  "Al-Haqqah",
+        "nameArabic":  "الحاقة",
+        "translatedName":  "Kenyataan (Hari Kiamat)",
+        "versesCount":  52,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  70,
+        "nameSimple":  "Al-Ma\u0027arij",
+        "nameArabic":  "المعارج",
+        "translatedName":  "Tempat yang Naik",
+        "versesCount":  44,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  71,
+        "nameSimple":  "Nuh",
+        "nameArabic":  "نوح",
+        "translatedName":  "Nuh",
+        "versesCount":  28,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  72,
+        "nameSimple":  "Al-Jinn",
+        "nameArabic":  "الجن",
+        "translatedName":  "Jin",
+        "versesCount":  28,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  73,
+        "nameSimple":  "Al-Muzzammil",
+        "nameArabic":  "المزمل",
+        "translatedName":  "Orang yang Berselimut",
+        "versesCount":  20,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  74,
+        "nameSimple":  "Al-Muddaththir",
+        "nameArabic":  "المدثر",
+        "translatedName":  "Orang yang Berkemul",
+        "versesCount":  56,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  75,
+        "nameSimple":  "Al-Qiyamah",
+        "nameArabic":  "القيامة",
+        "translatedName":  "Hari Berbangkit",
+        "versesCount":  40,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  76,
+        "nameSimple":  "Al-Insan",
+        "nameArabic":  "الانسان",
+        "translatedName":  "Manusia",
+        "versesCount":  31,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  77,
+        "nameSimple":  "Al-Mursalat",
+        "nameArabic":  "المرسلات",
+        "translatedName":  "Malaikat-malaikan yang Diutus",
+        "versesCount":  50,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  78,
+        "nameSimple":  "An-Naba",
+        "nameArabic":  "النبإ",
+        "translatedName":  "Berita Besar",
+        "versesCount":  40,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  79,
+        "nameSimple":  "An-Nazi\u0027at",
+        "nameArabic":  "النازعات",
+        "translatedName":  "Malaikat yang Mencabut",
+        "versesCount":  46,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  80,
+        "nameSimple":  "\u0027Abasa",
+        "nameArabic":  "عبس",
+        "translatedName":  "Ia Bermuka Masam",
+        "versesCount":  42,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  81,
+        "nameSimple":  "At-Takwir",
+        "nameArabic":  "التكوير",
+        "translatedName":  "Menggulung",
+        "versesCount":  29,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  82,
+        "nameSimple":  "Al-Infitar",
+        "nameArabic":  "الإنفطار",
+        "translatedName":  "Terbelah",
+        "versesCount":  19,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  83,
+        "nameSimple":  "Al-Mutaffifin",
+        "nameArabic":  "المطففين",
+        "translatedName":  "Orang-orang Curang",
+        "versesCount":  36,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  84,
+        "nameSimple":  "Al-Inshiqaq",
+        "nameArabic":  "الإنشقاق",
+        "translatedName":  "Terbelah",
+        "versesCount":  25,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  85,
+        "nameSimple":  "Al-Buruj",
+        "nameArabic":  "البروج",
+        "translatedName":  "Gugusan Bintang",
+        "versesCount":  22,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  86,
+        "nameSimple":  "At-Tariq",
+        "nameArabic":  "الطارق",
+        "translatedName":  "Yang Datang di Malam Hari",
+        "versesCount":  17,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  87,
+        "nameSimple":  "Al-A\u0027la",
+        "nameArabic":  "الأعلى",
+        "translatedName":  "Yang Paling Tinggi",
+        "versesCount":  19,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  88,
+        "nameSimple":  "Al-Ghashiyah",
+        "nameArabic":  "الغاشية",
+        "translatedName":  "Hari Pembalasan",
+        "versesCount":  26,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  89,
+        "nameSimple":  "Al-Fajr",
+        "nameArabic":  "الفجر",
+        "translatedName":  "Fajar",
+        "versesCount":  30,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  90,
+        "nameSimple":  "Al-Balad",
+        "nameArabic":  "البلد",
+        "translatedName":  "Negeri",
+        "versesCount":  20,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  91,
+        "nameSimple":  "Ash-Shams",
+        "nameArabic":  "الشمس",
+        "translatedName":  "Matahari",
+        "versesCount":  15,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  92,
+        "nameSimple":  "Al-Layl",
+        "nameArabic":  "الليل",
+        "translatedName":  "Malam",
+        "versesCount":  21,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  93,
+        "nameSimple":  "Ad-Duhaa",
+        "nameArabic":  "الضحى",
+        "translatedName":  "Waktu Dhuha",
+        "versesCount":  11,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  94,
+        "nameSimple":  "Ash-Sharh",
+        "nameArabic":  "الشرح",
+        "translatedName":  "Melapangkan",
+        "versesCount":  8,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  95,
+        "nameSimple":  "At-Tin",
+        "nameArabic":  "التين",
+        "translatedName":  "Buah Tin",
+        "versesCount":  8,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  96,
+        "nameSimple":  "Al-\u0027Alaq",
+        "nameArabic":  "العلق",
+        "translatedName":  "Segumpal Darah",
+        "versesCount":  19,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  97,
+        "nameSimple":  "Al-Qadr",
+        "nameArabic":  "القدر",
+        "translatedName":  "Kemuliaan",
+        "versesCount":  5,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  98,
+        "nameSimple":  "Al-Bayyinah",
+        "nameArabic":  "البينة",
+        "translatedName":  "Pembuktian",
+        "versesCount":  8,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  99,
+        "nameSimple":  "Az-Zalzalah",
+        "nameArabic":  "الزلزلة",
+        "translatedName":  "Kegoncangan",
+        "versesCount":  8,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  100,
+        "nameSimple":  "Al-\u0027Adiyat",
+        "nameArabic":  "العاديات",
+        "translatedName":  "Berlari Kencang",
+        "versesCount":  11,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  101,
+        "nameSimple":  "Al-Qari\u0027ah",
+        "nameArabic":  "القارعة",
+        "translatedName":  "Hari Kiamat",
+        "versesCount":  11,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  102,
+        "nameSimple":  "At-Takathur",
+        "nameArabic":  "التكاثر",
+        "translatedName":  "Bermegah-megahan",
+        "versesCount":  8,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  103,
+        "nameSimple":  "Al-\u0027Asr",
+        "nameArabic":  "العصر",
+        "translatedName":  "Waktu Sore",
+        "versesCount":  3,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  104,
+        "nameSimple":  "Al-Humazah",
+        "nameArabic":  "الهمزة",
+        "translatedName":  "Pengumpat",
+        "versesCount":  9,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  105,
+        "nameSimple":  "Al-Fil",
+        "nameArabic":  "الفيل",
+        "translatedName":  "Gajah",
+        "versesCount":  5,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  106,
+        "nameSimple":  "Quraysh",
+        "nameArabic":  "قريش",
+        "translatedName":  "Suku Quraisy",
+        "versesCount":  4,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  107,
+        "nameSimple":  "Al-Ma\u0027un",
+        "nameArabic":  "الماعون",
+        "translatedName":  "Barang yang Berguna",
+        "versesCount":  7,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  108,
+        "nameSimple":  "Al-Kawthar",
+        "nameArabic":  "الكوثر",
+        "translatedName":  "Nikmat Berlimpah",
+        "versesCount":  3,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  109,
+        "nameSimple":  "Al-Kafirun",
+        "nameArabic":  "الكافرون",
+        "translatedName":  "Orang-orang Kafir",
+        "versesCount":  6,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  110,
+        "nameSimple":  "An-Nasr",
+        "nameArabic":  "النصر",
+        "translatedName":  "Pertolongan",
+        "versesCount":  3,
+        "revelationPlace":  "madinah"
+    },
+    {
+        "number":  111,
+        "nameSimple":  "Al-Masad",
+        "nameArabic":  "المسد",
+        "translatedName":  "Gejolak Api (Sabut)",
+        "versesCount":  5,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  112,
+        "nameSimple":  "Al-Ikhlas",
+        "nameArabic":  "الإخلاص",
+        "translatedName":  "Ikhlash",
+        "versesCount":  4,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  113,
+        "nameSimple":  "Al-Falaq",
+        "nameArabic":  "الفلق",
+        "translatedName":  "Waktu Shubuh",
+        "versesCount":  5,
+        "revelationPlace":  "makkah"
+    },
+    {
+        "number":  114,
+        "nameSimple":  "An-Nas",
+        "nameArabic":  "الناس",
+        "translatedName":  "Umat Manusia",
+        "versesCount":  6,
+        "revelationPlace":  "makkah"
+    }
+]

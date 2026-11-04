@@ -238,6 +238,7 @@ public partial class MainViewModel
     {
         Action notify = () =>
         {
+            if (IsRadioPlaying || IsRadioBuffering) StopQuranForOtherPlayback();
             OnPropertyChanged(nameof(CurrentRadioStation));
             OnPropertyChanged(nameof(CurrentRadioStationName));
             OnPropertyChanged(nameof(CurrentRadioStationSubtitle));

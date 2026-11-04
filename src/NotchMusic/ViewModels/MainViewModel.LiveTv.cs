@@ -337,6 +337,7 @@ public partial class MainViewModel
     {
         Action notify = () =>
         {
+            if (IsLiveTvPlaying || IsLiveTvBuffering) StopQuranForOtherPlayback();
             OnPropertyChanged(nameof(CurrentLiveTvChannel));
             OnPropertyChanged(nameof(CurrentLiveTvChannelName));
             OnPropertyChanged(nameof(CurrentLiveTvChannelSubtitle));

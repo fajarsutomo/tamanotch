@@ -11,6 +11,20 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [0.8.1] - belum dirilis
+
+### Diubah
+- Mengklik pill jadwal sholat di island kini membuka jendela Waktu Sholat tersendiri (seperti Cuaca & Gempa), bukan memperluas island. Pill tetap ada di notch; menutup jendela hanya menyembunyikannya, dan tombol "pasang kembali ke notch" hanya muncul bila jendela memang dilepas.
+
+### Diperbaiki
+- Mengklik jadwal sholat (atau membuka panel Perluas) membuat island tampak hilang: kapsul idle berukuran tetap ikut dipakai di mode expanded sehingga seluruh isinya terpotong, dan notch kosong itu sulit diklik atau disorot. Kapsul idle kini hanya berlaku di mode compact.
+
+## [0.8.0] - belum dirilis
+
+### Ditambahkan
+- **Pemutar Al-Qur'an** (jendela seperti Radio, ada mode mini): daftar 114 surah dengan pencarian (nama, arti, nomor, atau huruf Arab), tombol surah acak, putar/jeda, sebelumnya/berikutnya, bilah progres yang bisa diklik untuk melompat, dan volume. Pilihan setelah surah selesai: berhenti, surah berikutnya, atau acak. Tanpa teks ayat. Audio murottal Mishari Alafasy dari Quran.com API (butuh internet, tanpa cache). Dibuka dari ikon buku di island saat disorot atau menu tray.
+- Saling jeda: Al-Qur'an menghentikan musik, Spotify, YouTube Music, Jellyfin, radio, dan Live TV saat mulai; pemutar tersebut atau adzan (dengan jeda otomatis) menghentikan Al-Qur'an.
+
 ## [0.7.0] - belum dirilis
 
 ### Ditambahkan

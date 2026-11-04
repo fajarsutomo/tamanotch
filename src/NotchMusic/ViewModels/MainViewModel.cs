@@ -10,6 +10,7 @@ using NotchMusic.Services.Lyrics;
 using NotchMusic.Services.LiveTv;
 using NotchMusic.Services.Media;
 using NotchMusic.Services.Prayer;
+using NotchMusic.Services.Quran;
 using NotchMusic.Services.Radio;
 using NotchMusic.Services.Settings;
 using NotchMusic.Services.Sync;
@@ -41,7 +42,8 @@ public partial class MainViewModel : ViewModelBase
         IBmkgService? bmkgService = null,
         ILocationService? locationService = null,
         IWellnessReminderService? wellnessService = null,
-        IAirQualityService? airQualityService = null)
+        IAirQualityService? airQualityService = null,
+        IQuranService? quranService = null)
     {
         _mediaService = mediaService;
         _lyricsService = lyricsService;
@@ -79,6 +81,8 @@ public partial class MainViewModel : ViewModelBase
         _filteredRadioStations = CollectionViewSource.GetDefaultView(RadioStations);
         _filteredRadioStations.Filter = FilterRadioStation;
 
+        InitializeQuran(quranService);
+
         _radioService.StateChanged += OnRadioStateChanged;
         _radioService.StationChanged += _ => OnRadioStateChanged();
 
@@ -109,8 +113,8 @@ public partial class MainViewModel : ViewModelBase
             }
             else
             {
-                CurrentMode = PanelMode.Expanded;
-                IsPrayerPanelOpen = true;
+                // Jadwal sholat selalu di jendela sendiri (seperti Cuaca & Gempa); pill di notch tetap ada.
+                RequestOpenPrayerSchedule?.Invoke();
             }
         });
         DismissPrayerNotificationCommand = new RelayCommand(() =>

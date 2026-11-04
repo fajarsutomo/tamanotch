@@ -752,6 +752,23 @@
                                              Visibility="{Binding IsLiveTvActiveOrOpen, Converter={StaticResource BoolToVis}}"/>
                                 </Grid>
                             </Border>
+
+                            <!-- 2c. Al-Qur'an (murottal per surah) -->
+                            <Border Width="42" Height="42" Style="{StaticResource NotchIconBadgeStyle}" Margin="0,0,6,0" Cursor="Hand"
+                                    Visibility="{Binding ShowComponentIcons, Converter={StaticResource BoolToVis}}"
+                                    ToolTip="{Binding QuranNotchTooltip}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding OpenQuranCommand}"/>
+                                </Border.InputBindings>
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Path Data="M12,6.5 C10.2,5 7.8,4.5 4.5,4.5 V18 C7.8,18 10.2,18.5 12,20 C13.8,18.5 16.2,18 19.5,18 V4.5 C16.2,4.5 13.8,5 12,6.5 Z M12,6.5 V20"
+                                          Stroke="{StaticResource MetallicSilverBrush}" StrokeThickness="1.6" StrokeLineJoin="Round"
+                                          Width="17" Height="17" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <!-- Indikator Hijau saat Al-Qur'an sedang Memutar -->
+                                    <Ellipse Width="6" Height="6" Fill="#30D158" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,2,2"
+                                             Visibility="{Binding IsQuranPlaying, Converter={StaticResource BoolToVis}}"/>
+                                </Grid>
+                            </Border>
                         </StackPanel>
 
                         <!-- TENGAH: Mata menyala (hanya saat idle; saat hover slot ini hilang). Klik membuka Pengaturan. -->

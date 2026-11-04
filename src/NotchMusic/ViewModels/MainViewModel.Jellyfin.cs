@@ -23,6 +23,7 @@ public partial class MainViewModel
         {
             _liveTvService.Stop();
         }
+        StopQuranForOtherPlayback();
 
         PlaybackStartedOnJellyfin?.Invoke();
     }

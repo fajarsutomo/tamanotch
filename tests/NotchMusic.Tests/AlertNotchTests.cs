@@ -169,6 +169,39 @@ public class AlertNotchTests
     }
 
     [Fact]
+    public void ExpandedMode_LeavesIdleCapsule_SoTheExpandedIslandIsNotClipped()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+        Assert.True(vm.ShowIdleEyes);
+
+        vm.CurrentMode = PanelMode.Expanded;
+        vm.IsPrayerPanelOpen = true;
+
+        Assert.True(vm.IsExpandedMode);
+        // Kapsul idle (ukuran tetap) hanya untuk mode compact; di mode expanded ia memotong seluruh isi island.
+        Assert.False(vm.ShowIdleEyes);
+        Assert.False(vm.ShowEyesInIdle);
+
+        vm.SetModeCommand.Execute("Compact");
+        Assert.True(vm.ShowIdleEyes);
+    }
+
+    [Fact]
+    public void ClickingThePrayerPill_OpensItsOwnWindow_WithoutDetachingOrExpandingTheIsland()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+        int requested = 0;
+        vm.RequestOpenPrayerSchedule += () => requested++;
+
+        vm.OpenPrayerScheduleCommand.Execute(null);
+
+        Assert.Equal(1, requested);
+        Assert.True(vm.IsCompactMode);
+        Assert.False(vm.IsPrayerPanelOpen);
+        Assert.False(vm.IsPrayerDetached);
+    }
+
+    [Fact]
     public void IslandEarthquakeBadge_HidesAfterThreeHours()
     {
         var now = new DateTimeOffset(2026, 11, 4, 12, 0, 0, TimeSpan.Zero);

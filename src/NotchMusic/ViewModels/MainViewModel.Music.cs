@@ -91,7 +91,7 @@ public partial class MainViewModel
 
     public bool IsPlaying => CurrentTrack?.IsPlaying ?? false;
 
-    public bool IsAudioActive => IsPlaying || IsRadioPlaying || IsLiveTvPlaying;
+    public bool IsAudioActive => IsPlaying || IsRadioPlaying || IsLiveTvPlaying || IsQuranPlaying;
 
     public SongLyrics? CurrentLyrics
     {
@@ -257,11 +257,13 @@ public partial class MainViewModel
     public void NotifyYouTubeMusicPlaying()
     {
         _ = _mediaService.PauseSessionByKeywordAsync("spotify");
+        StopQuranForOtherPlayback();
         PlaybackStartedOnYouTubeMusic?.Invoke();
     }
 
     public void NotifySpotifyPlaying()
     {
+        StopQuranForOtherPlayback();
         PlaybackStartedOnSpotify?.Invoke();
     }
 
@@ -271,6 +273,7 @@ public partial class MainViewModel
         {
             var oldTrackKey = _currentTrack?.UniqueSongKey;
             CurrentTrack = track;
+            if (track?.IsPlaying == true) StopQuranWhenMusicStarts();
 
             if (track == null || string.IsNullOrWhiteSpace(track.Title))
             {

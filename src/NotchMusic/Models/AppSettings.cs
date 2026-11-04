@@ -138,6 +138,19 @@ public class AppSettings
     public string LastRadioStationId { get; set; } = string.Empty;
     public List<string> FavoriteRadioStationIds { get; set; } = new();
     public List<RadioStation> CustomRadioStations { get; set; } = new();
+
+    // Pemutar Al-Qur'an (audio per surah dari Quran.com)
+    public bool IsQuranWindowOpen { get; set; } = false;
+    public double QuranWindowLeft { get; set; } = -1;
+    public double QuranWindowTop { get; set; } = -1;
+    public bool IsQuranWindowCompact { get; set; } = false;
+    public double QuranVolume { get; set; } = 0.80;
+    public bool QuranMuted { get; set; } = false;
+    public int LastQuranSurah { get; set; } = 0;
+    /// <summary>Id qari di Quran.com (7 = Mishari Alafasy).</summary>
+    public int QuranReciterId { get; set; } = 7;
+    /// <summary>"Stop", "Next", atau "Random": kelanjutan setelah satu surah selesai.</summary>
+    public string QuranAfterPlayback { get; set; } = "Next";
     public bool IsMusicWindowOpen { get; set; } = false;
     public double MusicWindowLeft { get; set; } = -1;
     public double MusicWindowTop { get; set; } = -1;

@@ -108,6 +108,6 @@ public partial class PrayerWindow : Window
     {
         // Terpasang di notch: IsPrayerWindowOpen juga mengatur pill dan panel sholat di notch utama, jadi hanya jendela yang disembunyikan.
         if (_viewModel.IsPrayerDetached) _viewModel.IsPrayerWindowOpen = false;
-        Hide();
+        this.HideToNotch();
     }
 }

@@ -24,6 +24,14 @@ public partial class MainViewModel
     public double IdleFrameHeight => Settings.IdleFrameAutoSize ? double.NaN : Math.Clamp(Settings.IdleFrameHeight, 20, 90);
 
     // Urutan CornerRadius: kiri-atas, kanan-atas, kanan-bawah, kiri-bawah.
+    /// <summary>Perkiraan ukuran kapsul idle (DIP) untuk animasi menciut; bila ukuran otomatis, mengikuti mata beserta ruang di sekitarnya.</summary>
+    public (double Width, double Height) EstimateIdleCapsuleSize()
+    {
+        double width = Settings.IdleFrameAutoSize ? CenterIconWidth + 4 + 24 + 2.4 : Math.Clamp(Settings.IdleFrameWidth, 40, 240);
+        double height = Settings.IdleFrameAutoSize ? CenterIconHeight + 8 + 1.2 : Math.Clamp(Settings.IdleFrameHeight, 20, 90);
+        return (width, height);
+    }
+
     public CornerRadius IdleFrameCornerRadius => new(0, 0, Math.Clamp(Settings.IdleFrameRadiusRight, 0, 60), Math.Clamp(Settings.IdleFrameRadiusLeft, 0, 60));
 
     // --- Kustomisasi notch: hover (null = tampilan bawaan) ---

@@ -11,6 +11,14 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [0.9.0] - belum dirilis
+
+### Ditambahkan
+- Animasi buka dan tutup jendela: Radio, Al-Qur'an, Waktu Sholat, Cuaca & Gempa, To-Do, dan Pemutar Musik keluar dari notch saat dibuka dan mengecil serta memudar ke notch (sekitar 0,3 detik) sebelum disembunyikan; membuka lagi saat sedang menutup membatalkan penutupan. Tanpa animasi saat aplikasi baru mulai atau notch belum tampil.
+- Island yang terbuka karena hover kini menciut mulus ke kapsul idle (isi memudar, bingkai mengecil, sekitar 0,4 detik) alih-alih langsung berganti; bila kursor kembali ke notch saat menciut, animasi dibatalkan dan island tetap terbuka.
+- Island juga membuka dengan animasi (kebalikan menciut, sekitar 0,4 detik): bingkai membesar dari kapsul idle dan isinya muncul belakangan, sehingga muncul dan hilangnya terasa setara.
+- Posisi island hover mengikuti notch idle seperti notch notifikasi: bila notch digeser ke kanan layar, island melebar ke kiri dari tepi kanan kapsul idle (ke kanan dari tepi kirinya bila notch di kiri, simetris bila di tengah), dan menciutnya menuju kapsul idle yang sebenarnya, bukan ke tengah island. Animasi buka/tutup jendela juga menuju kapsul idle itu. Mengikuti pengaturan Windows "Animation effects". Jendela berisi WebView2 (YouTube Music, Spotify, Jellyfin, Browser, Live TV) belum dianimasikan.
+
 ## [0.8.1] - belum dirilis
 
 ### Diubah

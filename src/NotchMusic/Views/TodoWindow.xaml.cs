@@ -260,7 +260,7 @@ public partial class TodoWindow : Window
     private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
         _viewModel.IsTodoWindowOpen = false;
-        Hide();
+        this.HideToNotch();
     }
 
     public void ForceClose()
@@ -274,7 +274,7 @@ public partial class TodoWindow : Window
         if (!_isRealClose)
         {
             e.Cancel = true;
-            Hide();
+            this.HideToNotch();
             return;
         }
         base.OnClosing(e);

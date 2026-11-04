@@ -45,6 +45,15 @@ public partial class MainWindow : Window
         DataContext = _viewModel;
         WindowHelper.HorizontalOffsetPercent = _settingsService.CurrentSettings.NotchHorizontalOffsetPercent;
 
+        _viewModel.RequestHoverCollapseAnimation += AnimateHoverCollapse;
+        _viewModel.HoverCollapseAnimationCancelled += CancelHoverCollapseAnimation;
+        _viewModel.PropertyChanged += (s, ev) =>
+        {
+            if (ev.PropertyName == nameof(MainViewModel.ShowComponentIcons) && _viewModel.ShowComponentIcons && _viewModel.IsCompactMode)
+            {
+                BeginHoverExpandAnimation();
+            }
+        };
         _viewModel.RequestOpenSettings += OpenSettings;
         _viewModel.RequestOpenYouTubeMusic += OpenYouTubeMusic;
         _mediaService = mediaService;
@@ -127,23 +136,244 @@ public partial class MainWindow : Window
         SetupTray();
     }
 
-    // Tepi kanan notch saat idle; notch notifikasi (merah/hijau) melebar ke kiri dari tepi ini.
-    private double _idleRightEdge = double.NaN;
+    /// <summary>Durasi island menciut ke kapsul idle; cukup panjang agar gerakannya terbaca.</summary>
+    private static readonly TimeSpan HoverCollapseDuration = TimeSpan.FromMilliseconds(400);
 
-    private void PositionCompactWindow()
+    /// <summary>Durasi island membuka dari kapsul idle; sama dengan menciut agar terasa setara.</summary>
+    private static readonly TimeSpan HoverExpandDuration = TimeSpan.FromMilliseconds(400);
+
+    private int _collapseAnimationVersion;
+    private bool _collapseAnimating;
+
+    /// <summary>
+    /// Island hover menciut ke kapsul idle: isinya memudar dan bingkainya mengecil ke arah kapsul (dari tengah atas),
+    /// baru setelah itu keadaan idle diterapkan sehingga pergantiannya mulus. Window tetap sebesar island hover selama animasi.
+    /// </summary>
+    private void AnimateHoverCollapse(Action commit)
     {
-        bool alertNotch = _viewModel.ShowAlertNotch || _viewModel.ShowPrayerNotch;
-        if (alertNotch && !double.IsNaN(_idleRightEdge) && ActualWidth > 0)
+        if (_collapseAnimating) return;
+        if (_expandAnimating)
         {
-            var area = WindowHelper.GetWorkAreaSize(this);
-            Left = Math.Clamp(_idleRightEdge - ActualWidth, 0, Math.Max(0, area.Width - ActualWidth));
-            Top = 0;
+            _expandAnimationVersion++;
+            ResetIslandAnimation();
+        }
+
+        var border = MainIslandBorder;
+        if (!WindowAnimator.Enabled || !IsVisible || border.Child is not UIElement content
+            || border.ActualWidth <= 0 || border.ActualHeight <= 0)
+        {
+            commit();
             return;
         }
 
-        WindowHelper.CenterAtTopBezel(this);
-        if (_viewModel.ShowEyesInIdle && ActualWidth > 0) _idleRightEdge = Left + ActualWidth;
+        var (idleWidth, idleHeight) = _viewModel.EstimateIdleCapsuleSize();
+        double scaleX = Math.Min(1.0, idleWidth / border.ActualWidth);
+        double scaleY = Math.Min(1.0, idleHeight / border.ActualHeight);
+        if (scaleX >= 0.98 && scaleY >= 0.98)
+        {
+            commit();
+            return;
+        }
+
+        _collapseAnimating = true;
+        int version = ++_collapseAnimationVersion;
+
+        // Island menciut ke kapsul idle yang sebenarnya (bisa di kanan/kiri tengah), bukan ke tengah island.
+        double originX = ComputeCapsulePivotX(border, idleWidth, scaleX);
+        border.RenderTransformOrigin = new System.Windows.Point(originX, 0);
+        var scale = new System.Windows.Media.ScaleTransform(1, 1);
+        border.RenderTransform = scale;
+
+        // Bayangan (glow) dirender lewat software dan dihitung ulang tiap frame, itu yang membuat animasi patah-patah.
+        // Selama animasi, glow dilepas dan bingkai disimpan sebagai tekstur GPU (BitmapCache) agar skala mulus.
+        border.Effect = null;
+        border.CacheMode = new System.Windows.Media.BitmapCache(1.0);
+
+        var duration = HoverCollapseDuration;
+        var ease = new System.Windows.Media.Animation.CubicEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseInOut };
+        var shrinkX = new System.Windows.Media.Animation.DoubleAnimation(1, scaleX, duration) { EasingFunction = ease };
+        var shrinkY = new System.Windows.Media.Animation.DoubleAnimation(1, scaleY, duration) { EasingFunction = ease };
+        // Isi memudar lebih cepat agar tidak terlihat gepeng saat bingkai mengecil.
+        var fade = new System.Windows.Media.Animation.DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(HoverCollapseDuration.TotalMilliseconds * 0.45));
+
+        shrinkX.Completed += (s, e) =>
+        {
+            if (version != _collapseAnimationVersion) return;   // dibatalkan
+            commit();
+            ResetIslandAnimation();
+        };
+
+        scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleXProperty, shrinkX);
+        scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleYProperty, shrinkY);
+        content.BeginAnimation(UIElement.OpacityProperty, fade);
     }
+
+    /// <summary>
+    /// Asal skala agar tepi kiri dan kanan island bertemu tepat dengan tepi kapsul idle: p = (kiriKapsul - s * kiriIsland) / (1 - s).
+    /// </summary>
+    private double ComputeCapsulePivotX(System.Windows.Controls.Border border, double idleWidth, double scaleX)
+    {
+        if (IdleNotchCenterX is not double idleCenter || scaleX >= 0.98) return 0.5;
+
+        double islandLeft = Left + border.TranslatePoint(new System.Windows.Point(0, 0), this).X;
+        double capsuleLeft = idleCenter - idleWidth / 2.0;
+        double pivot = (capsuleLeft - scaleX * islandLeft) / (1.0 - scaleX);
+        return Math.Clamp((pivot - islandLeft) / border.ActualWidth, -2.0, 3.0);
+    }
+
+    private int _expandAnimationVersion;
+    private bool _expandAnimating;
+
+    /// <summary>
+    /// Island hover membuka dari kapsul idle (kebalikan menciut): bingkai membesar dari ukuran kapsul dan isinya muncul belakangan.
+    /// Dipanggil saat keadaan hover mulai; bingkai disembunyikan sesaat agar tidak berkedip utuh sebelum animasi berjalan.
+    /// </summary>
+    private void BeginHoverExpandAnimation()
+    {
+        if (!WindowAnimator.Enabled || !IsVisible || _collapseAnimating) return;
+
+        var border = MainIslandBorder;
+        int version = ++_expandAnimationVersion;
+        _expandAnimating = true;
+        border.Opacity = 0;
+
+        // Prioritas Render (bukan Background) agar jeda tanpa gambar sependek mungkin; tata letak dipaksa selesai dulu
+        // supaya ukuran dan posisi jendela hover sudah final saat asal skala dihitung.
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Render, new Action(() =>
+        {
+            if (version != _expandAnimationVersion) return;   // dibatalkan, bingkai sudah dipulihkan
+            UpdateLayout();
+
+            if (!_viewModel.ShowComponentIcons || border.Child is not UIElement content
+                || border.ActualWidth <= 0 || border.ActualHeight <= 0)
+            {
+                ResetIslandAnimation();
+                return;
+            }
+
+            var (idleWidth, idleHeight) = _viewModel.EstimateIdleCapsuleSize();
+            double scaleX = Math.Min(1.0, idleWidth / border.ActualWidth);
+            double scaleY = Math.Min(1.0, idleHeight / border.ActualHeight);
+            if (scaleX >= 0.98 && scaleY >= 0.98)
+            {
+                ResetIslandAnimation();
+                return;
+            }
+
+            border.RenderTransformOrigin = new System.Windows.Point(ComputeCapsulePivotX(border, idleWidth, scaleX), 0);
+            var scale = new System.Windows.Media.ScaleTransform(scaleX, scaleY);
+            border.RenderTransform = scale;
+            border.Effect = null;
+            border.CacheMode = new System.Windows.Media.BitmapCache(1.0);
+            content.Opacity = 0;
+            border.Opacity = 1;
+
+            var duration = HoverExpandDuration;
+            var ease = new System.Windows.Media.Animation.CubicEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseOut };
+            var growX = new System.Windows.Media.Animation.DoubleAnimation(scaleX, 1, duration) { EasingFunction = ease };
+            var growY = new System.Windows.Media.Animation.DoubleAnimation(scaleY, 1, duration) { EasingFunction = ease };
+            // Isi baru muncul setelah bingkai cukup besar, supaya teks tidak terlihat gepeng.
+            var fade = new System.Windows.Media.Animation.DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(duration.TotalMilliseconds * 0.5))
+            {
+                BeginTime = TimeSpan.FromMilliseconds(duration.TotalMilliseconds * 0.4)
+            };
+
+            growX.Completed += (s, e) =>
+            {
+                if (version != _expandAnimationVersion) return;
+                ResetIslandAnimation();
+            };
+
+            scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleXProperty, growX);
+            scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleYProperty, growY);
+            content.BeginAnimation(UIElement.OpacityProperty, fade);
+        }));
+    }
+
+    private void CancelHoverCollapseAnimation()
+    {
+        if (!_collapseAnimating) return;
+        _collapseAnimationVersion++;
+        ResetIslandAnimation();
+    }
+
+    private void ResetIslandAnimation()
+    {
+        var border = MainIslandBorder;
+        if (border.Child is UIElement content)
+        {
+            content.BeginAnimation(UIElement.OpacityProperty, null);
+            content.Opacity = 1;
+        }
+        if (border.RenderTransform is System.Windows.Media.ScaleTransform scale)
+        {
+            scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleXProperty, null);
+            scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleYProperty, null);
+        }
+        border.RenderTransform = System.Windows.Media.Transform.Identity;
+        border.RenderTransformOrigin = new System.Windows.Point(0, 0);
+        border.ClearValue(UIElement.EffectProperty);       // kembali ke glow dari style
+        border.ClearValue(UIElement.CacheModeProperty);
+        border.Opacity = 1;
+        _collapseAnimating = false;
+        _expandAnimating = false;
+    }
+
+    // Tepi kanan notch saat idle; notch notifikasi (merah/hijau) melebar ke kiri dari tepi ini.
+    private double _idleRightEdge = double.NaN;
+    private double _idleLeftEdge = double.NaN;
+    private double _idleCenterX = double.NaN;
+
+    /// <summary>Titik tengah horizontal kapsul idle (koordinat layar, DIP); null sebelum notch pernah tampil idle.</summary>
+    public double? IdleNotchCenterX => double.IsNaN(_idleCenterX) ? null : _idleCenterX;
+
+    /// <summary>
+    /// Posisi jendela di mode compact. Notch idle dipusatkan (dengan geseran horizontal pengguna). Notch notifikasi dan island
+    /// hover melebar dari kapsul idle: ke kiri dari tepi kanannya bila notch berada di kanan layar, ke kanan dari tepi kirinya
+    /// bila di kiri, dan simetris bila di tengah.
+    /// </summary>
+    private void PositionCompactWindow()
+    {
+        if (ActualWidth > 0 && !double.IsNaN(_idleRightEdge))
+        {
+            bool alertNotch = _viewModel.ShowAlertNotch || _viewModel.ShowPrayerNotch;
+            bool hoverIsland = _viewModel.IsCompactMode && _viewModel.ShowComponentIcons;
+            double offset = _settingsService.CurrentSettings.NotchHorizontalOffsetPercent;
+
+            double? left = null;
+            if (alertNotch)
+            {
+                left = _idleRightEdge - ActualWidth;
+            }
+            else if (hoverIsland && offset > SideAnchorThresholdPercent)
+            {
+                left = _idleRightEdge - ActualWidth;
+            }
+            else if (hoverIsland && offset < -SideAnchorThresholdPercent)
+            {
+                left = _idleLeftEdge;
+            }
+
+            if (left.HasValue)
+            {
+                var area = WindowHelper.GetWorkAreaSize(this);
+                Left = Math.Clamp(left.Value, 0, Math.Max(0, area.Width - ActualWidth));
+                Top = 0;
+                return;
+            }
+        }
+
+        WindowHelper.CenterAtTopBezel(this);
+        if (_viewModel.ShowEyesInIdle && ActualWidth > 0)
+        {
+            _idleLeftEdge = Left;
+            _idleRightEdge = Left + ActualWidth;
+            _idleCenterX = Left + ActualWidth / 2.0;
+        }
+    }
+
+    /// <summary>Geseran notch (persen lebar layar) di bawah ini dianggap "di tengah": island hover tetap simetris.</summary>
+    private const double SideAnchorThresholdPercent = 5;
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -335,19 +565,20 @@ public partial class MainWindow : Window
                 _todoWindow = new TodoWindow(_viewModel, _settingsService);
                 _todoWindow.Closed += (s, e) => _todoWindow = null;
             }
+            WindowAnimator.Cancel(_todoWindow);
             if (!_todoWindow.IsVisible)
             {
                 if (_todoWindow.WindowState == WindowState.Minimized)
                 {
                     _todoWindow.WindowState = WindowState.Normal;
                 }
-                _todoWindow.Show();
+                _todoWindow.ShowFromNotch();
                 _todoWindow.Activate();
             }
         }
         else
         {
-            _todoWindow?.Hide();
+            _todoWindow?.HideToNotch();
         }
     }
 
@@ -360,15 +591,16 @@ public partial class MainWindow : Window
                 _prayerWindow = new PrayerWindow(_viewModel, _settingsService);
                 _prayerWindow.Closed += (s, e) => _prayerWindow = null;
             }
+            WindowAnimator.Cancel(_prayerWindow);
             if (!_prayerWindow.IsVisible)
             {
-                _prayerWindow.Show();
+                _prayerWindow.ShowFromNotch();
             }
         }
         else if (_viewModel.IsPrayerDetached || !_viewModel.EnablePrayerTimes)
         {
             // Terpasang di notch: jendela yang dibuka dari pill dibiarkan sampai ditutup sendiri.
-            _prayerWindow?.Hide();
+            _prayerWindow?.HideToNotch();
         }
     }
 
@@ -385,9 +617,10 @@ public partial class MainWindow : Window
         {
             _prayerWindow.WindowState = WindowState.Normal;
         }
+        WindowAnimator.Cancel(_prayerWindow);
         if (!_prayerWindow.IsVisible)
         {
-            _prayerWindow.Show();
+            _prayerWindow.ShowFromNotch();
         }
         _prayerWindow.Activate();
     }
@@ -412,7 +645,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            _musicWindow?.Hide();
+            _musicWindow?.HideToNotch();
         }
     }
 
@@ -434,7 +667,8 @@ public partial class MainWindow : Window
                 _musicWindow.WindowState = WindowState.Normal;
             }
 
-            _musicWindow.Show();
+            WindowAnimator.Cancel(_musicWindow);
+            _musicWindow.ShowFromNotch();
             _musicWindow.Activate();
         }
         catch (Exception ex)
@@ -455,7 +689,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            _radioWindow?.Hide();
+            _radioWindow?.HideToNotch();
         }
     }
 
@@ -467,7 +701,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            _quranWindow?.Hide();
+            _quranWindow?.HideToNotch();
         }
     }
 
@@ -491,7 +725,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            _bmkgWindow?.Hide();
+            _bmkgWindow?.HideToNotch();
         }
     }
 
@@ -513,7 +747,8 @@ public partial class MainWindow : Window
                 _bmkgWindow.WindowState = WindowState.Normal;
             }
 
-            _bmkgWindow.Show();
+            WindowAnimator.Cancel(_bmkgWindow);
+            _bmkgWindow.ShowFromNotch();
             _bmkgWindow.Activate();
         }
         catch (Exception ex)
@@ -992,7 +1227,8 @@ public partial class MainWindow : Window
                 _radioWindow.WindowState = WindowState.Normal;
             }
 
-            _radioWindow.Show();
+            WindowAnimator.Cancel(_radioWindow);
+            _radioWindow.ShowFromNotch();
             _radioWindow.Activate();
         }
         catch (Exception ex)
@@ -1023,7 +1259,8 @@ public partial class MainWindow : Window
                 _quranWindow.WindowState = WindowState.Normal;
             }
 
-            _quranWindow.Show();
+            WindowAnimator.Cancel(_quranWindow);
+            _quranWindow.ShowFromNotch();
             _quranWindow.Activate();
         }
         catch (Exception ex)

@@ -376,9 +376,19 @@ public partial class MainViewModel
         RequestComponentLayoutChanged?.Invoke();
     }
 
+    /// <summary>
+    /// Tampilan dapat menganimasikan island menciut ke kapsul idle: ia menerima aksi yang menyelesaikan penciutan
+    /// (mengosongkan <see cref="IsHovering"/>) dan memanggilnya setelah animasi. Tanpa pelanggan, island kembali seketika.
+    /// </summary>
+    public event Action<Action>? RequestHoverCollapseAnimation;
+
+    /// <summary>Kursor kembali ke notch saat animasi menciut berjalan: animasi harus dibatalkan.</summary>
+    public event Action? HoverCollapseAnimationCancelled;
+
     public void OnMouseEnter()
     {
         _isHoveringWindow = true;
+        HoverCollapseAnimationCancelled?.Invoke();
         IsHovering = true;
         _hoverCollapseTimer?.Stop();
         OnPropertyChanged(nameof(IsNotchActive));
@@ -424,12 +434,25 @@ public partial class MainViewModel
     /// <summary>Kembali ke idle bila kursor tidak di atas notch dan tidak ada yang menahan island tetap terbuka.</summary>
     public void CollapseHoverIfIdle()
     {
-        if (_isHoveringWindow || IsPinned || IsLyricsMode || IsComponentsMenuOpen
-            || HasActivePrayerNotification || HasActiveBmkgNotification)
+        if (!CanCollapseHover())
         {
+            return;
+        }
+
+        if (IsHovering && RequestHoverCollapseAnimation is { } animate)
+        {
+            // Kondisi diperiksa lagi saat animasi selesai: kursor atau notifikasi bisa saja berubah selama bergerak.
+            animate(() =>
+            {
+                if (CanCollapseHover()) IsHovering = false;
+            });
             return;
         }
 
         IsHovering = false;
     }
+
+    private bool CanCollapseHover()
+        => !(_isHoveringWindow || IsPinned || IsLyricsMode || IsComponentsMenuOpen
+             || HasActivePrayerNotification || HasActiveBmkgNotification);
 }

@@ -202,6 +202,20 @@ public class AlertNotchTests
     }
 
     [Fact]
+    public void WindowAnimator_OriginPointsAtTheNotch_RelativeToTheWindow()
+    {
+        // Jendela 400x200 di (100, 300); notch di (500, 20) tepat di tepi kanan-atas luar jendela.
+        var origin = NotchMusic.Helpers.WindowAnimator.ComputeRelativeOrigin(new System.Windows.Point(500, 20), 100, 300, 400, 200);
+
+        Assert.Equal(1.0, origin.X);
+        Assert.Equal(-1.4, origin.Y, 6);
+
+        var inside = NotchMusic.Helpers.WindowAnimator.ComputeRelativeOrigin(new System.Windows.Point(300, 400), 100, 300, 400, 200);
+        Assert.Equal(0.5, inside.X);
+        Assert.Equal(0.5, inside.Y);
+    }
+
+    [Fact]
     public void IslandEarthquakeBadge_HidesAfterThreeHours()
     {
         var now = new DateTimeOffset(2026, 11, 4, 12, 0, 0, TimeSpan.Zero);

@@ -119,7 +119,7 @@ public partial class RadioWindow : Window
     private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
         _viewModel.IsRadioWindowOpen = false;
-        Hide();
+        this.HideToNotch();
     }
 
     public void ForceClose()
@@ -134,7 +134,7 @@ public partial class RadioWindow : Window
         {
             e.Cancel = true;
             _viewModel.IsRadioWindowOpen = false;
-            Hide();
+            this.HideToNotch();
             return;
         }
 

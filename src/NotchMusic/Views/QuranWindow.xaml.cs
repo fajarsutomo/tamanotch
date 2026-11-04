@@ -102,7 +102,7 @@ public partial class QuranWindow : Window
     private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
         _viewModel.IsQuranWindowOpen = false;
-        Hide();
+        this.HideToNotch();
     }
 
     public void ForceClose()
@@ -117,7 +117,7 @@ public partial class QuranWindow : Window
         {
             e.Cancel = true;
             _viewModel.IsQuranWindowOpen = false;
-            Hide();
+            this.HideToNotch();
             return;
         }
 

@@ -70,6 +70,59 @@ public class HoverCollapseTests
         Assert.False(vm.IsHovering);
     }
 
+    [Fact]
+    public void WithAnimationSubscriber_CollapseWaitsForTheViewToCommit()
+    {
+        var vm = CreateHovered();
+        Action? commit = null;
+        vm.RequestHoverCollapseAnimation += c => commit = c;
+        vm.OnMouseLeave();
+
+        vm.CollapseHoverIfIdle();
+
+        Assert.True(vm.IsHovering);          // masih terbuka selama animasi
+        Assert.NotNull(commit);
+
+        commit!();
+        Assert.False(vm.IsHovering);
+        Assert.True(vm.ShowIdleEyes);
+    }
+
+    [Fact]
+    public void CommitAfterTheMouseReturned_KeepsTheIslandOpen()
+    {
+        var vm = CreateHovered();
+        Action? commit = null;
+        int cancelled = 0;
+        vm.RequestHoverCollapseAnimation += c => commit = c;
+        vm.HoverCollapseAnimationCancelled += () => cancelled++;
+        vm.OnMouseLeave();
+        vm.CollapseHoverIfIdle();
+
+        vm.OnMouseEnter();   // kursor kembali selagi island menciut
+
+        Assert.Equal(1, cancelled);
+        commit!();
+        Assert.True(vm.IsHovering);
+    }
+
+    [Fact]
+    public void IdleCapsuleEstimate_UsesConfiguredFrame_OrFollowsTheEyes()
+    {
+        var settings = new ViewModelTestFactory.MemorySettings();
+        settings.CurrentSettings.IdleFrameAutoSize = false;
+        settings.CurrentSettings.IdleFrameWidth = 120;
+        settings.CurrentSettings.IdleFrameHeight = 40;
+        var vm = ViewModelTestFactory.CreateMain(settings);
+
+        Assert.Equal((120.0, 40.0), vm.EstimateIdleCapsuleSize());
+
+        settings.CurrentSettings.IdleFrameAutoSize = true;
+        var auto = vm.EstimateIdleCapsuleSize();
+        Assert.InRange(auto.Width, 40, 120);
+        Assert.InRange(auto.Height, 20, 60);
+    }
+
     // --- Dengan timer sungguhan pada dispatcher ---
 
     private static void RunSta(Action action)

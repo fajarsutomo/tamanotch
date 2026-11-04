@@ -130,7 +130,7 @@ public partial class MusicWindow : Window
         {
             e.Cancel = true;
             _viewModel.IsMusicWindowOpen = false;
-            Hide();
+            this.HideToNotch();
             return;
         }
 

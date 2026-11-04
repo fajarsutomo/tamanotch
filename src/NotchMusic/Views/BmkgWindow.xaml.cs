@@ -120,7 +120,7 @@ public partial class BmkgWindow : Window
     private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
         _viewModel.IsBmkgWindowOpen = false;
-        Hide();
+        this.HideToNotch();
     }
 
     public void ForceClose()
@@ -135,7 +135,7 @@ public partial class BmkgWindow : Window
         {
             e.Cancel = true;
             _viewModel.IsBmkgWindowOpen = false;
-            Hide();
+            this.HideToNotch();
             return;
         }
 

@@ -440,9 +440,31 @@ public partial class MainViewModel
     /// <summary>Notch idle berubah jadi satu baris pesan berframe merah; saat hover atau mode lain banner penuh dipakai.</summary>
     public bool ShowAlertNotch => IsAlertNotchNotification && IsCompactMode && ShowIdleEyes;
 
-    public bool ShowBmkgBanner => HasActiveBmkgNotification && !ShowAlertNotch;
+    // Notifikasi yang sudah tampil sebagai notch tidak diulang di island (banner). Yang belum sempat tampil di notch
+    // (mis. tiba saat island sedang terbuka karena hover) tetap memakai banner.
+    private BmkgNotificationEvent? _bmkgShownInNotch;
+    private PrayerNotificationEvent? _prayerShownInNotch;
+    private WellnessNotificationEvent? _wellnessShownInNotch;
 
-    public bool ShowEyesInIdle => ShowIdleEyes && !ShowAlertNotch && !ShowPrayerNotch;
+    private bool BmkgShownInNotch => _bmkgShownInNotch != null && ReferenceEquals(_bmkgShownInNotch, _activeBmkgNotification);
+
+    private bool PrayerShownInNotch => _prayerShownInNotch != null && ReferenceEquals(_prayerShownInNotch, _activePrayerNotification);
+
+    private bool WellnessShownInNotch => _wellnessShownInNotch != null && ReferenceEquals(_wellnessShownInNotch, _activeWellnessNotification);
+
+    private void TrackNotchDisplay()
+    {
+        if (ShowAlertNotch) _bmkgShownInNotch = _activeBmkgNotification;
+        if (ShowPrayerNotch) _prayerShownInNotch = _activePrayerNotification;
+        if (ShowWellnessNotch) _wellnessShownInNotch = _activeWellnessNotification;
+    }
+
+    public bool ShowBmkgBanner => HasActiveBmkgNotification && !ShowAlertNotch && !BmkgShownInNotch;
+
+    /// <summary>Ada banner notifikasi yang sedang tampil di island; island tidak boleh menciut selama itu.</summary>
+    public bool HasVisibleIslandBanner => ShowBmkgBanner || ShowPrayerBanner || ShowWellnessBanner;
+
+    public bool ShowEyesInIdle => ShowIdleEyes && !ShowAlertNotch && !ShowPrayerNotch && !ShowWellnessNotch;
 
     public string AlertNotchText
     {
@@ -474,8 +496,14 @@ public partial class MainViewModel
     {
         base.OnPropertyChanged(propertyName);
         if (propertyName is nameof(ShowComponentIcons) or nameof(ShowIdleEyes) or nameof(ShowCompactView)
-            or nameof(HasActiveBmkgNotification) or nameof(HasActivePrayerNotification))
+            or nameof(HasActiveBmkgNotification) or nameof(HasActivePrayerNotification)
+            or nameof(HasActiveWellnessNotification))
         {
+            TrackNotchDisplay();
+            base.OnPropertyChanged(nameof(ShowWellnessNotch));
+            base.OnPropertyChanged(nameof(ShowWellnessBanner));
+            base.OnPropertyChanged(nameof(WellnessNotchText));
+            base.OnPropertyChanged(nameof(HasVisibleIslandBanner));
             base.OnPropertyChanged(nameof(IsAlertNotchNotification));
             base.OnPropertyChanged(nameof(ShowAlertNotch));
             base.OnPropertyChanged(nameof(ShowBmkgBanner));

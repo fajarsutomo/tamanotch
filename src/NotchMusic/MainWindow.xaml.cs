@@ -336,7 +336,7 @@ public partial class MainWindow : Window
     {
         if (ActualWidth > 0 && !double.IsNaN(_idleRightEdge))
         {
-            bool alertNotch = _viewModel.ShowAlertNotch || _viewModel.ShowPrayerNotch;
+            bool alertNotch = _viewModel.ShowAlertNotch || _viewModel.ShowPrayerNotch || _viewModel.ShowWellnessNotch;
             bool hoverIsland = _viewModel.IsCompactMode && _viewModel.ShowComponentIcons;
             double offset = _settingsService.CurrentSettings.NotchHorizontalOffsetPercent;
 

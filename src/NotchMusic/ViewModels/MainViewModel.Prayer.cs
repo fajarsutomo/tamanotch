@@ -256,7 +256,7 @@ public partial class MainViewModel
 
     public bool ShowPrayerNotch => HasActivePrayerNotification && IsCompactMode && ShowIdleEyes && !ShowAlertNotch;
 
-    public bool ShowPrayerBanner => HasActivePrayerNotification && !ShowPrayerNotch;
+    public bool ShowPrayerBanner => HasActivePrayerNotification && !ShowPrayerNotch && !PrayerShownInNotch;
 
     public string PrayerNotchText
     {

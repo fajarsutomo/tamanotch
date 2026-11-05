@@ -11,6 +11,12 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [0.10.0] - belum dirilis
+
+### Diubah
+- Pengingat minum dan gerak kini tampil sebagai **notch notifikasi**: minum berframe biru, gerak berframe pink (banner island memakai warna yang sama). Klik notch menjalankan aksi utama ("Sudah minum" atau "Sudah bergerak"), klik kanan menawarkan tunda 10 menit atau tutup. Prioritas bila bersamaan: peringatan BMKG berat, sholat, lalu pengingat kesehatan.
+- Notifikasi yang sudah tampil sebagai notch (BMKG berat, sholat, minum, gerak) tidak diulang lagi sebagai banner di island, dan tidak lagi menahan island tetap terbuka. Notifikasi yang tiba saat island sedang terbuka (belum sempat tampil di notch) dan peringatan gempa kecil tetap memakai banner.
+
 ## [0.9.0] - belum dirilis
 
 ### Ditambahkan

@@ -453,6 +453,5 @@ public partial class MainViewModel
     }
 
     private bool CanCollapseHover()
-        => !(_isHoveringWindow || IsPinned || IsLyricsMode || IsComponentsMenuOpen
-             || HasActivePrayerNotification || HasActiveBmkgNotification);
+        => !(_isHoveringWindow || IsPinned || IsLyricsMode || IsComponentsMenuOpen || HasVisibleIslandBanner);
 }

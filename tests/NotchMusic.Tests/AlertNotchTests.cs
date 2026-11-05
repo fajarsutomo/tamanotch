@@ -64,24 +64,60 @@ public class AlertNotchTests
     }
 
     [Fact]
-    public void Hovering_SwitchesFromAlertNotchToFullBanner_ThenIdleAfterDismissAndLeave()
+    public void Hovering_AfterTheAlertShownAsNotch_DoesNotRepeatItInTheIsland()
     {
         var vm = ViewModelTestFactory.CreateMain();
         vm.ShowBmkgNotification(Quake(high: true));
+        Assert.True(vm.ShowAlertNotch);
 
         vm.OnMouseEnter();
+
+        // Sudah tampil sebagai notch: island hover tidak mengulangnya sebagai banner.
+        Assert.False(vm.ShowAlertNotch);
+        Assert.False(vm.ShowBmkgBanner);
+
+        // ... dan tidak menahan island tetap terbuka.
+        vm.OnMouseLeave();
+        vm.CollapseHoverIfIdle();
+        Assert.False(vm.IsHovering);
+
+        // Selama masih aktif, notch kembali saat idle.
+        Assert.True(vm.ShowAlertNotch);
+        vm.DismissBmkgNotificationCommand.Execute(null);
+        Assert.True(vm.ShowEyesInIdle);
+    }
+
+    [Fact]
+    public void AlertArrivingWhileTheIslandIsOpen_StillUsesTheBanner_BecauseItNeverAppearedAsNotch()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+        vm.OnMouseEnter();
+
+        vm.ShowBmkgNotification(Quake(high: true));
+
         Assert.False(vm.ShowAlertNotch);
         Assert.True(vm.ShowBmkgBanner);
 
-        // Selama peringatan aktif island tetap terbuka; setelah ditutup dan kursor pergi, kembali ke idle.
+        // Banner yang tampil menahan island terbuka sampai ditutup.
         vm.OnMouseLeave();
         vm.CollapseHoverIfIdle();
-        Assert.True(vm.ShowBmkgBanner);
+        Assert.True(vm.IsHovering);
 
         vm.DismissBmkgNotificationCommand.Execute(null);
         vm.CollapseHoverIfIdle();
+        Assert.False(vm.IsHovering);
         Assert.True(vm.ShowEyesInIdle);
-        Assert.False(vm.ShowBmkgBanner);
+    }
+
+    [Fact]
+    public void SmallQuake_WithoutANotch_KeepsItsIslandBanner_OnHover()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+        vm.ShowBmkgNotification(Quake(high: false, magnitude: "4.1"));
+
+        vm.OnMouseEnter();
+
+        Assert.True(vm.ShowBmkgBanner);
     }
 
     [Fact]
@@ -145,15 +181,94 @@ public class AlertNotchTests
     }
 
     [Fact]
-    public void Hovering_SwitchesFromPrayerNotchToFullBanner()
+    public void Hovering_AfterThePrayerShownAsNotch_DoesNotRepeatItInTheIsland()
     {
         var vm = ViewModelTestFactory.CreateMain();
         vm.ShowPrayerNotification(Adhan());
+        Assert.True(vm.ShowPrayerNotch);
 
         vm.OnMouseEnter();
 
         Assert.False(vm.ShowPrayerNotch);
-        Assert.True(vm.ShowPrayerBanner);
+        Assert.False(vm.ShowPrayerBanner);
+    }
+
+    private static WellnessNotificationEvent Reminder(WellnessReminderKind kind) => new()
+    {
+        Kind = kind,
+        Title = kind == WellnessReminderKind.Drink ? "💧 Waktunya minum" : "🚶 Waktunya bergerak",
+        Message = kind == WellnessReminderKind.Drink ? "Segelas air membantu." : "Berdiri dan regangkan badan.",
+        PrimaryActionText = kind == WellnessReminderKind.Drink ? "Sudah minum" : "Sudah bergerak"
+    };
+
+    [Fact]
+    public void DrinkReminder_IsABlueNotch_AndMoveReminderIsPink()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+
+        vm.ShowWellnessNotification(Reminder(WellnessReminderKind.Drink));
+        Assert.True(vm.ShowWellnessNotch);
+        Assert.False(vm.ShowEyesInIdle);
+        Assert.False(vm.ShowWellnessBanner);
+        Assert.Equal("#4FC3F7", vm.WellnessAccentColor);
+        Assert.Equal("💧 Waktunya minum • Segelas air membantu.", vm.WellnessNotchText);
+        var blue = Assert.IsType<System.Windows.Media.SolidColorBrush>(vm.WellnessFrameBrush);
+
+        vm.DismissWellnessNotificationCommand.Execute(null);
+        vm.ShowWellnessNotification(Reminder(WellnessReminderKind.Move));
+        Assert.Equal("#FF7EB6", vm.WellnessAccentColor);
+        var pink = Assert.IsType<System.Windows.Media.SolidColorBrush>(vm.WellnessFrameBrush);
+        Assert.NotEqual(blue.Color, pink.Color);
+    }
+
+    [Fact]
+    public void WellnessNotch_YieldsToAlertAndPrayer_AndIsNotRepeatedInTheIsland()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+        vm.ShowWellnessNotification(Reminder(WellnessReminderKind.Move));
+        Assert.True(vm.ShowWellnessNotch);
+
+        vm.ShowPrayerNotification(Adhan());
+        Assert.False(vm.ShowWellnessNotch);
+        Assert.True(vm.ShowPrayerNotch);
+
+        vm.ShowBmkgNotification(Quake(high: true));
+        Assert.False(vm.ShowPrayerNotch);
+        Assert.True(vm.ShowAlertNotch);
+
+        vm.DismissBmkgNotificationCommand.Execute(null);
+        vm.DismissPrayerNotificationCommand.Execute(null);
+        Assert.True(vm.ShowWellnessNotch);
+
+        vm.OnMouseEnter();
+        Assert.False(vm.ShowWellnessBanner);
+        vm.OnMouseLeave();
+        vm.CollapseHoverIfIdle();
+        Assert.False(vm.IsHovering);
+    }
+
+    [Fact]
+    public void WellnessReminderArrivingWhileHovering_UsesTheBanner_WithItsActions()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+        vm.OnMouseEnter();
+
+        vm.ShowWellnessNotification(Reminder(WellnessReminderKind.Drink));
+
+        Assert.False(vm.ShowWellnessNotch);
+        Assert.True(vm.ShowWellnessBanner);
+    }
+
+    [Fact]
+    public void ClickingTheWellnessNotch_RunsThePrimaryActionAndClearsIt()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+        vm.ShowWellnessNotification(Reminder(WellnessReminderKind.Drink));
+
+        vm.WellnessPrimaryActionCommand.Execute(null);
+
+        Assert.False(vm.ShowWellnessNotch);
+        Assert.True(vm.ShowEyesInIdle);
     }
 
     [Fact]

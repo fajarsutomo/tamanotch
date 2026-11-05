@@ -53,6 +53,30 @@ public partial class SettingsViewModel
         set => SetSetting(Settings.IdleFrameRadiusRight, Math.Clamp(Math.Round(value), 0, 60), v => Settings.IdleFrameRadiusRight = v, nameof(IdleFrameRadiusRight), nameof(IdleFrameRadiusRightText));
     }
 
+    // Bentuk "air menggantung": sudut atas melengkung terbalik ke tepi layar.
+    public bool IdleDropShape
+    {
+        get => string.Equals(Settings.IdleShape, "Drop", StringComparison.OrdinalIgnoreCase);
+        set => SetSetting(Settings.IdleShape, value ? "Drop" : "Capsule", v => Settings.IdleShape = v, nameof(IdleDropShape), nameof(IsIdleTopRadiusEditable));
+    }
+
+    public bool IsIdleTopRadiusEditable => IdleDropShape;
+
+    public double IdleTopRadiusLeft
+    {
+        get => Settings.IdleTopRadiusLeft;
+        set => SetSetting(Settings.IdleTopRadiusLeft, Math.Clamp(Math.Round(value), 0, 16), v => Settings.IdleTopRadiusLeft = v, nameof(IdleTopRadiusLeft), nameof(IdleTopRadiusLeftText));
+    }
+
+    public double IdleTopRadiusRight
+    {
+        get => Settings.IdleTopRadiusRight;
+        set => SetSetting(Settings.IdleTopRadiusRight, Math.Clamp(Math.Round(value), 0, 16), v => Settings.IdleTopRadiusRight = v, nameof(IdleTopRadiusRight), nameof(IdleTopRadiusRightText));
+    }
+
+    public string IdleTopRadiusLeftText => $"{IdleTopRadiusLeft:0} px";
+    public string IdleTopRadiusRightText => $"{IdleTopRadiusRight:0} px";
+
     public string IdleFrameWidthText => $"{IdleFrameWidth:0} px";
     public string IdleFrameHeightText => $"{IdleFrameHeight:0} px";
     public string IdleFrameRadiusLeftText => $"{IdleFrameRadiusLeft:0} px";

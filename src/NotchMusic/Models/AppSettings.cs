@@ -13,6 +13,11 @@ public class AppSettings
     // Kustomisasi notch (warna = "#RRGGBB"; hover "default" = tampilan bawaan)
     public string IdleEyeColor { get; set; } = "#4FC3FF";
     public string IdleFrameColor { get; set; } = "#35D6FF";
+    /// <summary>Bentuk idle notch (eksperimen): "Capsule" (bawaan) atau "Drop" (tetes air menggantung).</summary>
+    public string IdleShape { get; set; } = "Capsule";
+    /// <summary>Radius lengkung terbalik sisi atas (bentuk "Drop"), 0–16 px; dibatasi oleh margin jendela 16 px.</summary>
+    public double IdleTopRadiusLeft { get; set; } = 10;
+    public double IdleTopRadiusRight { get; set; } = 10;
     public bool IdleFrameAutoSize { get; set; } = true;
     public double IdleFrameWidth { get; set; } = 66;
     public double IdleFrameHeight { get; set; } = 30;

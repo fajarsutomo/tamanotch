@@ -23,6 +23,33 @@ public partial class MainViewModel
 
     public double IdleFrameHeight => Settings.IdleFrameAutoSize ? double.NaN : Math.Clamp(Settings.IdleFrameHeight, 20, 90);
 
+    /// <summary>
+    /// Bentuk "air menggantung" (sudut atas melengkung terbalik) untuk mode compact: idle, notch notifikasi, dan island hover.
+    /// Mode expanded tetap persegi panjang membulat.
+    /// </summary>
+    public bool ShowDropShape => IsCompactMode && string.Equals(Settings.IdleShape, "Drop", StringComparison.OrdinalIgnoreCase);
+
+    public const double MaxDropTopRadius = 16;
+
+    public double DropTopRadiusLeft => Math.Clamp(Settings.IdleTopRadiusLeft, 0, MaxDropTopRadius);
+
+    public double DropTopRadiusRight => Math.Clamp(Settings.IdleTopRadiusRight, 0, MaxDropTopRadius);
+
+    /// <summary>Warna bingkai bentuk tetes mengikuti keadaan yang sedang tampil (null = bingkai bawaan island hover).</summary>
+    public Brush? DropFrameBrush =>
+        ShowAlertNotch ? AlertFrameBrush
+        : ShowPrayerNotch ? PrayerFrameBrush
+        : ShowWellnessNotch ? WellnessFrameBrush
+        : ShowIdleEyes ? IdleFrameBrush
+        : HoverFrameBrush;
+
+    public Effect? DropGlowEffect =>
+        ShowAlertNotch ? AlertGlowEffect
+        : ShowPrayerNotch ? PrayerGlowEffect
+        : ShowWellnessNotch ? WellnessGlowEffect
+        : ShowIdleEyes ? IdleGlowEffect
+        : HoverGlowEffect;
+
     // Urutan CornerRadius: kiri-atas, kanan-atas, kanan-bawah, kiri-bawah.
     /// <summary>Perkiraan ukuran kapsul idle (DIP) untuk animasi menciut; bila ukuran otomatis, mengikuti mata beserta ruang di sekitarnya.</summary>
     public (double Width, double Height) EstimateIdleCapsuleSize()
@@ -68,6 +95,11 @@ public partial class MainViewModel
         OnPropertyChanged(nameof(IdleFrameWidth));
         OnPropertyChanged(nameof(IdleFrameHeight));
         OnPropertyChanged(nameof(IdleFrameCornerRadius));
+        OnPropertyChanged(nameof(ShowDropShape));
+        OnPropertyChanged(nameof(DropTopRadiusLeft));
+        OnPropertyChanged(nameof(DropTopRadiusRight));
+        OnPropertyChanged(nameof(DropFrameBrush));
+        OnPropertyChanged(nameof(DropGlowEffect));
         OnPropertyChanged(nameof(HoverFrameBrush));
         OnPropertyChanged(nameof(HoverGlowEffect));
         OnPropertyChanged(nameof(HoverRingBrush));

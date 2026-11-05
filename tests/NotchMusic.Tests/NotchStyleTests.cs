@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using NotchMusic.Helpers;
+using NotchMusic.Models;
 using Xunit;
 
 namespace NotchMusic.Tests;
@@ -193,6 +194,65 @@ public class NotchStyleTests
         Assert.Equal(13, settings.CurrentSettings.IdleFrameRadiusLeft);
         Assert.Equal(0, settings.CurrentSettings.IdleFrameRadiusRight);
         Assert.Equal("13 px", vm.IdleFrameRadiusLeftText);
+    }
+
+    [Fact]
+    public void SettingsViewModel_TopRadii_AreClampedToTheWindowMargin_AndOnlyEditableInDropShape()
+    {
+        var settings = new ViewModelTestFactory.MemorySettings();
+        var vm = ViewModelTestFactory.CreateSettings(settings);
+
+        Assert.False(vm.IdleDropShape);
+        Assert.False(vm.IsIdleTopRadiusEditable);
+
+        vm.IdleDropShape = true;
+        vm.IdleTopRadiusLeft = 40;
+        vm.IdleTopRadiusRight = -3;
+
+        Assert.Equal("Drop", settings.CurrentSettings.IdleShape);
+        Assert.True(vm.IsIdleTopRadiusEditable);
+        Assert.Equal(16, settings.CurrentSettings.IdleTopRadiusLeft);
+        Assert.Equal(0, settings.CurrentSettings.IdleTopRadiusRight);
+        Assert.Equal("16 px", vm.IdleTopRadiusLeftText);
+
+        vm.IdleDropShape = false;
+        Assert.Equal("Capsule", settings.CurrentSettings.IdleShape);
+    }
+
+    [Fact]
+    public void MainViewModel_DropShape_OnlyInCompactMode_AndTopRadiiAreClamped()
+    {
+        var settings = new ViewModelTestFactory.MemorySettings();
+        settings.CurrentSettings.IdleShape = "Drop";
+        settings.CurrentSettings.IdleTopRadiusLeft = 99;
+        settings.CurrentSettings.IdleTopRadiusRight = 7;
+        var vm = ViewModelTestFactory.CreateMain(settings: settings);
+
+        Assert.True(vm.ShowDropShape);
+        Assert.Equal(16, vm.DropTopRadiusLeft);
+        Assert.Equal(7, vm.DropTopRadiusRight);
+
+        vm.SetModeCommand.Execute("Expanded");
+        Assert.False(vm.ShowDropShape);
+    }
+
+    [Fact]
+    public void DropShape_FollowsTheFrameOfWhicheverNotchIsShowing()
+    {
+        var settings = new ViewModelTestFactory.MemorySettings();
+        settings.CurrentSettings.IdleShape = "Drop";
+        var vm = ViewModelTestFactory.CreateMain(settings: settings);
+
+        // IdleFrameBrush dibuat baru tiap dibaca, jadi bandingkan warnanya.
+        Assert.Equal(((SolidColorBrush)vm.IdleFrameBrush).Color, ((SolidColorBrush)vm.DropFrameBrush!).Color);
+
+        vm.ShowWellnessNotification(new WellnessNotificationEvent { Kind = WellnessReminderKind.Drink, Title = "t", Message = "m", PrimaryActionText = "ok" });
+        Assert.True(vm.ShowDropShape);
+        Assert.Same(vm.WellnessFrameBrush, vm.DropFrameBrush);
+        Assert.Same(vm.WellnessGlowEffect, vm.DropGlowEffect);
+
+        vm.ShowPrayerNotification(new PrayerNotificationEvent { PrayerName = "Dzuhur", Type = PrayerReminderType.AtPrayerTime, Title = "t", Message = "m" });
+        Assert.Same(vm.PrayerFrameBrush, vm.DropFrameBrush);
     }
 
     [Fact]

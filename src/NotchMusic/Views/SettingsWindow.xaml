@@ -389,6 +389,29 @@
                         </Grid>
                         <Slider Minimum="0" Maximum="60" Value="{Binding IdleFrameRadiusRight}" TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="5"/>
 
+                        <CheckBox Content="Bentuk air menggantung (sudut atas melengkung terbalik ke tepi layar; berlaku juga untuk island)"
+                                  IsChecked="{Binding IdleDropShape}" Margin="0,10,0,0"/>
+                        <StackPanel IsEnabled="{Binding IsIdleTopRadiusEditable}">
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Sudut kiri atas" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding IdleTopRadiusLeftText}" FontWeight="Bold" Foreground="#FFFFFF"/>
+                            </Grid>
+                            <Slider Minimum="0" Maximum="16" Value="{Binding IdleTopRadiusLeft}" TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="2"/>
+                            <Grid Margin="0,4,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Sudut kanan atas" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding IdleTopRadiusRightText}" FontWeight="Bold" Foreground="#FFFFFF"/>
+                            </Grid>
+                            <Slider Minimum="0" Maximum="16" Value="{Binding IdleTopRadiusRight}" TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="2"/>
+                        </StackPanel>
+
                         <Border Height="1" Background="#2E2E3A" Margin="0,12,0,12"/>
 
                         <TextBlock Text="Saat hover (dynamic island)" FontWeight="SemiBold" Foreground="#CFE8FF" Margin="0,0,0,6"/>

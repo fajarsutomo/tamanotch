@@ -1,5 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 using NotchMusic.Helpers;
 using NotchMusic.Models;
 using NotchMusic.Services.Lyrics;
@@ -31,6 +33,56 @@ public partial class MainWindow : Window
     private HotkeyManager? _hotkeyManager;
     private bool _isRealExit;
 
+    /// <summary>Lebar tepi DropCanvas di luar badan kapsul (sama dengan margin negatif di XAML); radius atas maksimum.</summary>
+    private const double DropMargin = MainViewModel.MaxDropTopRadius;
+
+    /// <summary>
+    /// Bentuk "air menggantung": badan kapsul biasa (sudut bawah mengikuti pengaturan), sedangkan sudut atas kiri/kanan
+    /// berupa lengkung terbalik (cekung) yang melebar ke tepi atas layar.
+    /// </summary>
+    private void UpdateDropShape()
+    {
+        double w = DropCanvas.ActualWidth, h = DropCanvas.ActualHeight;
+        double m = DropMargin;
+        double bodyW = w - m * 2;        if (bodyW <= 8 || h <= 8)
+        {
+            DropShapePath.Data = null;
+            return;
+        }
+
+        // Idle dan notch notifikasi memakai radius bawah dari Pengaturan; island hover memakai radius bawaan 22.
+        var radii = _viewModel.ShowIdleEyes ? _viewModel.IdleFrameCornerRadius : new CornerRadius(0, 0, 22, 22);
+        double rl = Math.Min(radii.BottomLeft, Math.Min(bodyW / 2, h));
+        double rr = Math.Min(radii.BottomRight, Math.Min(bodyW / 2, h));
+        double el = _viewModel.DropTopRadiusLeft;
+        double er = _viewModel.DropTopRadiusRight;
+        // Lengkung atas dan sudut bawah dalam satu sisi tidak boleh saling menimpa (jumlahnya <= tinggi);
+        // bila terlalu besar, keduanya dikecilkan proporsional agar lengkung atas tetap terlihat.
+        if (el + rl > h) { double f = h / (el + rl); el *= f; rl *= f; }
+        if (er + rr > h) { double f = h / (er + rr); er *= f; rr *= f; }
+        double left = m, right = w - m;
+
+        var counter = System.Windows.Media.SweepDirection.Counterclockwise;
+        var clockwise = System.Windows.Media.SweepDirection.Clockwise;
+        var geometry = new System.Windows.Media.StreamGeometry();
+        using (var ctx = geometry.Open())
+        {
+            ctx.BeginFigure(new Point(right + er, 0), true, false);
+            if (er > 0.5) ctx.ArcTo(new Point(right, er), new Size(er, er), 0, false, counter, true, true);
+            else ctx.LineTo(new Point(right, 0), true, true);
+            ctx.LineTo(new Point(right, h - rr), true, true);
+            if (rr > 0.5) ctx.ArcTo(new Point(right - rr, h), new Size(rr, rr), 0, false, clockwise, true, true);
+            ctx.LineTo(new Point(left + rl, h), true, true);
+            if (rl > 0.5) ctx.ArcTo(new Point(left, h - rl), new Size(rl, rl), 0, false, clockwise, true, true);
+            ctx.LineTo(new Point(left, el), true, true);
+            if (el > 0.5) ctx.ArcTo(new Point(left - el, 0), new Size(el, el), 0, false, counter, true, true);
+            else ctx.LineTo(new Point(left, 0), true, true);
+        }
+
+        geometry.Freeze();
+        DropShapePath.Data = geometry;
+    }
+
     public MainWindow()
     {
         InitializeComponent();
@@ -45,6 +97,16 @@ public partial class MainWindow : Window
         DataContext = _viewModel;
         WindowHelper.HorizontalOffsetPercent = _settingsService.CurrentSettings.NotchHorizontalOffsetPercent;
 
+        DropCanvas.SizeChanged += (_, _) => UpdateDropShape();
+        _viewModel.PropertyChanged += (_, ev) =>
+        {
+            if (ev.PropertyName is nameof(MainViewModel.IdleFrameCornerRadius) or nameof(MainViewModel.ShowDropShape)
+                or nameof(MainViewModel.DropTopRadiusLeft) or nameof(MainViewModel.DropTopRadiusRight)
+                or nameof(MainViewModel.ShowIdleEyes))
+            {
+                UpdateDropShape();
+            }
+        };
         _viewModel.RequestHoverCollapseAnimation += AnimateHoverCollapse;
         _viewModel.HoverCollapseAnimationCancelled += CancelHoverCollapseAnimation;
         _viewModel.PropertyChanged += (s, ev) =>
@@ -187,6 +249,7 @@ public partial class MainWindow : Window
         // Bayangan (glow) dirender lewat software dan dihitung ulang tiap frame, itu yang membuat animasi patah-patah.
         // Selama animasi, glow dilepas dan bingkai disimpan sebagai tekstur GPU (BitmapCache) agar skala mulus.
         border.Effect = null;
+        DropShapePath.Effect = null;
         border.CacheMode = new System.Windows.Media.BitmapCache(1.0);
 
         var duration = HoverCollapseDuration;
@@ -205,7 +268,23 @@ public partial class MainWindow : Window
 
         scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleXProperty, shrinkX);
         scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleYProperty, shrinkY);
-        content.BeginAnimation(UIElement.OpacityProperty, fade);
+        foreach (var element in IslandContentElements()) element.BeginAnimation(UIElement.OpacityProperty, fade);
+    }
+
+    /// <summary>Isi island (tanpa bentuk tetes air) yang memudar saat animasi; bentuknya sendiri harus tetap terlihat.</summary>
+    private IEnumerable<UIElement> IslandContentElements()
+    {
+        if (MainIslandBorder.Child is System.Windows.Controls.Panel panel)
+        {
+            foreach (UIElement child in panel.Children)
+            {
+                if (!ReferenceEquals(child, DropCanvas)) yield return child;
+            }
+        }
+        else if (MainIslandBorder.Child is UIElement single)
+        {
+            yield return single;
+        }
     }
 
     /// <summary>
@@ -264,8 +343,9 @@ public partial class MainWindow : Window
             var scale = new System.Windows.Media.ScaleTransform(scaleX, scaleY);
             border.RenderTransform = scale;
             border.Effect = null;
+            DropShapePath.Effect = null;
             border.CacheMode = new System.Windows.Media.BitmapCache(1.0);
-            content.Opacity = 0;
+            foreach (var element in IslandContentElements()) element.Opacity = 0;
             border.Opacity = 1;
 
             var duration = HoverExpandDuration;
@@ -286,7 +366,7 @@ public partial class MainWindow : Window
 
             scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleXProperty, growX);
             scale.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleYProperty, growY);
-            content.BeginAnimation(UIElement.OpacityProperty, fade);
+            foreach (var element in IslandContentElements()) element.BeginAnimation(UIElement.OpacityProperty, fade);
         }));
     }
 
@@ -300,10 +380,10 @@ public partial class MainWindow : Window
     private void ResetIslandAnimation()
     {
         var border = MainIslandBorder;
-        if (border.Child is UIElement content)
+        foreach (var element in IslandContentElements())
         {
-            content.BeginAnimation(UIElement.OpacityProperty, null);
-            content.Opacity = 1;
+            element.BeginAnimation(UIElement.OpacityProperty, null);
+            element.Opacity = 1;
         }
         if (border.RenderTransform is System.Windows.Media.ScaleTransform scale)
         {
@@ -313,6 +393,7 @@ public partial class MainWindow : Window
         border.RenderTransform = System.Windows.Media.Transform.Identity;
         border.RenderTransformOrigin = new System.Windows.Point(0, 0);
         border.ClearValue(UIElement.EffectProperty);       // kembali ke glow dari style
+        DropShapePath.ClearValue(UIElement.EffectProperty);
         border.ClearValue(UIElement.CacheModeProperty);
         border.Opacity = 1;
         _collapseAnimating = false;

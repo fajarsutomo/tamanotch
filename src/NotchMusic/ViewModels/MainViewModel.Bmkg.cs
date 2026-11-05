@@ -508,6 +508,9 @@ public partial class MainViewModel
             base.OnPropertyChanged(nameof(ShowAlertNotch));
             base.OnPropertyChanged(nameof(ShowBmkgBanner));
             base.OnPropertyChanged(nameof(ShowEyesInIdle));
+            base.OnPropertyChanged(nameof(ShowDropShape));
+            base.OnPropertyChanged(nameof(DropFrameBrush));
+            base.OnPropertyChanged(nameof(DropGlowEffect));
             base.OnPropertyChanged(nameof(AlertNotchText));
             base.OnPropertyChanged(nameof(ShowPrayerNotch));
             base.OnPropertyChanged(nameof(ShowPrayerBanner));

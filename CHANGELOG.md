@@ -11,6 +11,13 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [0.11.0] - belum dirilis
+
+### Ditambahkan
+- Bentuk **air menggantung** (opsional, Pengaturan > Kustomisasi Notch): sudut atas kiri dan kanan melengkung terbalik (cekung) ke tepi atas layar, sudut bawah tetap seperti biasa. Berlaku untuk idle notch, semua notch notifikasi, dan island hover; mode expanded tidak berubah.
+- Slider **Sudut kiri atas** dan **Sudut kanan atas** (0–16 px, bawaan 10 px, mengikuti pengaturan sudut bawah). Bila radius atas dan bawah di satu sisi melebihi tinggi notch, keduanya dikecilkan proporsional.
+- Pengaturan baru di `settings.json`: `IdleShape` ("Capsule" bawaan atau "Drop"), `IdleTopRadiusLeft`, `IdleTopRadiusRight`.
+
 ## [0.10.0] - belum dirilis
 
 ### Diubah

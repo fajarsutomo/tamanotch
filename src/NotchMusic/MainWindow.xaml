@@ -579,6 +579,12 @@
                             <Setter Property="Width" Value="{Binding AlertNotchWidth}"/>
                             <Setter Property="Effect" Value="{Binding PrayerGlowEffect}"/>
                         </DataTrigger>
+                        <!-- Eksperimen: bentuk air menggantung (compact: idle, notch notifikasi, island hover); digambar oleh DropShapePath -->
+                        <DataTrigger Binding="{Binding ShowDropShape}" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="Effect" Value="{x:Null}"/>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Border.Style>
@@ -599,6 +605,22 @@
             </Border.ContextMenu>
 
             <Grid>
+                <!-- Bentuk tetes air (idle, eksperimen). Koordinat 0..1 agar ukuran alaminya diabaikan saat ukuran otomatis. -->
+                <!-- Canvas tidak ikut menentukan ukuran kapsul; melebar DropEarRadius ke kiri/kanan untuk lengkung terbalik di atas.
+                     Geometri dibangun di MainWindow.UpdateDropShape dari ukuran kapsul + radius sudut bawah. -->
+                <Canvas x:Name="DropCanvas" IsHitTestVisible="False" Margin="-16,0,-16,0"
+                        Visibility="{Binding ShowDropShape, Converter={StaticResource BoolToVis}}">
+                    <Path x:Name="DropShapePath" Fill="#000000"
+                          Stroke="{Binding DropFrameBrush, TargetNullValue={StaticResource LuxuryNotchBorderBrush}, FallbackValue={StaticResource LuxuryNotchBorderBrush}}"
+                          StrokeThickness="1.2" StrokeLineJoin="Round">
+                        <Path.Style>
+                            <!-- Glow lewat style (bukan nilai lokal) agar bisa dilepas selama animasi lalu dipulihkan lewat ClearValue -->
+                            <Style TargetType="Path">
+                                <Setter Property="Effect" Value="{Binding DropGlowEffect}"/>
+                            </Style>
+                        </Path.Style>
+                    </Path>
+                </Canvas>
                 <!-- ================= MODE 1: COMPACT (DYNAMIC ISLAND NOTCH: 5 KOMPONEN HOVER) ================= -->
                 <!-- Saat idle: Hanya logo TAMANOTCH yang muncul. Saat dihover: 5 ikon komponen muncul ke kiri (musik, radio), kanan (todo, browser), dan bawah (waktu sholat) -->
                 <Grid x:Name="CompactView" Grid.Row="0" Visibility="{Binding ShowCompactView, Converter={StaticResource BoolToVis}}" 

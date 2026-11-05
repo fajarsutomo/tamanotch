@@ -1131,6 +1131,10 @@
                         <TextBlock Text="Menampilkan sisa kuota paket Claude Pro/Max di jendela sendiri. Membaca token login Claude Code di komputer ini (hanya dibaca) dan memanggil layanan usage Anthropic yang tidak terdokumentasi resmi; penggunaan token di aplikasi pihak ketiga bisa tidak sejalan dengan ketentuan Anthropic. Mati secara bawaan."
                                    FontSize="11" Foreground="#999999" Margin="0,2,0,8" TextWrapping="Wrap"/>
                         <CheckBox Content="Aktifkan pemantauan pemakaian Claude" IsChecked="{Binding EnableClaudeUsage}"/>
+                        <StackPanel Margin="22,4,0,0" Visibility="{Binding EnableClaudeUsage, Converter={StaticResource BoolToVis}}">
+                            <CheckBox Content="Tampilkan lencana 5 jam / 7 hari di baris pill island" IsChecked="{Binding ShowClaudeUsageInIsland}"/>
+                            <CheckBox Content="Notifikasi tray saat kuota mencapai tingkat peringatan (75%) atau kritis (90%)" IsChecked="{Binding NotifyClaudeUsage}"/>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="22,4,0,0"
                                     Visibility="{Binding EnableClaudeUsage, Converter={StaticResource BoolToVis}}">
                             <TextBlock Text="Segarkan setiap" VerticalAlignment="Center" Margin="0,0,8,0"/>

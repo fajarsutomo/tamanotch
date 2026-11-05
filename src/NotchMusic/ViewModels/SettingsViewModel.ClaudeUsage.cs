@@ -16,4 +16,16 @@ public partial class SettingsViewModel
         set => SetSetting(Settings.ClaudeUsageRefreshMinutes, Math.Clamp(value, 2, 30),
             v => Settings.ClaudeUsageRefreshMinutes = v, nameof(ClaudeUsageRefreshMinutes));
     }
+
+    public bool ShowClaudeUsageInIsland
+    {
+        get => Settings.ShowClaudeUsageInIsland;
+        set => SetSetting(Settings.ShowClaudeUsageInIsland, value, v => Settings.ShowClaudeUsageInIsland = v, nameof(ShowClaudeUsageInIsland));
+    }
+
+    public bool NotifyClaudeUsage
+    {
+        get => Settings.NotifyClaudeUsage;
+        set => SetSetting(Settings.NotifyClaudeUsage, value, v => Settings.NotifyClaudeUsage = v, nameof(NotifyClaudeUsage));
+    }
 }

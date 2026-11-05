@@ -97,6 +97,74 @@ public partial class MainViewModel
         RaiseClaudeUsageChanged();
     }
 
+    // --- Lencana island dan notifikasi ---
+
+    private static readonly TimeSpan ClaudeBadgeMaxAge = TimeSpan.FromMinutes(30);
+
+    private readonly Dictionary<string, (ClaudeUsageLevel Level, long ResetKey)> _claudeAlerted = new();
+
+    private ClaudeUsageWindow? ClaudeWindow(string key)
+        => _claudeUsageService.Current?.Windows.FirstOrDefault(w => w.Key == key);
+
+    private static string ClaudeBadgeText(string prefix, ClaudeUsageWindow? w)
+        => w == null ? string.Empty : FormattableString.Invariant($"{prefix} {Math.Round(w.Percent):0}%");
+
+    private static Brush ClaudeBadgeBrush(ClaudeUsageWindow? w)
+        => ClaudeUsageBrush(w == null ? ClaudeUsageLevel.Normal
+            : Services.ClaudeUsage.ClaudeUsageService.Classify(w.Percent, w.ElapsedFraction(DateTimeOffset.Now)));
+
+    /// <summary>Lencana tampil bila fitur aktif, opsi island menyala, dan ada angka yang belum basi.</summary>
+    public bool ShowClaudeUsageBadge => EnableClaudeUsage && Settings.ShowClaudeUsageInIsland
+        && _claudeUsageService.Current is { } c && DateTime.Now - c.FetchedAt <= ClaudeBadgeMaxAge
+        && (ClaudeWindow("five_hour") != null || ClaudeWindow("seven_day") != null);
+
+    public string ClaudeBadgeSessionText => ClaudeBadgeText("5j", ClaudeWindow("five_hour"));
+
+    public string ClaudeBadgeWeekText => ClaudeBadgeText("7h", ClaudeWindow("seven_day"));
+
+    public Brush ClaudeBadgeSessionBrush => ClaudeBadgeBrush(ClaudeWindow("five_hour"));
+
+    public Brush ClaudeBadgeWeekBrush => ClaudeBadgeBrush(ClaudeWindow("seven_day"));
+
+    public bool HasClaudeBadgeSession => ClaudeWindow("five_hour") != null;
+
+    public bool HasClaudeBadgeWeek => ClaudeWindow("seven_day") != null;
+
+    public string ClaudeBadgeTooltip
+    {
+        get
+        {
+            var lines = ClaudeUsageBars.Select(b => $"{b.Label}: {b.PercentText} - {b.ResetText}").ToList();
+            if (lines.Count == 0) return string.Empty;
+            return "Pemakaian Claude\n" + string.Join("\n", lines) + "\n(Klik untuk membuka jendela)";
+        }
+    }
+
+    /// <summary>
+    /// Kirim notifikasi tray bila sebuah kuota naik ke tingkat peringatan atau kritis. Satu kali per tingkat per
+    /// periode reset, sehingga tidak berulang tiap penyegaran dan muncul lagi setelah kuota di-reset.
+    /// </summary>
+    public void CheckClaudeUsageAlerts()
+    {
+        if (!EnableClaudeUsage || !Settings.NotifyClaudeUsage || _claudeUsageService.Current is not { } snapshot) return;
+
+        var now = DateTimeOffset.Now;
+        foreach (var w in snapshot.Windows)
+        {
+            var level = Services.ClaudeUsage.ClaudeUsageService.Classify(w.Percent, w.ElapsedFraction(now));
+            if (level == ClaudeUsageLevel.Normal) continue;
+
+            var resetKey = w.ResetsAt is { } r ? r.ToUnixTimeSeconds() / 60 : 0;
+            if (_claudeAlerted.TryGetValue(w.Key, out var last) && last.ResetKey == resetKey && last.Level >= level) continue;
+
+            _claudeAlerted[w.Key] = (level, resetKey);
+            var severity = level == ClaudeUsageLevel.Critical ? "hampir habis" : "mulai tinggi";
+            RequestShowTrayNotification?.Invoke(
+                "Kuota Claude " + severity,
+                $"{w.Label}: {Math.Round(w.Percent):0}% terpakai. {ClaudeUsageFormat.Reset(w.ResetsAt, now)}.");
+        }
+    }
+
     public bool IsClaudeUsageDisabled => !EnableClaudeUsage;
 
     public bool HasClaudeUsageData => EnableClaudeUsage && _claudeUsageService.Current != null;
@@ -163,10 +231,16 @@ public partial class MainViewModel
 
     private void OnClaudeUsageUpdated()
     {
-        if (System.Windows.Application.Current?.Dispatcher is { } d && !d.CheckAccess())
-            d.BeginInvoke(RaiseClaudeUsageChanged);
-        else
+        void Apply()
+        {
             RaiseClaudeUsageChanged();
+            CheckClaudeUsageAlerts();
+        }
+
+        if (System.Windows.Application.Current?.Dispatcher is { } d && !d.CheckAccess())
+            d.BeginInvoke(Apply);
+        else
+            Apply();
     }
 
     /// <summary>Segarkan semua teks dan bar (juga dipanggil tiap menit agar hitung mundur reset tetap akurat).</summary>
@@ -182,5 +256,13 @@ public partial class MainViewModel
         OnPropertyChanged(nameof(ClaudeUsageBars));
         OnPropertyChanged(nameof(ClaudeUsageShares));
         OnPropertyChanged(nameof(HasClaudeUsageShares));
+        OnPropertyChanged(nameof(ShowClaudeUsageBadge));
+        OnPropertyChanged(nameof(ClaudeBadgeSessionText));
+        OnPropertyChanged(nameof(ClaudeBadgeWeekText));
+        OnPropertyChanged(nameof(ClaudeBadgeSessionBrush));
+        OnPropertyChanged(nameof(ClaudeBadgeWeekBrush));
+        OnPropertyChanged(nameof(HasClaudeBadgeSession));
+        OnPropertyChanged(nameof(HasClaudeBadgeWeek));
+        OnPropertyChanged(nameof(ClaudeBadgeTooltip));
     }
 }

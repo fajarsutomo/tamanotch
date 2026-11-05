@@ -1068,6 +1068,30 @@
                                     </Border>
                                 </StackPanel>
                             </Border>
+
+                            <!-- Pill Pemakaian Claude (kuota sesi 5 jam / mingguan 7 hari) -->
+                            <Border Style="{StaticResource NotchPrayerPillStyle}" Visibility="{Binding ShowClaudeUsageBadge, Converter={StaticResource BoolToVis}}"
+                                    Height="30" Margin="6,0,0,0" Padding="9,2,10,2" Cursor="Hand"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    ToolTip="{Binding ClaudeBadgeTooltip}">
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick" Command="{Binding OpenClaudeUsageCommand}"/>
+                                </Border.InputBindings>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Path Data="M4,17 A8,8 0 1 1 20,17 M12,13 L16,8.5"
+                                          Stroke="{StaticResource MetallicSilverBrush}" StrokeThickness="2" StrokeLineJoin="Round"
+                                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                          Width="13" Height="13" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding ClaudeBadgeSessionText}" Foreground="{Binding ClaudeBadgeSessionBrush}"
+                                               FontSize="11.5" FontWeight="Bold" VerticalAlignment="Center"
+                                               Visibility="{Binding HasClaudeBadgeSession, Converter={StaticResource BoolToVis}}"/>
+                                    <TextBlock Text="&#x00B7;" Foreground="#6E6E84" FontSize="11.5" Margin="6,0,6,0" VerticalAlignment="Center"
+                                               Visibility="{Binding HasClaudeBadgeWeek, Converter={StaticResource BoolToVis}}"/>
+                                    <TextBlock Text="{Binding ClaudeBadgeWeekText}" Foreground="{Binding ClaudeBadgeWeekBrush}"
+                                               FontSize="11.5" FontWeight="Bold" VerticalAlignment="Center"
+                                               Visibility="{Binding HasClaudeBadgeWeek, Converter={StaticResource BoolToVis}}"/>
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
 
                         <!-- Sebelah Kanan: Tombol Versi -->

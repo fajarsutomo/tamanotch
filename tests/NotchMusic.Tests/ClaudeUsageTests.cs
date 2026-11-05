@@ -470,6 +470,107 @@ public class ClaudeUsageTests
         Assert.Equal(1, stub.Stops);
     }
 
+    private static ClaudeUsageSnapshot SnapshotWith(double session, double week, DateTimeOffset? sessionReset = null)
+        => new("pro",
+            new[]
+            {
+                new ClaudeUsageWindow("five_hour", "Sesi (5 jam)", session, sessionReset ?? DateTimeOffset.Now.AddHours(2), ClaudeUsageService.SessionPeriod),
+                new ClaudeUsageWindow("seven_day", "Mingguan (7 hari)", week, DateTimeOffset.Now.AddDays(3), ClaudeUsageService.WeeklyPeriod)
+            },
+            Array.Empty<ClaudeUsageShare>(), DateTime.Now);
+
+    [Fact]
+    public void Badge_ShowsBothWindows_OnlyWhenEnabledFreshAndAllowed()
+    {
+        var settings = new ViewModelTestFactory.MemorySettings();
+        settings.CurrentSettings.EnableClaudeUsage = true;
+        var stub = new ViewModelTestFactory.StubClaudeUsage { Status = ClaudeUsageStatus.Ok, Current = SnapshotWith(11, 8) };
+        var vm = ViewModelTestFactory.CreateMain(settings, claudeUsage: stub);
+
+        Assert.True(vm.ShowClaudeUsageBadge);
+        Assert.Equal("5j 11%", vm.ClaudeBadgeSessionText);
+        Assert.Equal("7h 8%", vm.ClaudeBadgeWeekText);
+        Assert.Contains("Sesi (5 jam): 11%", vm.ClaudeBadgeTooltip);
+
+        settings.CurrentSettings.ShowClaudeUsageInIsland = false;
+        Assert.False(vm.ShowClaudeUsageBadge);
+
+        settings.CurrentSettings.ShowClaudeUsageInIsland = true;
+        stub.Current = SnapshotWith(11, 8) with { FetchedAt = DateTime.Now.AddHours(-1) };   // data basi disembunyikan
+        Assert.False(vm.ShowClaudeUsageBadge);
+
+        settings.CurrentSettings.EnableClaudeUsage = false;
+        stub.Current = SnapshotWith(11, 8);
+        Assert.False(vm.ShowClaudeUsageBadge);
+    }
+
+    [Fact]
+    public void Badge_ColorFollowsLevelPerWindow()
+    {
+        var settings = new ViewModelTestFactory.MemorySettings();
+        settings.CurrentSettings.EnableClaudeUsage = true;
+        var stub = new ViewModelTestFactory.StubClaudeUsage { Status = ClaudeUsageStatus.Ok, Current = SnapshotWith(95, 8) };
+        var vm = ViewModelTestFactory.CreateMain(settings, claudeUsage: stub);
+
+        var session = ((System.Windows.Media.SolidColorBrush)vm.ClaudeBadgeSessionBrush).Color;
+        var week = ((System.Windows.Media.SolidColorBrush)vm.ClaudeBadgeWeekBrush).Color;
+
+        Assert.Equal(((System.Windows.Media.SolidColorBrush)NotchMusic.ViewModels.MainViewModel.ClaudeUsageBrush(ClaudeUsageLevel.Critical)).Color, session);
+        Assert.NotEqual(session, week);
+    }
+
+    [Fact]
+    public void Alerts_FireOncePerLevelPerResetPeriod()
+    {
+        var settings = new ViewModelTestFactory.MemorySettings();
+        settings.CurrentSettings.EnableClaudeUsage = true;
+        var stub = new ViewModelTestFactory.StubClaudeUsage { Status = ClaudeUsageStatus.Ok };
+        var vm = ViewModelTestFactory.CreateMain(settings, claudeUsage: stub);
+        var messages = new List<(string Title, string Body)>();
+        vm.RequestShowTrayNotification += (t, b) => messages.Add((t, b));
+        var reset = DateTimeOffset.Now.AddHours(2);
+
+        stub.Current = SnapshotWith(10, 5, reset);
+        stub.Raise();
+        Assert.Empty(messages);                                   // aman: tidak ada notifikasi
+
+        stub.Current = SnapshotWith(80, 5, reset);
+        stub.Raise();
+        stub.Raise();
+        Assert.Single(messages);                                  // peringatan sekali saja
+        Assert.Contains("mulai tinggi", messages[0].Title);
+        Assert.Contains("Sesi (5 jam): 80%", messages[0].Body);
+
+        stub.Current = SnapshotWith(93, 5, reset);
+        stub.Raise();
+        Assert.Equal(2, messages.Count);                          // naik ke kritis: notifikasi lagi
+        Assert.Contains("hampir habis", messages[1].Title);
+
+        stub.Current = SnapshotWith(93, 5, reset);
+        stub.Raise();
+        Assert.Equal(2, messages.Count);
+
+        stub.Current = SnapshotWith(93, 5, reset.AddHours(5));   // periode baru setelah reset
+        stub.Raise();
+        Assert.Equal(3, messages.Count);
+    }
+
+    [Fact]
+    public void Alerts_AreSilent_WhenDisabledInSettings()
+    {
+        var settings = new ViewModelTestFactory.MemorySettings();
+        settings.CurrentSettings.EnableClaudeUsage = true;
+        settings.CurrentSettings.NotifyClaudeUsage = false;
+        var stub = new ViewModelTestFactory.StubClaudeUsage { Status = ClaudeUsageStatus.Ok, Current = SnapshotWith(99, 99) };
+        var vm = ViewModelTestFactory.CreateMain(settings, claudeUsage: stub);
+        var count = 0;
+        vm.RequestShowTrayNotification += (t, b) => count++;
+
+        stub.Raise();
+
+        Assert.Equal(0, count);
+    }
+
     [Fact]
     public void ViewModel_WindowOpenState_PersistsAndKeepsTheNotchActive()
     {

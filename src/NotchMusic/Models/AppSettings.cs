@@ -164,6 +164,10 @@ public class AppSettings
     public double ClaudeUsageWindowTop { get; set; } = -1;
     /// <summary>Jeda penyegaran data, menit (2-30).</summary>
     public int ClaudeUsageRefreshMinutes { get; set; } = 3;
+    /// <summary>Lencana 5 jam / 7 hari di baris pill island saat fitur aktif.</summary>
+    public bool ShowClaudeUsageInIsland { get; set; } = true;
+    /// <summary>Notifikasi tray saat kuota naik ke tingkat peringatan atau kritis.</summary>
+    public bool NotifyClaudeUsage { get; set; } = true;
 
     public bool IsMusicWindowOpen { get; set; } = false;
     public double MusicWindowLeft { get; set; } = -1;

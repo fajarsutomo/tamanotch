@@ -1123,6 +1123,22 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
+
+                <!-- 7. Pemakaian Claude -->
+                <Border Background="#202026" CornerRadius="8" Padding="14">
+                    <StackPanel>
+                        <TextBlock Text="&#x23F1; Pemakaian Claude (kuota 5 jam &amp; 7 hari)" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="Menampilkan sisa kuota paket Claude Pro/Max di jendela sendiri. Membaca token login Claude Code di komputer ini (hanya dibaca) dan memanggil layanan usage Anthropic yang tidak terdokumentasi resmi; penggunaan token di aplikasi pihak ketiga bisa tidak sejalan dengan ketentuan Anthropic. Mati secara bawaan."
+                                   FontSize="11" Foreground="#999999" Margin="0,2,0,8" TextWrapping="Wrap"/>
+                        <CheckBox Content="Aktifkan pemantauan pemakaian Claude" IsChecked="{Binding EnableClaudeUsage}"/>
+                        <StackPanel Orientation="Horizontal" Margin="22,4,0,0"
+                                    Visibility="{Binding EnableClaudeUsage, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="Segarkan setiap" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding ClaudeUsageIntervalOptions}" SelectedItem="{Binding ClaudeUsageRefreshMinutes}"
+                                      ItemStringFormat="{}{0} menit" Width="110" Height="26"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
 

@@ -25,6 +25,7 @@ public partial class MainWindow : Window
     private FloatingBrowserWindow? _floatingBrowserWindow;
     private RadioWindow? _radioWindow;
     private QuranWindow? _quranWindow;
+    private ClaudeUsageWindow? _claudeUsageWindow;
     private LiveTvWindow? _liveTvWindow;
     private MusicWindow? _musicWindow;
     private TodoWindow? _todoWindow;
@@ -146,6 +147,7 @@ public partial class MainWindow : Window
         _viewModel.RequestOpenLiveTv += OpenLiveTv;
         _viewModel.RequestOpenMusic += OpenMusic;
         _viewModel.RequestOpenBmkg += OpenBmkg;
+        _viewModel.RequestOpenClaudeUsage += OpenClaudeUsage;
         _viewModel.RequestExit += () => Dispatcher.Invoke(ExitApplication);
         _viewModel.RequestComponentLayoutChanged += () => Dispatcher.Invoke(() =>
         {
@@ -156,6 +158,7 @@ public partial class MainWindow : Window
             UpdateBrowserWindowState();
             UpdateRadioWindowState();
             UpdateQuranWindowState();
+            UpdateClaudeUsageWindowState();
             UpdateLiveTvWindowState();
         });
         _viewModel.RequestShowTrayNotification += (title, msg) => Dispatcher.Invoke(() => _trayService.ShowNotification(title, msg));
@@ -579,6 +582,7 @@ public partial class MainWindow : Window
         _trayService.OpenJellyfinRequested += () => Dispatcher.Invoke(OpenJellyfin);
         _trayService.OpenRadioRequested += () => Dispatcher.Invoke(OpenRadio);
         _trayService.OpenQuranRequested += () => Dispatcher.Invoke(OpenQuran);
+        _trayService.OpenClaudeUsageRequested += () => Dispatcher.Invoke(OpenClaudeUsage);
         _trayService.OpenLiveTvRequested += () => Dispatcher.Invoke(OpenLiveTv);
         _trayService.OpenBmkgRequested += () => Dispatcher.Invoke(OpenBmkg);
         _trayService.OpenFloatingBrowserRequested += () => Dispatcher.Invoke(OpenFloatingBrowser);
@@ -786,6 +790,18 @@ public partial class MainWindow : Window
         }
     }
 
+    private void UpdateClaudeUsageWindowState()
+    {
+        if (_viewModel.IsClaudeUsageWindowOpen)
+        {
+            OpenClaudeUsage();
+        }
+        else
+        {
+            _claudeUsageWindow?.HideToNotch();
+        }
+    }
+
     private void UpdateLiveTvWindowState()
     {
         if (_viewModel.IsLiveTvWindowOpen)
@@ -880,6 +896,7 @@ public partial class MainWindow : Window
         {
             _jellyfinWindow?.NavigateHome();
         }
+        _viewModel.SyncClaudeUsageWithSettings();
         _viewModel.RefreshComponentLayout();
         UpdateTodoWindowState();
         UpdatePrayerWindowState();
@@ -1354,6 +1371,38 @@ public partial class MainWindow : Window
         }
     }
 
+    public void OpenClaudeUsage()
+    {
+        try
+        {
+            _viewModel.CurrentMode = PanelMode.Compact;
+            _viewModel.IsClaudeUsageWindowOpen = true;
+
+            if (_claudeUsageWindow == null)
+            {
+                _claudeUsageWindow = new ClaudeUsageWindow(_viewModel, _settingsService);
+                _claudeUsageWindow.Closed += (s, e) => _claudeUsageWindow = null;
+            }
+
+            if (_claudeUsageWindow.WindowState == WindowState.Minimized)
+            {
+                _claudeUsageWindow.WindowState = WindowState.Normal;
+            }
+
+            WindowAnimator.Cancel(_claudeUsageWindow);
+            _claudeUsageWindow.ShowFromNotch();
+            _claudeUsageWindow.Activate();
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show(
+                $"Tidak dapat membuka jendela Pemakaian Claude:{Environment.NewLine}{ex.Message}",
+                "TAMANOTCH - Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
     public void OpenLiveTv()
     {
         try
@@ -1453,10 +1502,12 @@ public partial class MainWindow : Window
         _floatingBrowserWindow?.ForceClose();
         _radioWindow?.ForceClose();
         _quranWindow?.ForceClose();
+        _claudeUsageWindow?.ForceClose();
         _liveTvWindow?.ForceClose();
         _musicWindow?.ForceClose();
         _viewModel.RadioService.Dispose();
         _viewModel.QuranService.Dispose();
+        _viewModel.ClaudeUsageService.Dispose();
         _viewModel.LiveTvService.Dispose();
         _viewModel.BmkgService.Dispose();
         _bmkgWindow?.ForceClose();

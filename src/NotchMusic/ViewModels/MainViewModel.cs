@@ -10,6 +10,7 @@ using NotchMusic.Services.Lyrics;
 using NotchMusic.Services.LiveTv;
 using NotchMusic.Services.Media;
 using NotchMusic.Services.Prayer;
+using NotchMusic.Services.ClaudeUsage;
 using NotchMusic.Services.Quran;
 using NotchMusic.Services.Radio;
 using NotchMusic.Services.Settings;
@@ -43,7 +44,8 @@ public partial class MainViewModel : ViewModelBase
         ILocationService? locationService = null,
         IWellnessReminderService? wellnessService = null,
         IAirQualityService? airQualityService = null,
-        IQuranService? quranService = null)
+        IQuranService? quranService = null,
+        IClaudeUsageService? claudeUsageService = null)
     {
         _mediaService = mediaService;
         _lyricsService = lyricsService;
@@ -82,6 +84,7 @@ public partial class MainViewModel : ViewModelBase
         _filteredRadioStations.Filter = FilterRadioStation;
 
         InitializeQuran(quranService);
+        InitializeClaudeUsage(claudeUsageService);
 
         _radioService.StateChanged += OnRadioStateChanged;
         _radioService.StationChanged += _ => OnRadioStateChanged();
@@ -802,6 +805,8 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
             _bmkgService.Start();
             if (Settings.ShowAirQualityInIsland) _airQualityService.Start();
         }
+
+        if (Settings.EnableClaudeUsage) _claudeUsageService.Start();
 
         if (_googleDriveSyncService.IsConnected && Settings.GoogleDriveAutoSync)
         {

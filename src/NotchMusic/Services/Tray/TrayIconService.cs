@@ -12,6 +12,7 @@ public interface ITrayIconService : IDisposable
     event Action? OpenJellyfinRequested;
     event Action? OpenRadioRequested;
     event Action? OpenQuranRequested;
+    event Action? OpenClaudeUsageRequested;
     event Action? OpenLiveTvRequested;
     event Action? OpenBmkgRequested;
     event Action? OpenFloatingBrowserRequested;
@@ -33,6 +34,7 @@ public class TrayIconService : ITrayIconService
     public event Action? OpenJellyfinRequested;
     public event Action? OpenRadioRequested;
     public event Action? OpenQuranRequested;
+    public event Action? OpenClaudeUsageRequested;
     public event Action? OpenLiveTvRequested;
     public event Action? OpenBmkgRequested;
     public event Action? OpenFloatingBrowserRequested;
@@ -125,6 +127,9 @@ public class TrayIconService : ITrayIconService
 
         var quranItem = new ToolStripMenuItem("Buka Al-Qur'an (Pemutar)", null, (s, e) => OpenQuranRequested?.Invoke());
         contextMenu.Items.Add(quranItem);
+
+        var claudeUsageItem = new ToolStripMenuItem("Buka Pemakaian Claude (Kuota 5 Jam / 7 Hari)", null, (s, e) => OpenClaudeUsageRequested?.Invoke());
+        contextMenu.Items.Add(claudeUsageItem);
 
         var liveTvItem = new ToolStripMenuItem("Buka Live TV (Streaming TV)", null, (s, e) => OpenLiveTvRequested?.Invoke());
         contextMenu.Items.Add(liveTvItem);

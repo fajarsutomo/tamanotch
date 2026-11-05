@@ -11,6 +11,13 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [0.12.0] - belum dirilis
+
+### Ditambahkan
+- Jendela **Pemakaian Claude**: memantau kuota paket Claude Pro/Max per **sesi 5 jam** dan per **mingguan (7 hari)** tanpa WebView. Tiap kuota punya bar berwarna (biru, kuning mulai 75%, merah mulai 90% atau saat pemakaian jauh mendahului waktu), persen terpakai, hitung mundur reset, dan garis penanda seberapa jauh periode sudah berjalan. Bila ada, tampil juga kuota mingguan per model (Opus, Sonnet, ...) dan porsi pemakaian per sumber (Claude Code, Chats, Cowork). Dibuka lewat ikon pengukur di island atau menu tray; gaya dan animasi mengikuti jendela Radio/Al-Qur'an.
+- Sumber data: endpoint usage milik Claude Code (`api.anthropic.com/api/oauth/usage`) dengan token login Claude Code yang dibaca dari `~/.claude/.credentials.json` (atau `CLAUDE_CONFIG_DIR`). Token hanya dibaca: TAMANOTCH tidak memperbaruinya dan tidak menulis berkas kredensial; token kedaluwarsa memunculkan petunjuk untuk membuka Claude Code sebentar. Polling 2-30 menit (bawaan 3), berhenti sementara saat kena batas laju (mengikuti `Retry-After` atau mundur eksponensial), dan angka lama ditandai "(data lama)" bila gagal menyegarkan.
+- **Mati secara bawaan** dan butuh persetujuan: jendela menjelaskan bahwa endpoint ini tidak terdokumentasi resmi dan pemakaian token di aplikasi pihak ketiga bisa tidak sejalan dengan ketentuan Anthropic. Pengaturan > Pemakaian Claude: aktif/nonaktif dan interval segar.
+- Pengaturan baru di `settings.json`: `EnableClaudeUsage`, `IsClaudeUsageWindowOpen`, `ClaudeUsageWindowLeft/Top`, `ClaudeUsageRefreshMinutes`.
 ## [0.11.0] - belum dirilis
 
 ### Ditambahkan

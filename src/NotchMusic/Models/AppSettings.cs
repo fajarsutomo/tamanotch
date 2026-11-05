@@ -156,6 +156,15 @@ public class AppSettings
     public int QuranReciterId { get; set; } = 7;
     /// <summary>"Stop", "Next", atau "Random": kelanjutan setelah satu surah selesai.</summary>
     public string QuranAfterPlayback { get; set; } = "Next";
+
+    // Pemakaian kuota Claude (sesi 5 jam dan mingguan). Mati secara bawaan: fitur ini membaca token OAuth Claude Code.
+    public bool EnableClaudeUsage { get; set; } = false;
+    public bool IsClaudeUsageWindowOpen { get; set; } = false;
+    public double ClaudeUsageWindowLeft { get; set; } = -1;
+    public double ClaudeUsageWindowTop { get; set; } = -1;
+    /// <summary>Jeda penyegaran data, menit (2-30).</summary>
+    public int ClaudeUsageRefreshMinutes { get; set; } = 3;
+
     public bool IsMusicWindowOpen { get; set; } = false;
     public double MusicWindowLeft { get; set; } = -1;
     public double MusicWindowTop { get; set; } = -1;

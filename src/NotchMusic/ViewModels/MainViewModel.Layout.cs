@@ -244,7 +244,7 @@ public partial class MainViewModel
         }
     }
 
-    public bool IsNotchActive => IsAudioActive || IsQuranLoading || IsQuranWindowOpen || IsRadioBuffering || IsRadioWindowOpen || IsLiveTvBuffering || IsLiveTvWindowOpen || IsBrowserWindowOpen || CurrentMode != PanelMode.Compact || IsComponentsMenuOpen || HasActivePrayerNotification || _isHovering;
+    public bool IsNotchActive => IsAudioActive || IsQuranLoading || IsQuranWindowOpen || IsClaudeUsageWindowOpen || IsRadioBuffering || IsRadioWindowOpen || IsLiveTvBuffering || IsLiveTvWindowOpen || IsBrowserWindowOpen || CurrentMode != PanelMode.Compact || IsComponentsMenuOpen || HasActivePrayerNotification || _isHovering;
 
     public bool IsPinned
     {
@@ -354,6 +354,7 @@ public partial class MainViewModel
         OnPropertyChanged(nameof(NextPrayerCountdownBadge));
         OnPropertyChanged(nameof(PrayerScheduleTooltip));
         OnPropertyChanged(nameof(IsQuranWindowOpen));
+        OnPropertyChanged(nameof(IsClaudeUsageWindowOpen));
         OnPropertyChanged(nameof(IsRadioWindowOpen));
         OnPropertyChanged(nameof(IsRadioActiveOrOpen));
         OnPropertyChanged(nameof(RadioStatusSummary));

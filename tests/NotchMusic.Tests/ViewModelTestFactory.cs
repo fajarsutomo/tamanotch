@@ -66,14 +66,32 @@ internal static class ViewModelTestFactory
         public void Dispose() { }
     }
 
+    public sealed class StubClaudeUsage : NotchMusic.Services.ClaudeUsage.IClaudeUsageService
+    {
+        public NotchMusic.Services.ClaudeUsage.ClaudeUsageSnapshot? Current { get; set; }
+        public NotchMusic.Services.ClaudeUsage.ClaudeUsageStatus Status { get; set; }
+        public DateTimeOffset? NextAllowedAt { get; set; }
+        public int Starts { get; private set; }
+        public int Stops { get; private set; }
+        public int Refreshes { get; private set; }
+        public event EventHandler? Updated;
+        public void Start() { Starts++; Status = NotchMusic.Services.ClaudeUsage.ClaudeUsageStatus.Ok; }
+        public void Stop() { Stops++; Current = null; Status = NotchMusic.Services.ClaudeUsage.ClaudeUsageStatus.Idle; }
+        public Task RefreshAsync(CancellationToken cancellationToken = default) { Refreshes++; return Task.CompletedTask; }
+        public void Raise() => Updated?.Invoke(this, EventArgs.Empty);
+        public void Dispose() { }
+    }
+
     public static MainViewModel CreateMain(
         MemorySettings? settings = null,
         NotchMusic.Services.AirQuality.IAirQualityService? airQuality = null,
-        NotchMusic.Services.Quran.IQuranService? quran = null)
+        NotchMusic.Services.Quran.IQuranService? quran = null,
+        NotchMusic.Services.ClaudeUsage.IClaudeUsageService? claudeUsage = null)
     {
         var vm = new MainViewModel(new StubMedia(), new StubLyrics(), settings ?? new MemorySettings(),
             airQualityService: airQuality ?? new StubAirQuality(),
-            quranService: quran);
+            quranService: quran,
+            claudeUsageService: claudeUsage ?? new StubClaudeUsage());
         vm.CurrentMode = PanelMode.Compact;
         return vm;
     }

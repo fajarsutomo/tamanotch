@@ -11,6 +11,10 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [1.0.0] - 2026-11-06
+
+Rilis pertama dengan installer (Inno Setup). Seluruh perubahan 0.1.0 sampai 0.14.2 di bawah ini ikut di dalamnya. Installer tidak membawa kredensial Google apa pun; sinkronisasi to-do memakai kredensial yang dibuat pengguna di Pengaturan. Pemakaian Claude mati secara bawaan dan memakai layanan Anthropic yang tidak terdokumentasi resmi.
+
 ## [0.14.2] - belum dirilis
 
 ### Diperbaiki

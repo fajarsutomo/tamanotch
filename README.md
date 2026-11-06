@@ -36,7 +36,7 @@ Pintasan bawaan: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd> tampil/sembunyi pan
 
 ## Pemasangan
 
-Belum ada rilis terpasang. Untuk sementara jalankan dari source (lihat di bawah).
+Unduh installer dari halaman [Releases](https://github.com/fajarsutomo/tamanotch/releases/latest) (Windows 10/11, x64, tanpa hak admin). Installer ditandatangani sertifikat buatan sendiri, jadi SmartScreen bisa memperingatkan; jalankan `Install-Certificate.bat` yang terlampir lebih dulu atau pilih "Run anyway". Atau jalankan dari source (lihat di bawah).
 
 ## Menjalankan dari source
 

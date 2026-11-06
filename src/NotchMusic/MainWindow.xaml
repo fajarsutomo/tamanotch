@@ -2614,41 +2614,6 @@
                     </Grid>
                 </Border>
 
-                <!-- ================= FLOATING ISLAND PRAYER NOTIFICATION BANNER ================= -->
-                <Border Grid.Row="0" Visibility="{Binding ShowPrayerBanner, Converter={StaticResource BoolToVis}}"
-                        Background="#0D0D11" BorderBrush="#343444" BorderThickness="1.5" CornerRadius="22"
-                        Padding="12,6" Margin="4,2" VerticalAlignment="Center">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Icon -->
-                        <Border Grid.Column="0" Width="34" Height="34" CornerRadius="17" Background="#1C1C26" Margin="0,0,10,0">
-                            <Path Data="{StaticResource LuxuryPrayerIconGeometry}" Fill="#FFD43B"
-                                  Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-
-                        <!-- Info -->
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,8,0">
-                            <DockPanel LastChildFill="True">
-                                <Border DockPanel.Dock="Right" Background="#242434" CornerRadius="4" Padding="5,1" Margin="6,0,0,0" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding ActivePrayerNotification.PrayerTimeFormatted}" Foreground="#FFFFFF" FontSize="10" FontWeight="Bold"/>
-                                </Border>
-                                <TextBlock Text="{Binding ActivePrayerNotification.Title}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="12" TextTrimming="CharacterEllipsis"/>
-                            </DockPanel>
-                            <TextBlock Text="{Binding ActivePrayerNotification.Message}" Foreground="#CCCCCC" FontSize="10.5" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
-                        </StackPanel>
-
-                        <!-- Dismiss button -->
-                        <Button Grid.Column="2" Command="{Binding DismissPrayerNotificationCommand}"
-                                Style="{StaticResource SmallPillButton}" Content="&#x2715;" ToolTip="Tutup Notifikasi"
-                                Width="24" Height="24" Padding="0" VerticalAlignment="Center"/>
-                    </Grid>
-                </Border>
-
                 <!-- ================= FLOATING ISLAND WELLNESS (GERAK / MINUM) REMINDER BANNER ================= -->
                 <Border Grid.Row="0" Visibility="{Binding ShowWellnessBanner, Converter={StaticResource BoolToVis}}"
                         Background="#0D1114" BorderBrush="{Binding WellnessAccentColor}" BorderThickness="1.5" CornerRadius="22"

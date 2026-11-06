@@ -9,7 +9,10 @@ public enum PrayerReminderType
 {
     Before,
     AtPrayerTime,
-    After
+    After,
+
+    /// <summary>Pengingat sahur sebelum Imsak (hari puasa).</summary>
+    Sahur
 }
 
 public class CityLocation

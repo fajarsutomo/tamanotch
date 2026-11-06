@@ -256,8 +256,6 @@ public partial class MainViewModel
 
     public bool ShowPrayerNotch => HasActivePrayerNotification && IsCompactMode && ShowIdleEyes && !ShowAlertNotch;
 
-    public bool ShowPrayerBanner => HasActivePrayerNotification && !ShowPrayerNotch && !PrayerShownInNotch;
-
     public string PrayerNotchText
     {
         get
@@ -331,6 +329,10 @@ public ICommand TogglePrayerPanelCommand { get; }
     /// <summary>Tampilkan pengingat sholat di island/notch (tanpa notifikasi tray Windows) lalu tutup otomatis.</summary>
     public void ShowPrayerNotification(PrayerNotificationEvent evt)
     {
+        // Pengingat sholat hanya tampil di notch. Bila notch sedang tidak tampil (kursor di island), ia menunggu
+        // sampai notch kembali; penutup cadangan ini mencegahnya menggantung selamanya. Begitu tampil di notch,
+        // penghitung 20 detik dimulai (TrackNotchDisplay). Dipasang sebelum notifikasi aktif agar tidak menimpanya.
+        StartPrayerDismissTimer(PrayerPendingMaxWait);
         ActivePrayerNotification = evt;
 
         if (evt.AutoPauseRequested)
@@ -350,9 +352,15 @@ public ICommand TogglePrayerPanelCommand { get; }
             StopQuranForOtherPlayback();
         }
 
-        // Auto dismiss notification banner after 20 seconds
+    }
+
+    private static readonly TimeSpan PrayerShownDuration = TimeSpan.FromSeconds(20);
+    private static readonly TimeSpan PrayerPendingMaxWait = TimeSpan.FromMinutes(15);
+
+    private void StartPrayerDismissTimer(TimeSpan after)
+    {
         _notificationDismissTimer?.Stop();
-        _notificationDismissTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(20) };
+        _notificationDismissTimer = new DispatcherTimer { Interval = after };
         _notificationDismissTimer.Tick += (s, e) =>
         {
             _notificationDismissTimer?.Stop();

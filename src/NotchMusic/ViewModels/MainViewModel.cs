@@ -45,7 +45,8 @@ public partial class MainViewModel : ViewModelBase
         IWellnessReminderService? wellnessService = null,
         IAirQualityService? airQualityService = null,
         IQuranService? quranService = null,
-        IClaudeUsageService? claudeUsageService = null)
+        IClaudeUsageService? claudeUsageService = null,
+        IWelcomeBackService? welcomeBackService = null)
     {
         _mediaService = mediaService;
         _lyricsService = lyricsService;
@@ -61,8 +62,11 @@ public partial class MainViewModel : ViewModelBase
         _bmkgService = bmkgService ?? new BmkgService(settingsService);
         _locationService = locationService ?? new LocationService(settingsService, _prayerService, _prayerReminderService);
         _locationService.LocationChanged += OnLocationChanged;
-        _wellnessService = wellnessService ?? new WellnessReminderService(settingsService);
+        _wellnessService = wellnessService ?? new WellnessReminderService(settingsService,
+            isFasting: () => FastingHelper.IsFastingNow(settingsService.CurrentSettings, _prayerReminderService.CurrentSchedule, DateTime.Now));
         _wellnessService.ReminderTriggered += OnWellnessReminder;
+        _welcomeBackService = welcomeBackService ?? new WelcomeBackService(settingsService);
+        _welcomeBackService.Returned += OnWelcomeBack;
         PropertyChanged += (s, e) =>
         {
             if (e.PropertyName == nameof(ShowComponentIcons)) RaiseCenterIconChanged();
@@ -201,14 +205,15 @@ public partial class MainViewModel : ViewModelBase
         {
             var active = ActiveWellnessNotification;
             if (active == null) return;
-            if (active.Kind == WellnessReminderKind.Drink) _wellnessService.LogDrink(); else _wellnessService.MarkMoved();
+            if (active.Kind == WellnessReminderKind.Drink) _wellnessService.LogDrink();
+            else if (active.Kind == WellnessReminderKind.Move) _wellnessService.MarkMoved();
             ActiveWellnessNotification = null;
         });
         WellnessSnoozeCommand = new RelayCommand(() =>
         {
             var active = ActiveWellnessNotification;
             if (active == null) return;
-            _wellnessService.Snooze(active.Kind, 10);
+            if (active.Kind != WellnessReminderKind.Welcome) _wellnessService.Snooze(active.Kind, 10);
             ActiveWellnessNotification = null;
         });
         DismissWellnessNotificationCommand = new RelayCommand(() => ActiveWellnessNotification = null);
@@ -800,6 +805,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
         await _mediaService.InitializeAsync();
         _prayerReminderService.Start();
         _wellnessService.Start();
+        _welcomeBackService.Start();
         if (Settings.EnableBmkg)
         {
             _bmkgService.Start();

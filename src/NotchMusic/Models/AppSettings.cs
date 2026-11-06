@@ -96,6 +96,16 @@ public class AppSettings
     public int RemindAfterMinutes { get; set; } = 15;
     public bool PrayerSoundAlert { get; set; } = true;
     public bool PrayerAutoPauseMusic { get; set; } = true;
+
+    // Puasa: pengingat sahur dan berbuka, pengingat minum diam selama berpuasa.
+    public bool EnableFasting { get; set; } = false;
+    public bool FastingMondayThursdayOnly { get; set; } = false;
+    public int FastingSahurMinutes { get; set; } = 30;
+
+    // Sapaan "selamat datang kembali" setelah idle lama.
+    public string UserDisplayName { get; set; } = string.Empty;
+    public bool EnableWelcomeBack { get; set; } = true;
+    public int WelcomeBackIdleMinutes { get; set; } = 60;
     public bool ShowPrayerInCompactNotch { get; set; } = true;
 
     // Pilihan Suara Adzan & Notifikasi

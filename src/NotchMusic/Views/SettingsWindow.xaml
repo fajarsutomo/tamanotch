@@ -800,6 +800,25 @@
                                 </StackPanel>
                             </Border>
 
+                            <!-- Puasa: pengingat sahur & berbuka, pengingat minum diam selama berpuasa -->
+                            <Border Background="#141418" CornerRadius="6" Padding="10,8" Margin="0,0,0,8">
+                                <StackPanel>
+                                    <CheckBox Content="Mode puasa (sahur &amp; berbuka)" IsChecked="{Binding EnableFasting}" Margin="0"/>
+                                    <TextBlock Text="Pengingat sahur sebelum Imsak, notifikasi berbuka saat Maghrib, dan pengingat minum berhenti dari Imsak sampai Maghrib."
+                                               FontSize="10.5" Foreground="#777788" Margin="22,2,0,0" TextWrapping="Wrap"/>
+                                    <StackPanel Margin="22,6,0,0" Visibility="{Binding EnableFasting, Converter={StaticResource BoolToVis}}">
+                                        <CheckBox Content="Hanya hari Senin dan Kamis (kosongkan untuk setiap hari, mis. Ramadan)"
+                                                  IsChecked="{Binding FastingMondayThursdayOnly}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                            <TextBlock Text="Ingatkan sahur" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="11" Foreground="#CCCCCC"/>
+                                            <ComboBox ItemsSource="{Binding FastingSahurOptions}" SelectedItem="{Binding FastingSahurMinutes}"
+                                                      ItemStringFormat="{}{0} menit" Width="110" Height="26"/>
+                                            <TextBlock Text="sebelum Imsak" VerticalAlignment="Center" Margin="8,0,0,0" FontSize="11" Foreground="#CCCCCC"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
                             <!-- Opsi Suara & Integrasi Musik -->
                             <Border Background="#141418" CornerRadius="6" Padding="10,8" Margin="0,0,0,8">
                                 <StackPanel>
@@ -1139,6 +1158,27 @@
                                     Visibility="{Binding EnableClaudeUsage, Converter={StaticResource BoolToVis}}">
                             <TextBlock Text="Segarkan setiap" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <ComboBox ItemsSource="{Binding ClaudeUsageIntervalOptions}" SelectedItem="{Binding ClaudeUsageRefreshMinutes}"
+                                      ItemStringFormat="{}{0} menit" Width="110" Height="26"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 8. Sapaan -->
+                <Border Background="#202026" CornerRadius="8" Padding="14">
+                    <StackPanel>
+                        <TextBlock Text="&#x1F44B; Sapaan &quot;Selamat datang kembali&quot;" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        <TextBlock Text="Setelah tidak ada gerakan mouse/keyboard cukup lama, sapaan singkat tampil di notch begitu Anda mulai memakai komputer lagi."
+                                   FontSize="11" Foreground="#999999" Margin="0,2,0,8" TextWrapping="Wrap"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <TextBlock Text="Nama Anda" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBox Text="{Binding UserDisplayName, UpdateSourceTrigger=LostFocus}" Width="200" Height="26" MaxLength="40"
+                                     VerticalContentAlignment="Center"/>
+                        </StackPanel>
+                        <CheckBox Content="Tampilkan sapaan setelah idle lama" IsChecked="{Binding EnableWelcomeBack}"/>
+                        <StackPanel Orientation="Horizontal" Margin="22,4,0,0"
+                                    Visibility="{Binding EnableWelcomeBack, Converter={StaticResource BoolToVis}}">
+                            <TextBlock Text="Dianggap pergi bila idle" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox ItemsSource="{Binding WelcomeBackIdleOptions}" SelectedItem="{Binding WelcomeBackIdleMinutes}"
                                       ItemStringFormat="{}{0} menit" Width="110" Height="26"/>
                         </StackPanel>
                     </StackPanel>

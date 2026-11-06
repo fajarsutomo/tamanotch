@@ -82,16 +82,28 @@ internal static class ViewModelTestFactory
         public void Dispose() { }
     }
 
+    public sealed class StubWelcomeBack : NotchMusic.Services.Wellness.IWelcomeBackService
+    {
+        public event Action<TimeSpan>? Returned;
+        public void Start() { }
+        public void Stop() { }
+        public void Tick() { }
+        public void Raise(TimeSpan away) => Returned?.Invoke(away);
+        public void Dispose() { }
+    }
+
     public static MainViewModel CreateMain(
         MemorySettings? settings = null,
         NotchMusic.Services.AirQuality.IAirQualityService? airQuality = null,
         NotchMusic.Services.Quran.IQuranService? quran = null,
-        NotchMusic.Services.ClaudeUsage.IClaudeUsageService? claudeUsage = null)
+        NotchMusic.Services.ClaudeUsage.IClaudeUsageService? claudeUsage = null,
+        NotchMusic.Services.Wellness.IWelcomeBackService? welcomeBack = null)
     {
         var vm = new MainViewModel(new StubMedia(), new StubLyrics(), settings ?? new MemorySettings(),
             airQualityService: airQuality ?? new StubAirQuality(),
             quranService: quran,
-            claudeUsageService: claudeUsage ?? new StubClaudeUsage());
+            claudeUsageService: claudeUsage ?? new StubClaudeUsage(),
+            welcomeBackService: welcomeBack ?? new StubWelcomeBack());
         vm.CurrentMode = PanelMode.Compact;
         return vm;
     }

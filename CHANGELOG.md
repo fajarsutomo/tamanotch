@@ -11,6 +11,19 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [0.14.0] - belum dirilis
+
+### Ditambahkan
+- **Sapaan "Selamat datang kembali, <nama>"** di notch (ungu) begitu ada gerakan mouse atau keyboard lagi setelah idle lama (bawaan 60 menit, bisa 15 sampai 180). Sapaan menyebut waktu (pagi/siang/sore/malam) dan lama Anda pergi, tidak ada kaitannya dengan sholat, dan hanya tampil di notch. Nama diisi di Pengaturan > Sapaan; kosong berarti tanpa nama. Pengaturan baru: `UserDisplayName`, `EnableWelcomeBack`, `WelcomeBackIdleMinutes`.
+- **Mode puasa** (Pengaturan > Waktu Sholat): pengingat sahur sebelum Imsak (bawaan 30 menit), notifikasi "Waktunya Berbuka Puasa" saat Maghrib, dan pengingat minum berhenti dari Imsak sampai Maghrib (hitungannya mulai lagi setelah berbuka). Bisa setiap hari (mis. Ramadan) atau hanya Senin dan Kamis. Pengaturan baru: `EnableFasting`, `FastingMondayThursdayOnly`, `FastingSahurMinutes`.
+- Pengingat minum dan gerak di notch kini menampilkan petunjuk aksi ("Klik: Sudah minum"); klik di notch menambah hitungan gelas seperti tombol di banner island.
+
+### Diubah
+- Semua pengingat sholat (sebelum, saat adzan, sesudah, sahur) hanya tampil di notch dan tidak pernah jadi banner island. Bila notch sedang tidak tampil (kursor di island), pengingat menunggu sampai notch kembali; 20 detik dihitung sejak ia tampil di notch, dan dibuang bila lebih dari 15 menit belum sempat tampil.
+
+### Diperbaiki
+- Salah ketik pada pesan pengingat sebelum sholat ("berjamah" menjadi "berjamaah").
+
 ## [0.13.0] - belum dirilis
 
 ### Ditambahkan

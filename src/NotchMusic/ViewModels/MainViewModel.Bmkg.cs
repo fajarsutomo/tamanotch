@@ -455,14 +455,19 @@ public partial class MainViewModel
     private void TrackNotchDisplay()
     {
         if (ShowAlertNotch) _bmkgShownInNotch = _activeBmkgNotification;
-        if (ShowPrayerNotch) _prayerShownInNotch = _activePrayerNotification;
+        if (ShowPrayerNotch)
+        {
+            // Mulai hitung tampil 20 detik tepat saat notifikasi sholat pertama kali muncul di notch.
+            if (!PrayerShownInNotch) StartPrayerDismissTimer(PrayerShownDuration);
+            _prayerShownInNotch = _activePrayerNotification;
+        }
         if (ShowWellnessNotch) _wellnessShownInNotch = _activeWellnessNotification;
     }
 
     public bool ShowBmkgBanner => HasActiveBmkgNotification && !ShowAlertNotch && !BmkgShownInNotch;
 
     /// <summary>Ada banner notifikasi yang sedang tampil di island; island tidak boleh menciut selama itu.</summary>
-    public bool HasVisibleIslandBanner => ShowBmkgBanner || ShowPrayerBanner || ShowWellnessBanner;
+    public bool HasVisibleIslandBanner => ShowBmkgBanner || ShowWellnessBanner;
 
     public bool ShowEyesInIdle => ShowIdleEyes && !ShowAlertNotch && !ShowPrayerNotch && !ShowWellnessNotch;
 
@@ -513,7 +518,6 @@ public partial class MainViewModel
             base.OnPropertyChanged(nameof(DropGlowEffect));
             base.OnPropertyChanged(nameof(AlertNotchText));
             base.OnPropertyChanged(nameof(ShowPrayerNotch));
-            base.OnPropertyChanged(nameof(ShowPrayerBanner));
             base.OnPropertyChanged(nameof(PrayerNotchText));
         }
     }

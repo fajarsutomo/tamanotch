@@ -163,7 +163,6 @@ public class AlertNotchTests
         Assert.True(vm.ShowPrayerNotch);
         Assert.False(vm.ShowAlertNotch);
         Assert.False(vm.ShowEyesInIdle);
-        Assert.False(vm.ShowPrayerBanner);
         Assert.Equal("🕌 Waktu Sholat Dzuhur Telah Tiba! • Pukul 11:58.", vm.PrayerNotchText);
     }
 
@@ -190,7 +189,6 @@ public class AlertNotchTests
         vm.OnMouseEnter();
 
         Assert.False(vm.ShowPrayerNotch);
-        Assert.False(vm.ShowPrayerBanner);
     }
 
     private static WellnessNotificationEvent Reminder(WellnessReminderKind kind) => new()
@@ -211,7 +209,7 @@ public class AlertNotchTests
         Assert.False(vm.ShowEyesInIdle);
         Assert.False(vm.ShowWellnessBanner);
         Assert.Equal("#4FC3F7", vm.WellnessAccentColor);
-        Assert.Equal("💧 Waktunya minum • Segelas air membantu.", vm.WellnessNotchText);
+        Assert.Equal("💧 Waktunya minum • Segelas air membantu. • Klik: Sudah minum", vm.WellnessNotchText);
         var blue = Assert.IsType<System.Windows.Media.SolidColorBrush>(vm.WellnessFrameBrush);
 
         vm.DismissWellnessNotificationCommand.Execute(null);

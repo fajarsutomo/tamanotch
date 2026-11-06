@@ -16,6 +16,9 @@ public interface IPrayerReminderService : IDisposable
     void Start();
     void Stop();
     void RefreshSchedule();
+
+    /// <summary>Satu putaran pemeriksaan (dipanggil timer; dibuka agar bisa dites).</summary>
+    void Tick();
 }
 
 public class PrayerReminderService : IPrayerReminderService
@@ -23,6 +26,7 @@ public class PrayerReminderService : IPrayerReminderService
     private readonly IPrayerService _prayerService;
     private readonly ISettingsService _settingsService;
     private readonly DispatcherTimer _timer;
+    private readonly Func<DateTime> _now;
     private readonly HashSet<string> _firedKeys = new();
     private DateTime _lastFiredDate = DateTime.MinValue;
     private PrayerSchedule _currentSchedule;
@@ -33,8 +37,9 @@ public class PrayerReminderService : IPrayerReminderService
 
     public PrayerSchedule CurrentSchedule => _currentSchedule;
 
-    public PrayerReminderService(IPrayerService prayerService, ISettingsService settingsService)
+    public PrayerReminderService(IPrayerService prayerService, ISettingsService settingsService, Func<DateTime>? now = null)
     {
+        _now = now ?? (() => DateTime.Now);
         _prayerService = prayerService;
         _settingsService = settingsService;
         _currentSchedule = _prayerService.GetTodaySchedule();
@@ -43,7 +48,7 @@ public class PrayerReminderService : IPrayerReminderService
         {
             Interval = TimeSpan.FromSeconds(5)
         };
-        _timer.Tick += Timer_Tick;
+        _timer.Tick += (s, e) => Tick();
     }
 
     public void Start()
@@ -69,9 +74,9 @@ public class PrayerReminderService : IPrayerReminderService
         ScheduleUpdated?.Invoke(_currentSchedule);
     }
 
-    private void Timer_Tick(object? sender, EventArgs e)
+    public void Tick()
     {
-        var now = DateTime.Now;
+        var now = _now();
 
         // Reset fired keys if day changed
         if (now.Date != _lastFiredDate)
@@ -96,6 +101,9 @@ public class PrayerReminderService : IPrayerReminderService
     private void CheckReminders(DateTime now, AppSettings settings)
     {
         string datePrefix = now.ToString("yyyyMMdd");
+        bool fastingDay = FastingHelper.IsFastingDay(settings, now);
+
+        if (fastingDay) CheckSahurReminder(now, settings, datePrefix);
 
         foreach (var item in _currentSchedule.Items)
         {
@@ -120,7 +128,7 @@ public class PrayerReminderService : IPrayerReminderService
                         Type = PrayerReminderType.Before,
                         Minutes = settings.RemindBeforeMinutes,
                         Title = $"🕌 {settings.RemindBeforeMinutes} Menit Menuju Waktu {item.Name}",
-                        Message = $"Waktu sholat {item.Name} pukul {item.FormattedTime}. Mari persiapkan wudhu dan sholat berjamah.",
+                        Message = $"Waktu sholat {item.Name} pukul {item.FormattedTime}. Mari persiapkan wudhu dan sholat berjamaah.",
                         AutoPauseRequested = false
                     };
 
@@ -148,8 +156,12 @@ public class PrayerReminderService : IPrayerReminderService
                         PrayerTimeFormatted = item.FormattedTime,
                         Type = PrayerReminderType.AtPrayerTime,
                         Minutes = 0,
-                        Title = $"🕌 Waktu Sholat {item.Name} Telah Tiba!",
-                        Message = $"Pukul {item.FormattedTime}. Hayya 'alash-Shalah — Mari tunaikan ibadah sholat.",
+                        Title = fastingDay && item.Name == "Maghrib"
+                            ? "🌙 Waktunya Berbuka Puasa!"
+                            : $"🕌 Waktu Sholat {item.Name} Telah Tiba!",
+                        Message = fastingDay && item.Name == "Maghrib"
+                            ? $"Maghrib pukul {item.FormattedTime}. Selamat berbuka, lalu tunaikan sholat Maghrib."
+                            : $"Pukul {item.FormattedTime}. Hayya 'alash-Shalah — Mari tunaikan ibadah sholat.",
                         AutoPauseRequested = settings.PrayerAutoPauseMusic
                     };
 
@@ -192,6 +204,32 @@ public class PrayerReminderService : IPrayerReminderService
                 }
             }
         }
+    }
+
+    /// <summary>Pengingat sahur N menit sebelum Imsak pada hari puasa.</summary>
+    private void CheckSahurReminder(DateTime now, AppSettings settings, string datePrefix)
+    {
+        var imsakItem = _currentSchedule.Items.FirstOrDefault(i => i.Name == "Imsak");
+        if (imsakItem == null || settings.FastingSahurMinutes <= 0) return;
+
+        var target = (now.Date + imsakItem.Time).AddMinutes(-settings.FastingSahurMinutes);
+        string key = $"{datePrefix}_Imsak_Sahur";
+        if (now < target || now >= target.AddMinutes(2) || _firedKeys.Contains(key)) return;
+
+        _firedKeys.Add(key);
+        var evt = new PrayerNotificationEvent
+        {
+            PrayerName = "Imsak",
+            PrayerTimeFormatted = imsakItem.FormattedTime,
+            Type = PrayerReminderType.Sahur,
+            Minutes = settings.FastingSahurMinutes,
+            Title = "🌙 Waktunya Sahur",
+            Message = $"Imsak pukul {imsakItem.FormattedTime} ({settings.FastingSahurMinutes} menit lagi). Segera sahur dan niatkan puasa.",
+            AutoPauseRequested = false
+        };
+
+        if (settings.PrayerSoundAlert) PrayerAudioHelper.PlayPrayerNotification(settings, evt);
+        ReminderTriggered?.Invoke(evt);
     }
 
     public void Dispose()

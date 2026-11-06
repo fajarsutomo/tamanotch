@@ -3,7 +3,10 @@ namespace NotchMusic.Models;
 public enum WellnessReminderKind
 {
     Move,
-    Drink
+    Drink,
+
+    /// <summary>Sapaan setelah kembali dari idle lama; hanya tampil di notch.</summary>
+    Welcome
 }
 
 public class WellnessNotificationEvent

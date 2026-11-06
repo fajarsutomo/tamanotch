@@ -51,12 +51,16 @@ public class WellnessReminderService : IWellnessReminderService
     public event Action<WellnessNotificationEvent>? ReminderTriggered;
     public event Action? StateChanged;
 
-    public WellnessReminderService(ISettingsService settingsService, Func<DateTime>? now = null, Func<TimeSpan>? idleTime = null)
+    public WellnessReminderService(ISettingsService settingsService, Func<DateTime>? now = null, Func<TimeSpan>? idleTime = null,
+        Func<bool>? isFasting = null)
     {
         _settingsService = settingsService;
         _now = now ?? (() => DateTime.Now);
         _idleTime = idleTime ?? UserIdleHelper.GetIdleTime;
+        _isFasting = isFasting ?? (() => false);
     }
+
+    private readonly Func<bool> _isFasting;
 
     private AppSettings Settings => _settingsService.CurrentSettings;
 
@@ -132,6 +136,13 @@ public class WellnessReminderService : IWellnessReminderService
     {
         int interval = Math.Max(1, Settings.DrinkReminderMinutes);
         if (!Settings.DrinkReminderEnabled || !inWorkHours)
+        {
+            _drinkDue = null;
+            return;
+        }
+
+        // Sedang berpuasa (Imsak sampai Maghrib): tidak mengingatkan minum; hitungan mulai lagi setelah berbuka.
+        if (_isFasting())
         {
             _drinkDue = null;
             return;

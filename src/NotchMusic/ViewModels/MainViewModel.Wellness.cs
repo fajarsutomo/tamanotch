@@ -21,13 +21,27 @@ public partial class MainViewModel
     private const string DrinkColorHex = "#4FC3F7";
     private const string MoveColorHex = "#FF7EB6";
 
-    public string WellnessAccentColor => _activeWellnessNotification?.Kind == WellnessReminderKind.Drink ? DrinkColorHex : MoveColorHex;
+    private const string WelcomeColorHex = "#B388FF";
+
+    private readonly IWelcomeBackService _welcomeBackService;
+
+    public string WellnessAccentColor => _activeWellnessNotification?.Kind switch
+    {
+        WellnessReminderKind.Drink => DrinkColorHex,
+        WellnessReminderKind.Welcome => WelcomeColorHex,
+        _ => MoveColorHex
+    };
 
     private static readonly System.Windows.Media.Brush DrinkFrameBrush = NotchMusic.Helpers.NeonPalette.Freeze(
         new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(DrinkColorHex)));
 
     private static readonly System.Windows.Media.Brush MoveFrameBrush = NotchMusic.Helpers.NeonPalette.Freeze(
         new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(MoveColorHex)));
+
+    private static readonly System.Windows.Media.Brush WelcomeFrameBrush = NotchMusic.Helpers.NeonPalette.Freeze(
+        new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(WelcomeColorHex)));
+
+    private static readonly System.Windows.Media.Effects.Effect WelcomeGlow = CreateGlow(WelcomeColorHex);
 
     private static readonly System.Windows.Media.Effects.Effect DrinkGlow = CreateGlow(DrinkColorHex);
 
@@ -43,21 +57,28 @@ public partial class MainViewModel
 
     private bool IsDrinkReminder => _activeWellnessNotification?.Kind == WellnessReminderKind.Drink;
 
-    public System.Windows.Media.Brush WellnessFrameBrush => IsDrinkReminder ? DrinkFrameBrush : MoveFrameBrush;
+    private bool IsWelcome => _activeWellnessNotification?.Kind == WellnessReminderKind.Welcome;
 
-    public System.Windows.Media.Effects.Effect WellnessGlowEffect => IsDrinkReminder ? DrinkGlow : MoveGlow;
+    public System.Windows.Media.Brush WellnessFrameBrush => IsWelcome ? WelcomeFrameBrush : IsDrinkReminder ? DrinkFrameBrush : MoveFrameBrush;
+
+    public System.Windows.Media.Effects.Effect WellnessGlowEffect => IsWelcome ? WelcomeGlow : IsDrinkReminder ? DrinkGlow : MoveGlow;
 
     // Prioritas notch: peringatan BMKG berat, sholat, lalu pengingat kesehatan.
     public bool ShowWellnessNotch => HasActiveWellnessNotification && IsCompactMode && ShowIdleEyes && !ShowAlertNotch && !ShowPrayerNotch;
 
-    public bool ShowWellnessBanner => HasActiveWellnessNotification && !ShowWellnessNotch && !WellnessShownInNotch;
+    // Sapaan hanya untuk notch; saat notch tidak tampil (mis. kursor di island) ia dilewati, bukan jadi banner.
+    public bool ShowWellnessBanner => HasActiveWellnessNotification && !IsWelcome && !ShowWellnessNotch && !WellnessShownInNotch;
 
+    /// <summary>Teks satu baris di notch; pengingat minum/gerak menyertakan petunjuk aksi klik (mis. "Klik: Sudah minum").</summary>
     public string WellnessNotchText
     {
         get
         {
             var n = _activeWellnessNotification;
-            return n == null ? string.Empty : $"{n.Title} • {n.Message}";
+            if (n == null) return string.Empty;
+            return n.Kind == WellnessReminderKind.Welcome
+                ? $"{n.Title} • {n.Message}"
+                : $"{n.Title} • {n.Message} • Klik: {n.PrimaryActionText}";
         }
     }
 
@@ -66,8 +87,9 @@ public partial class MainViewModel
         get
         {
             var n = _activeWellnessNotification;
-            return n == null
-                ? string.Empty
+            if (n == null) return string.Empty;
+            return n.Kind == WellnessReminderKind.Welcome
+                ? $"{n.Title}\n{n.Message}\nKlik untuk menutup"
                 : $"{n.Title}\n{n.Message}\nKlik: {n.PrimaryActionText} • Klik kanan: tunda 10 menit atau tutup";
         }
     }
@@ -89,7 +111,7 @@ public partial class MainViewModel
             _wellnessDismissTimer?.Stop();
             if (value == null) return;
 
-            _wellnessDismissTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(40) };
+            _wellnessDismissTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(value.Kind == WellnessReminderKind.Welcome ? 20 : 40) };
             _wellnessDismissTimer.Tick += (s, e) =>
             {
                 _wellnessDismissTimer?.Stop();
@@ -109,6 +131,35 @@ public partial class MainViewModel
         {
             try { System.Media.SystemSounds.Asterisk.Play(); } catch { }
         }
+    }
+
+    private void OnWelcomeBack(TimeSpan away)
+    {
+        var evt = BuildWelcome(Settings.UserDisplayName, away, DateTime.Now);
+        if (System.Windows.Application.Current?.Dispatcher is { } d && !d.CheckAccess())
+            d.BeginInvoke(() => ShowWellnessNotification(evt));
+        else
+            ShowWellnessNotification(evt);
+    }
+
+    /// <summary>Sapaan sesuai jam ("Selamat pagi...") dengan nama dari Pengaturan (kosong = tanpa nama).</summary>
+    public static WellnessNotificationEvent BuildWelcome(string? name, TimeSpan away, DateTime now)
+    {
+        string salam = now.Hour switch
+        {
+            < 11 => "Selamat pagi",
+            < 15 => "Selamat siang",
+            < 18 => "Selamat sore",
+            _ => "Selamat malam"
+        };
+        name = name?.Trim();
+        return new WellnessNotificationEvent
+        {
+            Kind = WellnessReminderKind.Welcome,
+            Title = string.IsNullOrEmpty(name) ? "Selamat datang kembali" : $"Selamat datang kembali, {name}",
+            Message = $"{salam}! Anda pergi sekitar {Services.ClaudeUsage.ClaudeUsageFormat.Duration(away)}.",
+            PrimaryActionText = "Tutup"
+        };
     }
 
     public ICommand WellnessPrimaryActionCommand { get; }

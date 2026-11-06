@@ -35,6 +35,7 @@ public class LocationServiceTests
         public void Start() { }
         public void Stop() { }
         public void RefreshSchedule() => RefreshCount++;
+        public void Tick() { }
         public void Dispose() { }
     }
 

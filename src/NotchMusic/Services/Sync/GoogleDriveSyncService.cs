@@ -16,21 +16,6 @@ public class GoogleDriveSyncService : IGoogleDriveSyncService
     private const string FileName = "todos.json";
     private static readonly string[] Scopes = { DriveService.Scope.DriveFile };
 
-    // Kredensial Bawaan Aplikasi TAMANOTCH
-    private static readonly byte[] EncId = new byte[] { 105, 107, 107, 109, 108, 109, 109, 110, 106, 111, 108, 107, 119, 55, 63, 106, 57, 43, 44, 52, 46, 40, 49, 40, 104, 106, 47, 106, 104, 43, 56, 42, 55, 60, 98, 106, 60, 56, 105, 59, 44, 41, 44, 98, 40, 116, 59, 42, 42, 41, 116, 61, 53, 53, 61, 54, 63, 47, 41, 63, 40, 57, 53, 52, 46, 63, 52, 46, 116, 57, 53, 55 };
-    private static readonly byte[] EncSec = new byte[] { 29, 21, 25, 9, 10, 2, 119, 52, 48, 2, 56, 57, 34, 104, 56, 111, 12, 10, 99, 16, 9, 40, 30, 22, 21, 23, 9, 28, 14, 119, 31, 45, 19, 16, 13 };
-
-    public static readonly string DefaultClientId = DecodeCred(EncId);
-    public static readonly string DefaultClientSecret = DecodeCred(EncSec);
-
-    private static string DecodeCred(byte[] data)
-    {
-        if (data == null || data.Length == 0) return string.Empty;
-        var b = new byte[data.Length];
-        for (int i = 0; i < data.Length; i++) b[i] = (byte)(data[i] ^ 0x5A);
-        return System.Text.Encoding.UTF8.GetString(b);
-    }
-
     private readonly ISettingsService _settingsService;
     private readonly string _authDataStorePath;
     private readonly SemaphoreSlim _syncLock = new(1, 1);
@@ -50,7 +35,7 @@ public class GoogleDriveSyncService : IGoogleDriveSyncService
             if (!string.IsNullOrWhiteSpace(envId))
                 return envId.Trim();
 
-            return DefaultClientId;
+            return string.Empty;
         }
     }
 
@@ -65,7 +50,7 @@ public class GoogleDriveSyncService : IGoogleDriveSyncService
             if (!string.IsNullOrWhiteSpace(envSecret))
                 return envSecret.Trim();
 
-            return DefaultClientSecret;
+            return string.Empty;
         }
     }
 

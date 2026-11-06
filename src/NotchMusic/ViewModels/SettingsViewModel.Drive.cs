@@ -64,6 +64,7 @@ public partial class SettingsViewModel
             ? Settings.GoogleDriveLastSyncTime.Value.ToString("dd MMM yyyy, HH:mm")
             : "Belum pernah";
 
+    // Tanpa kredensial bawaan: bagian kredensial langsung terbuka selama Google Drive belum dikonfigurasi.
     private bool _showCustomCredentials;
 
     public bool ShowCustomCredentials

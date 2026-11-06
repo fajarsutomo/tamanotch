@@ -43,6 +43,8 @@ public partial class SettingsViewModel : ViewModelBase
         _settingsService = settingsService;
         _onHotkeyUpdated = onHotkeyUpdated;
         _syncService = syncService ?? new GoogleDriveSyncService(settingsService);
+        // Tanpa kredensial bawaan, bagian kredensial langsung terbuka bila Google Drive belum dikonfigurasi.
+        _showCustomCredentials = !_syncService.IsConfigured;
         _updateService = updateService ?? new UpdateService(settingsService);
         _prayerService = prayerService ?? new PrayerService(settingsService);
         _locationService = locationService ?? new LocationService(settingsService, _prayerService);

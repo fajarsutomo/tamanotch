@@ -622,8 +622,11 @@
 
                         <!-- Saat BELUM Terhubung -->
                         <StackPanel Visibility="{Binding IsGoogleDriveConnected, Converter={StaticResource InverseBoolToVis}}" Margin="0,6,0,0">
-                            <TextBlock Text="Cukup login dengan akun Google/Gmail Anda untuk menyinkronkan tugas secara otomatis antar perangkat." 
-                                       FontSize="11.5" Foreground="#CCCCCC" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                            <TextBlock Text="Login dengan akun Google/Gmail Anda untuk menyinkronkan tugas secara otomatis antar perangkat." 
+                                       FontSize="11.5" Foreground="#CCCCCC" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                            <TextBlock Text="TAMANOTCH tidak membawa kredensial Google. Buat kredensial sendiri (gratis, sekali saja; langkahnya ada di docs/GOOGLE_DRIVE_SETUP.md), lalu impor credentials.json atau isi Client ID dan Secret di bawah. Setelah terisi, tombol Hubungkan aktif."
+                                       FontSize="11" Foreground="#FFB020" TextWrapping="Wrap" Margin="0,0,0,10"
+                                       Visibility="{Binding IsGoogleDriveConfigured, Converter={StaticResource InverseBoolToVis}}"/>
 
                             <Button Content="Hubungkan Akun Google" Command="{Binding ConnectGoogleDriveCommand}"
                                     IsEnabled="{Binding IsGoogleDriveConfigured}"
@@ -633,22 +636,22 @@
                             <TextBlock Text="{Binding GoogleDriveSyncStatus}" Foreground="#CCCCCC" FontSize="11" Margin="0,6,0,8"/>
 
                             <!-- Opsi Kredensial Kustom (Opsional) -->
-                            <Button Content="Opsi Lanjutan: Gunakan Kredensial Kustom &#x25BE;" Command="{Binding ToggleCustomCredentialsCommand}"
+                            <Button Content="Kredensial Google (Client ID &amp; Secret) &#x25BE;" Command="{Binding ToggleCustomCredentialsCommand}"
                                     Background="Transparent" Foreground="#888899" BorderThickness="0" Padding="0,4"
                                     HorizontalAlignment="Left" Cursor="Hand" FontSize="11"/>
 
                             <StackPanel Visibility="{Binding ShowCustomCredentials, Converter={StaticResource BoolToVis}}" Margin="0,6,0,0">
-                                <TextBlock Text="Impor file credentials.json atau masukkan Client ID sendiri jika ingin menggunakan project Google Cloud pribadi:" 
+                                <TextBlock Text="Impor file credentials.json dari project Google Cloud Anda, atau masukkan Client ID dan Secret-nya:" 
                                            FontSize="10.5" Foreground="#888888" TextWrapping="Wrap" Margin="0,0,0,6"/>
                                 <Button Content="Impor File credentials.json" Command="{Binding ImportCredentialsCommand}"
                                         Background="#25252C" Foreground="#FFFFFF" BorderThickness="0" Padding="10,5"
                                         HorizontalAlignment="Left" Cursor="Hand" Margin="0,0,0,8"/>
 
-                                <TextBlock Text="Client ID Kustom:" FontSize="10.5" Foreground="#888899" Margin="0,2"/>
+                                <TextBlock Text="Client ID:" FontSize="10.5" Foreground="#888899" Margin="0,2"/>
                                 <TextBox Text="{Binding GoogleDriveClientId, UpdateSourceTrigger=PropertyChanged}" 
                                          Background="#141418" Foreground="#FFFFFF" BorderBrush="#3A3A4A" Padding="5" Margin="0,0,0,6"/>
 
-                                <TextBlock Text="Client Secret Kustom:" FontSize="10.5" Foreground="#888899" Margin="0,2"/>
+                                <TextBlock Text="Client Secret:" FontSize="10.5" Foreground="#888899" Margin="0,2"/>
                                 <TextBox Text="{Binding GoogleDriveClientSecret, UpdateSourceTrigger=PropertyChanged}" 
                                          Background="#141418" Foreground="#FFFFFF" BorderBrush="#3A3A4A" Padding="5" Margin="0,0,0,6"/>
                             </StackPanel>

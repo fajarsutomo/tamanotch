@@ -11,6 +11,14 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [0.14.1] - belum dirilis
+
+### Diubah
+- **Kredensial Google Drive tidak lagi disertakan di aplikasi.** Client ID dan secret bawaan (warisan DRANOTCH, memakai project Google Cloud milik penulis aslinya) dihapus dari kode. Sinkronisasi to-do kini memakai kredensial Google yang Anda buat sendiri (lihat `docs/GOOGLE_DRIVE_SETUP.md`), diimpor lewat Pengaturan > To-do atau dibaca dari variabel lingkungan `GOOGLE_DRIVE_CLIENT_ID`/`GOOGLE_DRIVE_CLIENT_SECRET`. Selama belum terisi, bagian kredensial di Pengaturan langsung terbuka dengan petunjuk, dan tombol Hubungkan nonaktif. Installer dengan begitu tidak membawa kredensial apa pun.
+- README memuat Al-Qur'an, Pemakaian Claude (dengan catatan layanan tak terdokumentasi), dan Sapaan.
+
+BREAKING CHANGE: pengguna yang sebelumnya tersambung lewat kredensial bawaan harus membuat kredensial sendiri dan menghubungkan ulang akun Google-nya.
+
 ## [0.14.0] - belum dirilis
 
 ### Ditambahkan

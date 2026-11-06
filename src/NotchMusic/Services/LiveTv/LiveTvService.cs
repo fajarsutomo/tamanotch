@@ -106,6 +106,7 @@ public class LiveTvService : ILiveTvService
         _channels.Clear();
 
         var builtIn = GetBuiltInChannels();
+        _builtInIds = new HashSet<string>(builtIn.Select(b => b.Id), StringComparer.OrdinalIgnoreCase);
         var favIds = _settingsService.CurrentSettings.FavoriteLiveTvChannelIds ?? new List<string>();
         var favSet = new HashSet<string>(favIds, StringComparer.OrdinalIgnoreCase);
 
@@ -124,7 +125,21 @@ public class LiveTvService : ILiveTvService
                 _channels.Add(custom);
             }
         }
+
+        // Saluran dari katalog/pencarian online yang difavoritkan dimuat kembali dari data lengkapnya.
+        if (_settingsService.CurrentSettings.SavedOnlineLiveTvChannels != null)
+        {
+            foreach (var saved in _settingsService.CurrentSettings.SavedOnlineLiveTvChannels)
+            {
+                if (_channels.Any(c => string.Equals(c.Id, saved.Id, StringComparison.OrdinalIgnoreCase))) continue;
+                saved.IsCustom = false;
+                saved.IsFavorite = true;
+                _channels.Add(saved);
+            }
+        }
     }
+
+    private HashSet<string> _builtInIds = new(StringComparer.OrdinalIgnoreCase);
 
     private void RestoreLastChannel()
     {
@@ -301,8 +316,19 @@ public class LiveTvService : ILiveTvService
             favs.RemoveAll(id => string.Equals(id, channel.Id, StringComparison.OrdinalIgnoreCase));
         }
 
+        PersistOnlineFavorite(channel);
         _settingsService.Save();
         StateChanged?.Invoke();
+    }
+
+    /// <summary>Saluran online (bukan bawaan dan bukan kustom) disimpan lengkap saat difavoritkan dan dibuang saat tidak.</summary>
+    private void PersistOnlineFavorite(LiveTvChannel channel)
+    {
+        if (channel.IsCustom || _builtInIds.Contains(channel.Id)) return;
+
+        var saved = _settingsService.CurrentSettings.SavedOnlineLiveTvChannels ??= new List<LiveTvChannel>();
+        saved.RemoveAll(c => string.Equals(c.Id, channel.Id, StringComparison.OrdinalIgnoreCase));
+        if (channel.IsFavorite) saved.Add(channel);
     }
 
     public LiveTvChannel AddCustomChannel(string name, string streamUrl, string category = "Custom", string countryCode = "id", string countryName = "Custom Stream")

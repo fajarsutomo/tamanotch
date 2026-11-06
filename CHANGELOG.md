@@ -11,6 +11,11 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [0.14.2] - belum dirilis
+
+### Diperbaiki
+- **Favorit radio dan Live TV dari pencarian/katalog online hilang setelah aplikasi dijalankan ulang.** Yang tersimpan hanya ID-nya, sedangkan stasiun/saluran online tidak dimuat ulang saat start. Kini data lengkapnya (nama, alamat stream, kota, genre) disimpan saat difavoritkan dan dimuat kembali saat start, lalu dibuang saat favoritnya dilepas. Pengaturan baru: `SavedOnlineRadioStations`, `SavedOnlineLiveTvChannels`. Favorit yang ID-nya sudah terlanjur tersimpan tanpa data tidak bisa dipulihkan; cukup cari dan favoritkan lagi.
+
 ## [0.14.1] - belum dirilis
 
 ### Diubah

@@ -114,6 +114,7 @@ public class RadioService : IRadioService
         _stations.Clear();
 
         var builtIn = GetBuiltInStations();
+        _builtInIds = new HashSet<string>(builtIn.Select(b => b.Id), StringComparer.OrdinalIgnoreCase);
         var favIds = _settingsService.CurrentSettings.FavoriteRadioStationIds ?? new List<string>();
         var favSet = new HashSet<string>(favIds, StringComparer.OrdinalIgnoreCase);
 
@@ -132,7 +133,22 @@ public class RadioService : IRadioService
                 _stations.Add(custom);
             }
         }
+
+        // Stasiun hasil pencarian online yang difavoritkan: hanya ID-nya di FavoriteRadioStationIds tidak cukup,
+        // datanya harus dimuat kembali agar tidak hilang saat aplikasi dijalankan ulang.
+        if (_settingsService.CurrentSettings.SavedOnlineRadioStations != null)
+        {
+            foreach (var saved in _settingsService.CurrentSettings.SavedOnlineRadioStations)
+            {
+                if (_stations.Any(s => string.Equals(s.Id, saved.Id, StringComparison.OrdinalIgnoreCase))) continue;
+                saved.IsCustom = false;
+                saved.IsFavorite = true;
+                _stations.Add(saved);
+            }
+        }
     }
+
+    private HashSet<string> _builtInIds = new(StringComparer.OrdinalIgnoreCase);
 
     private void RestoreLastStation()
     {
@@ -571,8 +587,19 @@ public class RadioService : IRadioService
         }
 
         _settingsService.CurrentSettings.FavoriteRadioStationIds = favList;
+        PersistOnlineFavorite(station);
         _settingsService.Save();
         StateChanged?.Invoke();
+    }
+
+    /// <summary>Stasiun online (bukan bawaan dan bukan kustom) disimpan lengkap saat difavoritkan dan dibuang saat tidak.</summary>
+    private void PersistOnlineFavorite(RadioStation station)
+    {
+        if (station.IsCustom || _builtInIds.Contains(station.Id)) return;
+
+        var saved = _settingsService.CurrentSettings.SavedOnlineRadioStations ??= new List<RadioStation>();
+        saved.RemoveAll(s => string.Equals(s.Id, station.Id, StringComparison.OrdinalIgnoreCase));
+        if (station.IsFavorite) saved.Add(station);
     }
 
     public RadioStation AddCustomStation(string name, string streamUrl, string category = "Custom", string cityOrCountry = "Custom Stream")

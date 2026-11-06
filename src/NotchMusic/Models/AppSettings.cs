@@ -154,6 +154,9 @@ public class AppSettings
     public List<string> FavoriteRadioStationIds { get; set; } = new();
     public List<RadioStation> CustomRadioStations { get; set; } = new();
 
+    /// <summary>Stasiun hasil pencarian online yang dijadikan favorit; disimpan lengkap agar tetap ada setelah aplikasi dijalankan ulang.</summary>
+    public List<RadioStation> SavedOnlineRadioStations { get; set; } = new();
+
     // Pemutar Al-Qur'an (audio per surah dari Quran.com)
     public bool IsQuranWindowOpen { get; set; } = false;
     public double QuranWindowLeft { get; set; } = -1;
@@ -225,6 +228,9 @@ public class AppSettings
     public string LastLiveTvCountryCode { get; set; } = "id";
     public List<string> FavoriteLiveTvChannelIds { get; set; } = new();
     public List<LiveTvChannel> CustomLiveTvChannels { get; set; } = new();
+
+    /// <summary>Saluran dari katalog/pencarian online yang dijadikan favorit; disimpan lengkap agar tetap ada setelah dijalankan ulang.</summary>
+    public List<LiveTvChannel> SavedOnlineLiveTvChannels { get; set; } = new();
 
     // Cuaca & Gempa Bumi BMKG (Komponen ke-7)
     public bool EnableBmkg { get; set; } = true;

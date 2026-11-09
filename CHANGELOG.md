@@ -11,6 +11,11 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [1.0.1] - belum dirilis
+
+### Diperbaiki
+- **Gempa kecil masih tampil sebagai banner island lama.** Hanya gempa M >= 5 atau berpotensi tsunami yang memakai notch, sehingga gempa kecil (mis. M 2.5) tampil di island dan melanggar aturan "tampil di notch berarti tidak di island". Kini semua notifikasi gempa memakai notch, dengan warna bingkai menurut tingkat: kuning (M < 3), oranye (M 3 sampai < 5), merah (M >= 5 atau berpotensi tsunami; cuaca ekstrem tetap merah). Banner island hanya menjadi cadangan saat notifikasi tiba ketika island sedang terbuka.
+
 ## [1.0.0] - 2026-11-06
 
 Rilis pertama dengan installer (Inno Setup). Seluruh perubahan 0.1.0 sampai 0.14.2 di bawah ini ikut di dalamnya. Installer tidak membawa kredensial Google apa pun; sinkronisasi to-do memakai kredensial yang dibuat pengguna di Pengaturan. Pemakaian Claude mati secara bawaan dan memakai layanan Anthropic yang tidak terdokumentasi resmi.

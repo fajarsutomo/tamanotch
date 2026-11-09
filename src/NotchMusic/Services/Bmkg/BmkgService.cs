@@ -809,7 +809,7 @@ public class BmkgService : IBmkgService
             Potensi = latest.PotensiOrDirasakanSummary,
             ShakemapUrl = latest.ShakemapUrl,
             IsEarthquake = true,
-            IsHighSeverity = latest.MagnitudeValue >= 5.0 || latest.IsPotentialTsunami,
+            Level = BmkgNotificationEvent.LevelForEarthquake(latest.MagnitudeValue, latest.IsPotentialTsunami),
             Timestamp = DateTime.Now
         };
 
@@ -844,7 +844,7 @@ public class BmkgService : IBmkgService
             Kedalaman = $"Angin {current.WindSpeedFormatted}",
             Potensi = $"Curah Hujan {current.PrecipitationFormatted}",
             IsEarthquake = false,
-            IsHighSeverity = true,
+            Level = BmkgAlertLevel.Red,
             Timestamp = DateTime.Now
         };
 
@@ -880,7 +880,7 @@ public class BmkgService : IBmkgService
             Potensi = eq.PotensiOrDirasakanSummary,
             ShakemapUrl = eq.ShakemapUrl,
             IsEarthquake = true,
-            IsHighSeverity = eq.MagnitudeValue >= 5.0 || eq.IsPotentialTsunami,
+            Level = BmkgNotificationEvent.LevelForEarthquake(eq.MagnitudeValue, eq.IsPotentialTsunami),
             Timestamp = DateTime.Now
         };
 

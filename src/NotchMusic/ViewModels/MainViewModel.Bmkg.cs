@@ -433,9 +433,20 @@ public partial class MainViewModel
 
     // --- Notch notifikasi: peringatan berat (gempa M >= 5 / tsunami, cuaca ekstrem) menggantikan mata idle ---
     private static readonly System.Windows.Media.Color AlertRed = System.Windows.Media.Color.FromRgb(0xFF, 0x3B, 0x4E);
+    private static readonly System.Windows.Media.Color AlertOrange = System.Windows.Media.Color.FromRgb(0xFF, 0x9F, 0x0A);
+    private static readonly System.Windows.Media.Color AlertYellow = System.Windows.Media.Color.FromRgb(0xFF, 0xD4, 0x3B);
+
+    private static System.Windows.Media.Color AlertColorFor(BmkgAlertLevel level) => level switch
+    {
+        BmkgAlertLevel.Orange => AlertOrange,
+        BmkgAlertLevel.Yellow => AlertYellow,
+        _ => AlertRed
+    };
+
+    private BmkgAlertLevel ActiveAlertLevel => _activeBmkgNotification?.Level ?? BmkgAlertLevel.Red;
 
     /// <summary>Peringatan aktif yang cukup berat untuk tampil sebagai notch notifikasi (bukan banner).</summary>
-    public bool IsAlertNotchNotification => HasActiveBmkgNotification && _activeBmkgNotification!.IsHighSeverity;
+    public bool IsAlertNotchNotification => HasActiveBmkgNotification;
 
     /// <summary>Notch idle berubah jadi satu baris pesan berframe merah; saat hover atau mode lain banner penuh dipakai.</summary>
     public bool ShowAlertNotch => IsAlertNotchNotification && IsCompactMode && ShowIdleEyes;
@@ -486,13 +497,28 @@ public partial class MainViewModel
 
     public double AlertNotchMaxTextWidth => Math.Max(240, System.Windows.SystemParameters.PrimaryScreenWidth * 0.6);
 
-    public System.Windows.Media.Brush AlertFrameBrush { get; } = NotchMusic.Helpers.NeonPalette.Freeze(new System.Windows.Media.SolidColorBrush(AlertRed));
-
-    public System.Windows.Media.Effects.Effect AlertGlowEffect { get; } = CreateAlertGlow();
-
-    private static System.Windows.Media.Effects.Effect CreateAlertGlow()
+    private static readonly Dictionary<BmkgAlertLevel, System.Windows.Media.Brush> AlertBrushes = new()
     {
-        var effect = new System.Windows.Media.Effects.DropShadowEffect { Color = AlertRed, BlurRadius = 14, ShadowDepth = 0, Opacity = 0.9 };
+        [BmkgAlertLevel.Red] = NotchMusic.Helpers.NeonPalette.Freeze(new System.Windows.Media.SolidColorBrush(AlertRed)),
+        [BmkgAlertLevel.Orange] = NotchMusic.Helpers.NeonPalette.Freeze(new System.Windows.Media.SolidColorBrush(AlertOrange)),
+        [BmkgAlertLevel.Yellow] = NotchMusic.Helpers.NeonPalette.Freeze(new System.Windows.Media.SolidColorBrush(AlertYellow))
+    };
+
+    private static readonly Dictionary<BmkgAlertLevel, System.Windows.Media.Effects.Effect> AlertGlows = new()
+    {
+        [BmkgAlertLevel.Red] = CreateAlertGlow(AlertRed),
+        [BmkgAlertLevel.Orange] = CreateAlertGlow(AlertOrange),
+        [BmkgAlertLevel.Yellow] = CreateAlertGlow(AlertYellow)
+    };
+
+    /// <summary>Bingkai notch notifikasi BMKG: kuning (gempa M &lt; 3), oranye (M 3 sampai &lt; 5), merah (M &gt;= 5, tsunami, cuaca ekstrem).</summary>
+    public System.Windows.Media.Brush AlertFrameBrush => AlertBrushes[ActiveAlertLevel];
+
+    public System.Windows.Media.Effects.Effect AlertGlowEffect => AlertGlows[ActiveAlertLevel];
+
+    private static System.Windows.Media.Effects.Effect CreateAlertGlow(System.Windows.Media.Color color)
+    {
+        var effect = new System.Windows.Media.Effects.DropShadowEffect { Color = color, BlurRadius = 14, ShadowDepth = 0, Opacity = 0.9 };
         effect.Freeze();
         return effect;
     }
@@ -517,6 +543,8 @@ public partial class MainViewModel
             base.OnPropertyChanged(nameof(DropFrameBrush));
             base.OnPropertyChanged(nameof(DropGlowEffect));
             base.OnPropertyChanged(nameof(AlertNotchText));
+            base.OnPropertyChanged(nameof(AlertFrameBrush));
+            base.OnPropertyChanged(nameof(AlertGlowEffect));
             base.OnPropertyChanged(nameof(ShowPrayerNotch));
             base.OnPropertyChanged(nameof(PrayerNotchText));
         }

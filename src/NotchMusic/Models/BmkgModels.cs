@@ -390,6 +390,20 @@ public class BmkgNotificationEvent
     public string Potensi { get; set; } = string.Empty;
     public string ShakemapUrl { get; set; } = string.Empty;
     public bool IsEarthquake { get; set; } = true;
-    public bool IsHighSeverity { get; set; }
+    public BmkgAlertLevel Level { get; set; } = BmkgAlertLevel.Red;
     public DateTime Timestamp { get; set; } = DateTime.Now;
+
+    /// <summary>Gempa M &lt; 3 kuning, M 3 sampai &lt; 5 oranye, M &gt;= 5 atau berpotensi tsunami merah.</summary>
+    public static BmkgAlertLevel LevelForEarthquake(double magnitude, bool potentialTsunami)
+        => potentialTsunami || magnitude >= 5.0 ? BmkgAlertLevel.Red
+         : magnitude >= 3.0 ? BmkgAlertLevel.Orange
+         : BmkgAlertLevel.Yellow;
+}
+
+/// <summary>Tingkat keparahan notifikasi BMKG; menentukan warna bingkai notch.</summary>
+public enum BmkgAlertLevel
+{
+    Red,
+    Orange,
+    Yellow
 }

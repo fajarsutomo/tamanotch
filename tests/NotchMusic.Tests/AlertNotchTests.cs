@@ -14,7 +14,9 @@ public class AlertNotchTests
         Message = "1 km BaratDaya TOMOHON-SULUT • Kedalaman 148 km (08:15:02 WIB)",
         MagnitudeBadge = $"M {magnitude}",
         IsEarthquake = true,
-        IsHighSeverity = high
+        Level = high
+            ? BmkgAlertLevel.Red
+            : BmkgNotificationEvent.LevelForEarthquake(double.Parse(magnitude, System.Globalization.CultureInfo.InvariantCulture), false)
     };
 
     private static BmkgNotificationEvent Weather() => new()
@@ -23,7 +25,7 @@ public class AlertNotchTests
         Title = "⛈ Peringatan Cuaca BMKG • Jakarta",
         Message = "Hujan Petir (28°C)",
         IsEarthquake = false,
-        IsHighSeverity = true
+        Level = BmkgAlertLevel.Red
     };
 
     [Fact]
@@ -51,16 +53,49 @@ public class AlertNotchTests
         Assert.StartsWith("⛈ Peringatan Cuaca BMKG", vm.AlertNotchText);
     }
 
+    [Theory]
+    [InlineData(2.5, false, BmkgAlertLevel.Yellow)]
+    [InlineData(2.9, false, BmkgAlertLevel.Yellow)]
+    [InlineData(3.0, false, BmkgAlertLevel.Orange)]
+    [InlineData(4.9, false, BmkgAlertLevel.Orange)]
+    [InlineData(5.0, false, BmkgAlertLevel.Red)]
+    [InlineData(6.2, false, BmkgAlertLevel.Red)]
+    [InlineData(3.5, true, BmkgAlertLevel.Red)]
+    public void QuakeLevel_FollowsMagnitude_AndTsunamiPotential(double magnitude, bool tsunami, BmkgAlertLevel expected)
+    {
+        Assert.Equal(expected, BmkgNotificationEvent.LevelForEarthquake(magnitude, tsunami));
+    }
+
     [Fact]
-    public void SmallQuake_KeepsTheOldBanner_AndEyes()
+    public void SmallQuake_AlsoUsesTheNotch_NotTheIslandBanner()
     {
         var vm = ViewModelTestFactory.CreateMain();
 
-        vm.ShowBmkgNotification(Quake(high: false, magnitude: "4.1"));
+        vm.ShowBmkgNotification(Quake(high: false, magnitude: "2.5"));
 
-        Assert.False(vm.ShowAlertNotch);
-        Assert.True(vm.ShowEyesInIdle);
-        Assert.True(vm.ShowBmkgBanner);
+        Assert.True(vm.ShowAlertNotch);
+        Assert.False(vm.ShowEyesInIdle);
+        Assert.False(vm.ShowBmkgBanner);
+    }
+
+    [Fact]
+    public void NotchFrame_IsYellowOrangeOrRed_ByQuakeLevel()
+    {
+        var vm = ViewModelTestFactory.CreateMain();
+
+        vm.ShowBmkgNotification(Quake(high: false, magnitude: "2.5"));
+        var yellow = Assert.IsType<System.Windows.Media.SolidColorBrush>(vm.AlertFrameBrush).Color;
+        Assert.Equal(System.Windows.Media.Color.FromRgb(0xFF, 0xD4, 0x3B), yellow);
+
+        vm.DismissBmkgNotificationCommand.Execute(null);
+        vm.ShowBmkgNotification(Quake(high: false, magnitude: "4.1"));
+        var orange = Assert.IsType<System.Windows.Media.SolidColorBrush>(vm.AlertFrameBrush).Color;
+        Assert.Equal(System.Windows.Media.Color.FromRgb(0xFF, 0x9F, 0x0A), orange);
+
+        vm.DismissBmkgNotificationCommand.Execute(null);
+        vm.ShowBmkgNotification(Quake(high: true));
+        var red = Assert.IsType<System.Windows.Media.SolidColorBrush>(vm.AlertFrameBrush).Color;
+        Assert.Equal(System.Windows.Media.Color.FromRgb(0xFF, 0x3B, 0x4E), red);
     }
 
     [Fact]
@@ -110,14 +145,15 @@ public class AlertNotchTests
     }
 
     [Fact]
-    public void SmallQuake_WithoutANotch_KeepsItsIslandBanner_OnHover()
+    public void SmallQuake_ShownAsNotch_IsNotRepeatedInTheIslandOnHover()
     {
         var vm = ViewModelTestFactory.CreateMain();
         vm.ShowBmkgNotification(Quake(high: false, magnitude: "4.1"));
+        Assert.True(vm.ShowAlertNotch);
 
         vm.OnMouseEnter();
 
-        Assert.True(vm.ShowBmkgBanner);
+        Assert.False(vm.ShowBmkgBanner);
     }
 
     [Fact]

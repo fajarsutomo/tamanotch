@@ -94,7 +94,7 @@ if ($FilePath -and $FilePath.Length -gt 0) {
     }
 } else {
     # Default targets: Publish exe and Installer exe
-    $publishExe = Join-Path $rootDir "dist\Publish\NotchMusic.exe"
+    $publishExe = Join-Path $rootDir "dist\Publish\TamaNotch.exe"
     if (Test-Path $publishExe) {
         $targets += $publishExe
     }

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TamaNotch/TamaNotch.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TamaNotch.Tests/TamaNotch.Tests.csproj" />
+  </Folder>
+</Solution>

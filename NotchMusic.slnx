@@ -1,8 +1,0 @@
-<Solution>
-  <Folder Name="/src/">
-    <Project Path="src/NotchMusic/NotchMusic.csproj" />
-  </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/NotchMusic.Tests/NotchMusic.Tests.csproj" />
-  </Folder>
-</Solution>

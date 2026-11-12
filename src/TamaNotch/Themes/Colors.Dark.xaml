@@ -1,0 +1,40 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Tema Dark: kunci brush semantik yang sama di Colors.Dark/Light/Glass.xaml (dicek oleh ThemeTests). -->
+
+    <!-- Permukaan -->
+    <SolidColorBrush x:Key="ThemeSurfaceDeep" Color="#0E0E12"/>
+    <SolidColorBrush x:Key="ThemeSurface" Color="#18181C"/>
+    <SolidColorBrush x:Key="ThemeSurfaceRaised" Color="#22222A"/>
+    <SolidColorBrush x:Key="ThemeSurfaceHigh" Color="#34343F"/>
+    <!-- Garis -->
+    <SolidColorBrush x:Key="ThemeLine" Color="#2A2A36"/>
+    <SolidColorBrush x:Key="ThemeLineStrong" Color="#44445A"/>
+    <!-- Teks -->
+    <SolidColorBrush x:Key="ThemeText" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="ThemeTextBody" Color="#CCCCCC"/>
+    <SolidColorBrush x:Key="ThemeTextSecondary" Color="#9090A0"/>
+    <SolidColorBrush x:Key="ThemeTextMuted" Color="#70708A"/>
+    <!-- Island (notch) -->
+    <SolidColorBrush x:Key="ThemeIslandBg" Color="#000000"/>
+    <SolidColorBrush x:Key="ThemeIslandIdleBg" Color="#000000"/>
+
+    <!-- Pil, lencana ikon, dan bingkai island -->
+    <!-- Flat (Material): semua warna polos, tanpa gradien logam -->
+    <SolidColorBrush x:Key="LuxuryNotchBorderBrush" Color="#2A2A36"/>
+    <SolidColorBrush x:Key="LuxuryPillBackgroundBrush" Color="#1C1C24"/>
+    <SolidColorBrush x:Key="MetallicIconBadgeBgBrush" Color="#1C1C24"/>
+    <SolidColorBrush x:Key="MetallicIconBadgeBorderBrush" Color="#2E2E3A"/>
+    <SolidColorBrush x:Key="NotchPillBorderBrush" Color="#2C2C3A"/>
+    <SolidColorBrush x:Key="NotchPillHoverBorderBrush" Color="#50506E"/>
+    <SolidColorBrush x:Key="NotchBadgeHoverBorderBrush" Color="#80FFFFFF"/>
+
+    <!-- Warna isi ikon vektor (nama lama dipertahankan; kini polos) -->
+    <SolidColorBrush x:Key="MetallicSilverBrush" Color="#E8EAF0"/>
+
+    <!-- Scrollbar -->
+    <SolidColorBrush x:Key="ScrollBar.Thumb.Normal" Color="#33333E"/>
+    <SolidColorBrush x:Key="ScrollBar.Thumb.MouseOver" Color="#4E4E62"/>
+    <SolidColorBrush x:Key="ScrollBar.Thumb.Pressed" Color="#6C6C82"/>
+    <SolidColorBrush x:Key="ScrollBar.Track.Background" Color="#0D0D12"/>
+</ResourceDictionary>

@@ -1,0 +1,254 @@
+<UserControl x:Class="TamaNotch.Views.NotesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:icons="clr-namespace:TamaNotch.Helpers"
+             xmlns:helpers="clr-namespace:TamaNotch.Helpers"
+             Foreground="{DynamicResource ThemeText}">
+    <UserControl.Resources>
+        <helpers:BoolToVisibilityConverter x:Key="BoolToVis"/>
+        <helpers:BoolToVisibilityConverter x:Key="InverseBoolToVis" Invert="True"/>
+        <helpers:StringNotEmptyToVisibilityConverter x:Key="StringNotEmptyToVis"/>
+
+        <!-- Tombol ikon kecil tanpa latar; hover menampilkan permukaan -->
+        <Style x:Key="NoteIconButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Width" Value="26"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ThemeSurfaceRaised}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ThemeText}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Tab Akun / Catatan -->
+        <Style x:Key="NoteTabButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="9" Padding="12,5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ThemeSurfaceRaised}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NoteField" TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurfaceDeep}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeText}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource ThemeText}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeLine}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="NoteLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextMuted}"/>
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="12,10,12,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header: tab, tambah, tutup -->
+        <Grid Grid.Row="0" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Akun" Command="{Binding SelectNotesTabCommand}" CommandParameter="Akun">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource NoteTabButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsNotesAccountsTab}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource ThemeText}"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHigh}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="Catatan" Command="{Binding SelectNotesTabCommand}" CommandParameter="Catatan" Margin="4,0,0,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource NoteTabButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsNotesTextsTab}" Value="True">
+                                    <Setter Property="Foreground" Value="{DynamicResource ThemeText}"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Background" Value="{DynamicResource ThemeSurfaceHigh}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button Style="{StaticResource NoteIconButton}" ToolTip="Tambah akun" Command="{Binding AddNoteAccountCommand}"
+                        Visibility="{Binding IsNotesAccountsTab, Converter={StaticResource BoolToVis}}" Content="{icons:Icon Plus}"/>
+                <Button Style="{StaticResource NoteIconButton}" ToolTip="Tambah catatan" Command="{Binding AddNoteTextCommand}"
+                        Visibility="{Binding IsNotesTextsTab, Converter={StaticResource BoolToVis}}" Content="{icons:Icon Plus}"/>
+                <Button Style="{StaticResource NoteIconButton}" ToolTip="Tutup" Click="CloseButton_Click" Content="{icons:Icon Close}"/>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Grid.Row="1" Text="{Binding NotesStatus}" FontSize="10.5" Foreground="{DynamicResource ThemeTextMuted}" Margin="2,0,0,6"
+                   Visibility="{Binding NotesStatus, Converter={StaticResource StringNotEmptyToVis}}"/>
+
+        <Grid Grid.Row="2" Margin="0,0,-8,0">
+            <!-- TAB AKUN -->
+            <ScrollViewer MaxHeight="360" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding IsNotesAccountsTab, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock Text="Belum ada akun. Tekan + untuk menambah (mis. login SAP)." FontSize="11.5"
+                               Foreground="{DynamicResource ThemeTextMuted}" TextWrapping="Wrap" Margin="2,4,2,8"
+                               Visibility="{Binding HasNoteAccounts, Converter={StaticResource InverseBoolToVis}}"/>
+                    <ItemsControl ItemsSource="{Binding NoteAccounts}">
+                        <!-- 4 kolom (25%): kiri ke kanan, lalu baris baru -->
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="4" VerticalAlignment="Top"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource ThemeSurface}" BorderBrush="{DynamicResource ThemeLine}" BorderThickness="1"
+                                        CornerRadius="10" Padding="8,7" Margin="0,0,8,8">
+                                    <StackPanel>
+                                        <Grid Margin="0,0,0,6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Style="{StaticResource NoteField}" FontWeight="SemiBold"
+                                                     Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0"/>
+                                            <Button Grid.Column="1" Style="{StaticResource NoteIconButton}" ToolTip="Hapus akun"
+                                                    Command="{Binding DataContext.RemoveNoteAccountCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}" Content="{icons:Icon Delete}"/>
+                                        </Grid>
+
+                                        <TextBlock Text="User" Style="{StaticResource NoteLabel}" Margin="1,0,0,2"/>
+                                        <Grid Margin="0,0,0,6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBox Style="{StaticResource NoteField}" Text="{Binding User, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,0"/>
+                                            <Button Grid.Column="1" Style="{StaticResource NoteIconButton}" ToolTip="Salin user"
+                                                    Command="{Binding DataContext.CopyNoteValueCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding User}" Content="{icons:Icon ContentCopy, Size=13}"/>
+                                        </Grid>
+
+                                        <TextBlock Text="Password" Style="{StaticResource NoteLabel}" Margin="1,0,0,2"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid Margin="0,0,2,0">
+                                                <TextBox Style="{StaticResource NoteField}" Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"
+                                                         Visibility="{Binding IsRevealed, Converter={StaticResource BoolToVis}}"/>
+                                                <Border Background="{DynamicResource ThemeSurfaceDeep}" BorderBrush="{DynamicResource ThemeLine}" BorderThickness="1" Padding="6,4"
+                                                        CornerRadius="2" Visibility="{Binding IsMasked, Converter={StaticResource BoolToVis}}">
+                                                    <TextBlock Text="{Binding PasswordMasked}" FontSize="12" Foreground="{DynamicResource ThemeTextBody}" TextTrimming="CharacterEllipsis"/>
+                                                </Border>
+                                            </Grid>
+                                            <Button Grid.Column="1" Style="{StaticResource NoteIconButton}" ToolTip="Tampilkan / sembunyikan password"
+                                                    Command="{Binding DataContext.ToggleNoteRevealCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}">
+                                                <helpers:IconPath Kind="{Binding RevealIconKind}" Width="14" Height="14"/>
+                                            </Button>
+                                            <Button Grid.Column="2" Style="{StaticResource NoteIconButton}" ToolTip="Salin password"
+                                                    Command="{Binding DataContext.CopyNoteValueCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding Password}" Content="{icons:Icon ContentCopy, Size=13}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- TAB CATATAN -->
+            <ScrollViewer MaxHeight="360" VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding IsNotesTextsTab, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock Text="Belum ada catatan. Tekan + untuk menambah." FontSize="11.5"
+                               Foreground="{DynamicResource ThemeTextMuted}" TextWrapping="Wrap" Margin="2,4,2,8"
+                               Visibility="{Binding HasNoteTexts, Converter={StaticResource InverseBoolToVis}}"/>
+                    <ItemsControl ItemsSource="{Binding NoteTexts}">
+                        <!-- 2 kolom (50%): kiri ke kanan, lalu baris baru -->
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2" VerticalAlignment="Top"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource ThemeSurface}" BorderBrush="{DynamicResource ThemeLine}" BorderThickness="1"
+                                        CornerRadius="10" Padding="10,8" Margin="0,0,8,8">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Row="0" Style="{StaticResource NoteField}" FontWeight="SemiBold"
+                                                 Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,6"/>
+                                        <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource NoteIconButton}" ToolTip="Salin isi catatan"
+                                                Command="{Binding DataContext.CopyNoteValueCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding Text}" Content="{icons:Icon ContentCopy, Size=13}" Margin="0,0,0,6"/>
+                                        <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource NoteIconButton}" ToolTip="Hapus catatan"
+                                                Command="{Binding DataContext.RemoveNoteTextCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}" Content="{icons:Icon Delete}" Margin="0,0,0,6"/>
+                                        <TextBox Grid.Row="1" Grid.ColumnSpan="3" Style="{StaticResource NoteField}" AcceptsReturn="True" TextWrapping="Wrap"
+                                                 MinHeight="64" MaxHeight="140" VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top"
+                                                 Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

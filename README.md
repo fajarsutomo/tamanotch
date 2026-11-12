@@ -30,7 +30,7 @@ TAMANOTCH adalah widget *Dynamic Island* di bagian atas layar Windows. Saat idle
 | **Pengingat kesehatan** | Pengingat gerak dan minum selama jam kerja (interval, target gelas, jam kerja bisa diatur), penghitung gelas harian yang bisa ditambah langsung dengan klik di notch, jeda otomatis saat Anda pergi dari komputer |
 | **Pemakaian Claude** | Memantau kuota paket Claude Pro/Max (sesi 5 jam dan mingguan 7 hari) di jendela sendiri, lencana di island, dan notifikasi tray. Mati secara bawaan; lihat catatan di bawah |
 | **Sapaan** | "Selamat datang kembali, <nama>" di notch saat Anda memakai komputer lagi setelah lama pergi (idle, terkunci, atau sleep); nama dan ambang idle diatur di Pengaturan |
-| **Pengaturan notch** | Geser posisi kiri/kanan, ukuran mata idle, hotkey, pilihan komponen |
+| **Pengaturan & tema** | Pengaturan bersidebar; tema Gelap, Putih, dan Liquid Glass; geser posisi notch kiri/kanan, ukuran mata idle, hotkey, pilihan komponen |
 
 Pintasan bawaan: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd> tampil/sembunyi panel, <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>L</kbd> mode lirik.
 
@@ -45,7 +45,7 @@ Prasyarat: [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) dan 
 ```bash
 git clone https://github.com/fajarsutomo/tamanotch.git
 cd tamanotch
-dotnet run --project src/NotchMusic        # jalankan tanpa build installer
+dotnet run --project src/TamaNotch        # jalankan tanpa build installer
 dotnet test                                 # tes unit
 ```
 
@@ -72,5 +72,6 @@ BMKG (cuaca dan gempa), LRCLIB (lirik), Radio-Browser (stasiun radio), Quran.com
 ## Kredit & Lisensi
 
 - Berlisensi [MIT](LICENSE).
+- Ikon antarmuka berasal dari [Material Design Icons](https://github.com/Templarian/MaterialDesign) / Google Material Icons, lisensi Apache-2.0.
 - Dikembangkan berdasarkan **DRANOTCH v1.8.4** oleh [dningratx](https://github.com/dningratx/dranotch) (MIT). Hak cipta kode asli tetap milik penulis aslinya; modifikasi TAMANOTCH oleh Fajar Sutomo.
 - Riwayat perubahan ada di [CHANGELOG.md](CHANGELOG.md).

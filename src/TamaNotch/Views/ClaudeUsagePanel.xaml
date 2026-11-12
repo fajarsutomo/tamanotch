@@ -1,0 +1,136 @@
+<UserControl x:Class="TamaNotch.Views.ClaudeUsagePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:icons="clr-namespace:TamaNotch.Helpers"
+             xmlns:helpers="clr-namespace:TamaNotch.Helpers"
+             xmlns:views="clr-namespace:TamaNotch.Views"
+             Foreground="{DynamicResource ThemeText}">
+    <UserControl.Resources>
+        <helpers:BoolToVisibilityConverter x:Key="BoolToVis"/>
+        <helpers:BoolToVisibilityConverter x:Key="InverseBoolToVis" Invert="True"/>
+
+
+        <!-- Pengukur kuota (24x24): busur dengan jarum -->
+
+        <Style x:Key="SmallPillButton" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurface}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeLineStrong}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="9" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource ThemeSurfaceHigh}"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource ThemeLineStrong}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ThemeText}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel Margin="16,14,16,14">
+
+        <!-- HEADER -->
+        <Grid Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Width="28" Height="28" CornerRadius="8" Background="{DynamicResource ThemeSurface}" BorderBrush="#38FFFFFF" BorderThickness="1" Margin="0,0,8,0" VerticalAlignment="Center">
+                    <Path Data="{DynamicResource ClaudeUsageIconGeometry}" Fill="{DynamicResource MetallicSilverBrush}" Width="15" Height="15" Stretch="Uniform"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Pemakaian Claude" FontSize="14.5" FontWeight="Bold" Foreground="{DynamicResource ThemeText}"/>
+                    <TextBlock Text="{Binding ClaudeUsagePlanText}" FontSize="10.5" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,1,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <Button Style="{StaticResource SmallPillButton}" Command="{Binding RefreshClaudeUsageCommand}"
+                        Content="{icons:Icon Refresh}" ToolTip="Segarkan sekarang" Margin="0,0,3,0"
+                        Visibility="{Binding EnableClaudeUsage, Converter={StaticResource BoolToVis}}"/>
+                <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click"
+                        Content="{icons:Icon Close}" ToolTip="Sembunyikan jendela"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- BELUM DIAKTIFKAN: penjelasan dan persetujuan -->
+        <Border Background="{DynamicResource ThemeSurfaceDeep}" BorderBrush="{DynamicResource ThemeLine}" BorderThickness="1.2" CornerRadius="14" Padding="14,12"
+                Visibility="{Binding IsClaudeUsageDisabled, Converter={StaticResource BoolToVis}}">
+            <StackPanel>
+                <TextBlock Text="Pantau kuota sesi 5 jam dan mingguan paket Claude Anda tanpa membuka claude.ai."
+                           FontSize="12" Foreground="{DynamicResource ThemeTextBody}" TextWrapping="Wrap"/>
+                <TextBlock FontSize="10.5" Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap" Margin="0,8,0,0"
+                           Text="Cara kerja: TAMANOTCH membaca token login yang sudah disimpan Claude Code di komputer ini (hanya dibaca, tidak diubah) dan memanggil layanan usage milik Anthropic. Endpoint ini tidak terdokumentasi resmi dan penggunaan token di aplikasi pihak ketiga bisa tidak sejalan dengan ketentuan Anthropic. Aktifkan hanya bila Anda menerima risikonya."/>
+                <Button Style="{StaticResource SmallPillButton}" Command="{Binding EnableClaudeUsageCommand}"
+                        Content="Aktifkan pemantauan" Margin="0,12,0,0" Padding="12,7" HorizontalAlignment="Left"
+                        Background="#FFFFFF" BorderBrush="#FFFFFF" Foreground="#000000"/>
+            </StackPanel>
+        </Border>
+
+        <!-- PESAN STATUS -->
+        <Border Background="{DynamicResource ThemeSurface}" BorderBrush="#4A3320" BorderThickness="1.2" CornerRadius="12" Padding="12,9" Margin="0,0,0,10"
+                Visibility="{Binding HasClaudeUsageStatus, Converter={StaticResource BoolToVis}}">
+            <TextBlock Text="{Binding ClaudeUsageStatusText}" FontSize="11" Foreground="#FFC88A" TextWrapping="Wrap"/>
+        </Border>
+
+        <!-- BAR KUOTA -->
+        <ItemsControl ItemsSource="{Binding ClaudeUsageBars}"
+                      Visibility="{Binding HasClaudeUsageData, Converter={StaticResource BoolToVis}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="0,0,0,14">
+                        <Grid>
+                            <TextBlock Text="{Binding Label}" FontSize="12.5" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextBody}"/>
+                            <TextBlock Text="{Binding PercentText}" FontSize="12.5" FontWeight="Bold" Foreground="{Binding Brush}"
+                                       HorizontalAlignment="Right"/>
+                        </Grid>
+                        <views:ClaudeUsageBar Margin="0,6,0,0" Percent="{Binding Percent}" Elapsed="{Binding Elapsed}" Fill="{Binding Brush}"/>
+                        <TextBlock Text="{Binding ResetText}" FontSize="10.5" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- SUMBER PEMAKAIAN MINGGU INI -->
+        <StackPanel Margin="0,0,0,10"
+                    Visibility="{Binding HasClaudeUsageShares, Converter={StaticResource BoolToVis}}">
+            <TextBlock Text="SUMBER PEMAKAIAN MINGGU INI" FontSize="8.5" FontWeight="Bold" Foreground="{DynamicResource ThemeTextMuted}" Margin="0,0,0,4"/>
+            <ItemsControl ItemsSource="{Binding ClaudeUsageShares}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><WrapPanel/></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{DynamicResource ThemeSurface}" BorderBrush="{DynamicResource ThemeLine}" BorderThickness="1" CornerRadius="8" Padding="8,3" Margin="0,0,6,4">
+                            <TextBlock Text="{Binding}" FontSize="11" Foreground="{DynamicResource ThemeTextBody}"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <!-- FOOTER -->
+        <TextBlock Text="{Binding ClaudeUsageUpdatedText}" FontSize="10.5" Foreground="{DynamicResource ThemeTextMuted}"
+                   Visibility="{Binding HasClaudeUsageData, Converter={StaticResource BoolToVis}}"/>
+        <TextBlock Text="Garis putih pada bar = seberapa jauh periode sudah berjalan. Bar yang melewatinya berarti pemakaian lebih cepat dari waktu."
+                   FontSize="9.5" Foreground="{DynamicResource ThemeTextMuted}" TextWrapping="Wrap" Margin="0,4,0,0"
+                   Visibility="{Binding HasClaudeUsageData, Converter={StaticResource BoolToVis}}"/>
+    </StackPanel>
+</UserControl>

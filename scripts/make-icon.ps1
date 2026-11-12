@@ -2,7 +2,7 @@
 # kotak membulat gelap bertepi neon dengan dua mata menyala, turunan dari tampilan notch idle.
 # Pemakaian: powershell -ExecutionPolicy Bypass -File scripts\make-icon.ps1 [-GlowHex 35D6FF] [-EyeHex E6F8FF]
 param(
-    [string]$OutDir = (Join-Path $PSScriptRoot "..\src\NotchMusic\Assets"),
+    [string]$OutDir = (Join-Path $PSScriptRoot "..\src\TamaNotch\Assets"),
     [string]$GlowHex = "35D6FF",
     [string]$EyeHex = "E6F8FF"
 )

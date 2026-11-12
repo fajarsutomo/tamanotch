@@ -1,0 +1,145 @@
+<UserControl x:Class="TamaNotch.Views.MonitorPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:icons="clr-namespace:TamaNotch.Helpers"
+             xmlns:helpers="clr-namespace:TamaNotch.Helpers"
+             xmlns:views="clr-namespace:TamaNotch.Views"
+             Foreground="{DynamicResource ThemeText}">
+    <UserControl.Resources>
+        <helpers:BoolToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style x:Key="MonitorIconButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Width" Value="26"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ThemeSurfaceRaised}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ThemeText}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Kartu metrik: judul + nilai di kiri, grafik di kanan -->
+        <Style x:Key="MetricCard" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource ThemeSurface}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeLine}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+        </Style>
+
+        <Style x:Key="MetricTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
+        </Style>
+
+        <Style x:Key="MetricValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="19"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeText}"/>
+        </Style>
+
+        <Style x:Key="MetricDetail" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextMuted}"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="12,10,12,4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="2,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Monitor Sistem" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding MonitorUptimeFull, StringFormat=Up time  {0}}" FontSize="11" Margin="12,0,0,0"
+                           Foreground="{Binding UptimeBrush}" VerticalAlignment="Center"
+                           ToolTip="{Binding UptimeToolTip}"/>
+            </StackPanel>
+            <Button Grid.Column="1" Style="{StaticResource MonitorIconButton}" ToolTip="Tutup" Click="CloseButton_Click" Content="{icons:Icon Close}"/>
+        </Grid>
+
+        <!-- 5 kartu sejajar (masing-masing 20% lebar island); kartu yang tidak tersedia (Disk/GPU) disembunyikan -->
+        <UniformGrid Grid.Row="1" Rows="1" Margin="0,0,-8,0">
+            <!-- CPU -->
+            <Border Style="{StaticResource MetricCard}">
+                <StackPanel>
+                    <TextBlock Text="CPU" Style="{StaticResource MetricTitle}"/>
+                    <TextBlock Text="{Binding MonitorCpuText}" Style="{StaticResource MetricValue}"/>
+                    <TextBlock Text=" " Style="{StaticResource MetricDetail}"/>
+                    <views:SparklineChart Height="56" Margin="0,6,0,0" Capacity="60" MaxValue="100"
+                                          Values="{Binding MonitorCpuHistory}" Stroke="#4FC3F7" Fill="#334FC3F7" GridBrush="{DynamicResource ThemeLine}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Memori -->
+            <Border Style="{StaticResource MetricCard}">
+                <StackPanel>
+                    <TextBlock Text="Memori" Style="{StaticResource MetricTitle}"/>
+                    <TextBlock Text="{Binding MonitorMemoryText}" Style="{StaticResource MetricValue}"/>
+                    <TextBlock Text="{Binding MonitorMemoryDetail}" Style="{StaticResource MetricDetail}" TextTrimming="CharacterEllipsis"/>
+                    <views:SparklineChart Height="56" Margin="0,6,0,0" Capacity="60" MaxValue="100"
+                                          Values="{Binding MonitorMemoryHistory}" Stroke="#B388FF" Fill="#33B388FF" GridBrush="{DynamicResource ThemeLine}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Disk -->
+            <Border Style="{StaticResource MetricCard}" Visibility="{Binding MonitorHasDisk, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock Text="Disk (aktivitas)" Style="{StaticResource MetricTitle}" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock Text="{Binding MonitorDiskText}" Style="{StaticResource MetricValue}"/>
+                    <TextBlock Text=" " Style="{StaticResource MetricDetail}"/>
+                    <views:SparklineChart Height="56" Margin="0,6,0,0" Capacity="60" MaxValue="100"
+                                          Values="{Binding MonitorDiskHistory}" Stroke="#4CD964" Fill="#334CD964" GridBrush="{DynamicResource ThemeLine}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Jaringan -->
+            <Border Style="{StaticResource MetricCard}">
+                <StackPanel>
+                    <TextBlock Text="Jaringan" Style="{StaticResource MetricTitle}"/>
+                    <TextBlock Text="{Binding MonitorNetText}" FontSize="11" FontWeight="SemiBold" TextWrapping="Wrap" Height="40"
+                               Foreground="{DynamicResource ThemeText}" Margin="0,2,0,0"/>
+                    <Grid Height="56" Margin="0,6,0,0">
+                        <views:SparklineChart Capacity="60" MaxValue="0" AutoMinimum="10240"
+                                              Values="{Binding MonitorNetDownHistory}" Stroke="#FFB74D" Fill="#33FFB74D" GridBrush="{DynamicResource ThemeLine}"/>
+                        <views:SparklineChart Capacity="60" MaxValue="0" AutoMinimum="10240"
+                                              Values="{Binding MonitorNetUpHistory}" Stroke="#7DD3FC"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- GPU -->
+            <Border Style="{StaticResource MetricCard}" Visibility="{Binding MonitorHasGpu, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock Text="GPU (3D)" Style="{StaticResource MetricTitle}"/>
+                    <TextBlock Text="{Binding MonitorGpuText}" Style="{StaticResource MetricValue}"/>
+                    <TextBlock Text=" " Style="{StaticResource MetricDetail}"/>
+                    <views:SparklineChart Height="56" Margin="0,6,0,0" Capacity="60" MaxValue="100"
+                                          Values="{Binding MonitorGpuHistory}" Stroke="#FF7EB6" Fill="#33FF7EB6" GridBrush="{DynamicResource ThemeLine}"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+    </Grid>
+</UserControl>

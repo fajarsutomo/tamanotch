@@ -11,10 +11,10 @@ $ErrorActionPreference = "Stop"
 Write-Host "=== TAMANOTCH Build & Packaging Script ===" -ForegroundColor Cyan
 
 $rootDir = Split-Path -Parent $PSScriptRoot
-$projectPath = Join-Path $rootDir "src\NotchMusic\NotchMusic.csproj"
+$projectPath = Join-Path $rootDir "src\TamaNotch\TamaNotch.csproj"
 $publishDir = Join-Path $rootDir "dist\Publish"
 $installerDir = Join-Path $rootDir "dist\Installer"
-$innoScript = Join-Path $rootDir "Installer\NotchMusic.iss"
+$innoScript = Join-Path $rootDir "Installer\TamaNotch.iss"
 
 # 1. Determine Version (Major / Minor / Patch / Custom)
 [xml]$projXml = Get-Content $projectPath
@@ -60,15 +60,15 @@ if ($Bump) {
     Write-Host "Using current version: $targetVersion" -ForegroundColor Gray
 }
 
-# 2. Update version in NotchMusic.csproj
+# 2. Update version in TamaNotch.csproj
 if ($targetVersion -ne $currentVersionStr) {
-    Write-Host "Updating NotchMusic.csproj to version $targetVersion..." -ForegroundColor Yellow
+    Write-Host "Updating TamaNotch.csproj to version $targetVersion..." -ForegroundColor Yellow
     $projContent = Get-Content $projectPath -Raw
     $projContent = $projContent -replace "<Version>[^<]+</Version>", "<Version>$targetVersion</Version>"
     Set-Content -Path $projectPath -Value $projContent -NoNewline
 }
 
-# 3. Update default version in NotchMusic.iss
+# 3. Update default version in TamaNotch.iss
 $issContent = Get-Content $innoScript -Raw
 if ($issContent -match '#define MyAppVersion "[^"]+"') {
     $issContent = $issContent -replace '#define MyAppVersion "[^"]+"', "#define MyAppVersion `"$targetVersion`""
@@ -76,10 +76,10 @@ if ($issContent -match '#define MyAppVersion "[^"]+"') {
 }
 
 # 4. Clean previous dist
-$running = Get-Process NotchMusic -ErrorAction SilentlyContinue
+$running = Get-Process TamaNotch, NotchMusic -ErrorAction SilentlyContinue
 if ($running) {
-    Write-Host "Stopping running instance of NotchMusic to release file locks..." -ForegroundColor Yellow
-    Stop-Process -Name NotchMusic -Force
+    Write-Host "Stopping running instance of TamaNotch to release file locks..." -ForegroundColor Yellow
+    $running | Stop-Process -Force
     Start-Sleep -Milliseconds 600
 }
 
@@ -93,7 +93,7 @@ if (Test-Path $installerDir) {
 # 5. Run unit tests
 if (-not $SkipTests) {
     Write-Host "Running Unit Tests..." -ForegroundColor Yellow
-    dotnet test "$rootDir\tests\NotchMusic.Tests\NotchMusic.Tests.csproj" -c Release
+    dotnet test "$rootDir\tests\TamaNotch.Tests\TamaNotch.Tests.csproj" -c Release
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Tests failed!"
         exit 1
@@ -115,7 +115,7 @@ Write-Host "Portable build published successfully to: $publishDir" -ForegroundCo
 $signScript = Join-Path $PSScriptRoot "sign.ps1"
 if (Test-Path $signScript) {
     Write-Host "Signing published application binary..." -ForegroundColor Yellow
-    & "$signScript" -FilePath "$publishDir\NotchMusic.exe"
+    & "$signScript" -FilePath "$publishDir\TamaNotch.exe"
 }
 
 # 7. Inno Setup Compiler

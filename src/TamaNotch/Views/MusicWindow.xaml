@@ -1,0 +1,395 @@
+﻿<Window x:Class="TamaNotch.Views.MusicWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:icons="clr-namespace:TamaNotch.Helpers"
+        xmlns:helpers="clr-namespace:TamaNotch.Helpers"
+        Title="TAMANOTCH - Pemutar Musik"
+        Width="456"
+        SizeToContent="Height"
+        FontFamily="Segoe UI Variable Display, Segoe UI"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="ClearType"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="{Binding Settings.AlwaysOnTop}"
+        ShowInTaskbar="False"
+        WindowStartupLocation="Manual">
+
+    <Window.Resources>
+        <helpers:BoolToVisibilityConverter x:Key="BoolToVis"/>
+        <helpers:BoolToVisibilityConverter x:Key="InverseBoolToVis" Invert="True"/>
+
+
+
+
+        <Geometry x:Key="SpotifyIconGeometry">M 12,2 C 6.48,2 2,6.48 2,12 C 2,17.52 6.48,22 12,22 C 17.52,22 22,17.52 22,12 C 22,6.48 17.52,2 12,2 Z M 16.59,16.59 C 16.35,16.97 15.85,17.09 15.47,16.85 C 12.66,15.13 9.36,14.77 5.48,15.66 C 5.05,15.76 4.61,15.48 4.51,15.05 C 4.41,14.61 4.68,14.17 5.12,14.07 C 9.36,13.1 13.02,13.52 16.16,15.44 C 16.54,15.67 16.66,16.17 16.42,16.56 Z M 17.92,13.44 C 17.66,13.88 17.09,14.02 16.66,13.75 C 13.62,11.88 9.01,11.34 5.41,12.44 C 4.91,12.59 4.38,12.31 4.22,11.81 C 4.06,11.31 4.34,10.78 4.84,10.62 C 8.95,9.38 14.05,9.98 17.52,12.11 C 17.95,12.38 18.09,12.94 17.83,13.38 Z M 18.06,10.23 C 14.41,8.06 8.38,7.86 4.88,8.92 C 4.31,9.09 3.72,8.78 3.55,8.22 C 3.38,7.66 3.69,7.06 4.25,6.89 C 8.28,5.66 14.94,5.9 19.14,8.39 C 19.64,8.69 19.81,9.33 19.52,9.83 C 19.22,10.33 18.58,10.5 18.08,10.2 Z</Geometry>
+
+        <Style x:Key="ControlButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="Margin" Value="2,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="14" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2EFFFFFF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#48FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SmallPillButton" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource LuxuryPillBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextBody}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeLineStrong}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="11,5"/>
+            <Setter Property="Margin" Value="2.5,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="PillBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="PillBorder" Property="Background" Value="{DynamicResource ThemeSurfaceHigh}"/>
+                                <Setter TargetName="PillBorder" Property="BorderBrush" Value="#565672"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ThemeText}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="PillBorder" Property="Background" Value="#404058"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="12">
+        <Border x:Name="MusicContainerBorder"
+                Background="{DynamicResource ThemeSurfaceDeep}"
+                BorderBrush="{DynamicResource ThemeLine}"
+                BorderThickness="1.2"
+                CornerRadius="20"
+                MouseDown="Border_MouseDown">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="5" BlurRadius="18" Opacity="0.78"/>
+            </Border.Effect>
+
+            <Grid>
+                <!-- ================= MODE 1: COMPACT MUSIC MINI NOTCH (Saat Minimize - Tetap Menampilkan Lirik) ================= -->
+                <Grid x:Name="MusicCompactView"
+                      Visibility="{Binding IsMusicWindowCompact, Converter={StaticResource BoolToVis}}"
+                      Margin="14,12,14,12" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Baris 0: Header Ringkas (Album Art, Judul & Artis, Karaoke, Play/Pause, Perluas, Menyatu dengan Notch) -->
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Album Art / Icon Badge -->
+                        <Border Grid.Column="0" Width="34" Height="34" CornerRadius="9" ClipToBounds="True" Margin="0,0,8,0"
+                                Background="{DynamicResource ThemeSurface}" BorderBrush="#38FFFFFF" BorderThickness="1">
+                            <Grid>
+                                <Path Data="{DynamicResource LuxuryMusicNoteGeometry}" Fill="{DynamicResource MetallicSilverBrush}"
+                                      Width="15" Height="15" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Visibility="{Binding HasTrackThumbnail, Converter={StaticResource InverseBoolToVis}}"/>
+                                <Image Source="{Binding CurrentTrack.Thumbnail}" Stretch="UniformToFill"
+                                       RenderOptions.BitmapScalingMode="HighQuality"
+                                       Visibility="{Binding HasTrackThumbnail, Converter={StaticResource BoolToVis}}"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Track Info Pill (Klik untuk Perluas) -->
+                        <Border Grid.Column="1" Background="{DynamicResource ThemeSurfaceDeep}" BorderBrush="{DynamicResource ThemeLine}" BorderThickness="1.2"
+                                CornerRadius="12" Height="34" Margin="0,0,8,0" Padding="10,2" Cursor="Hand"
+                                ToolTip="Klik untuk perluas pemutar musik">
+                            <Border.InputBindings>
+                                <MouseBinding MouseAction="LeftClick" Command="{Binding ExpandMusicWindowCommand}"/>
+                            </Border.InputBindings>
+                            <Grid VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding CurrentTrack.Title, FallbackValue='Tidak ada lagu'}"
+                                           Foreground="{DynamicResource ThemeText}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Grid.Column="1" Text="{Binding CurrentTrack.Artist, FallbackValue=''}"
+                                           Foreground="{DynamicResource ThemeTextSecondary}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" Margin="6,0,0,0" TextTrimming="CharacterEllipsis"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Quick Controls (Karaoke Vocal Remover, Play/Pause, Perluas, Menyatu dengan Notch Utama) -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding ToggleVocalRemoverCommand}"
+                                    ToolTip="{Binding VocalRemoverTooltip}" Padding="7,4" Margin="0,0,3,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="&#x1F3A4;" FontSize="10.5" VerticalAlignment="Center"/>
+                                    <Ellipse Width="6" Height="6" Fill="#30D158" Margin="4,0,0,0" VerticalAlignment="Center"
+                                             Visibility="{Binding IsVocalRemoverEnabled, Converter={StaticResource BoolToVis}}"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding TogglePlayPauseCommand}"
+                                    ToolTip="Putar / Jeda" Padding="8,4" Margin="0,0,3,0">
+                                <Grid>
+                                    <icons:IconPath Kind="ChevronRight" Width="12" Height="12" Visibility="{Binding IsPlaying, Converter={StaticResource InverseBoolToVis}}"/>
+                                    <TextBlock Text="&#x23F8;" FontSize="10" Visibility="{Binding IsPlaying, Converter={StaticResource BoolToVis}}"/>
+                                </Grid>
+                            </Button>
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding ExpandMusicWindowCommand}"
+                                     Content="{icons:Icon ChevronDown}" ToolTip="Perluas Pemutar Musik" Padding="7,4" Margin="0,0,3,0"/>
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding CloseMusicWindowCommand}"
+                                    Content="{icons:Icon Dock}" ToolTip="Menyatu kembali dengan notch utama" Padding="7,4" Margin="0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Baris 1: Lirik Tetap Tampil Saat Mode Minimize -->
+                    <Border Grid.Row="1" Background="{DynamicResource ThemeSurfaceDeep}" CornerRadius="10" Padding="10,8" Margin="0,8,0,0"
+                            MinHeight="56" MaxHeight="90" Cursor="Hand"
+                            ToolTip="Klik untuk perluas pemutar musik">
+                        <Border.InputBindings>
+                            <MouseBinding MouseAction="LeftClick" Command="{Binding ExpandMusicWindowCommand}"/>
+                        </Border.InputBindings>
+                        <Grid>
+                            <TextBlock Text="Siap memutar musik..." Foreground="{DynamicResource ThemeTextMuted}" FontSize="12" TextAlignment="Center" VerticalAlignment="Center"
+                                       Visibility="{Binding HasTrack, Converter={StaticResource InverseBoolToVis}}"/>
+
+                            <Grid Visibility="{Binding HasTrack, Converter={StaticResource BoolToVis}}">
+                                <!-- Synced 3-Line Display -->
+                                <StackPanel VerticalAlignment="Center"
+                                            Visibility="{Binding IsLyricsSynced, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock Text="{Binding PreviousLyric}" Foreground="{DynamicResource ThemeTextMuted}" FontSize="11.5" TextAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,0,2"/>
+                                    <TextBlock Text="{Binding ActiveLyric}" Foreground="{DynamicResource ThemeText}" FontSize="13.5" FontWeight="SemiBold" TextAlignment="Center" TextWrapping="Wrap" Margin="0,1"/>
+                                    <TextBlock Text="{Binding NextLyric}" Foreground="{DynamicResource ThemeTextMuted}" FontSize="11.5" TextAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
+                                </StackPanel>
+
+                                <!-- Unsynced / Plain Lyrics Display -->
+                                <ScrollViewer VerticalAlignment="Center" MaxHeight="74" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                              Visibility="{Binding IsLyricsSynced, Converter={StaticResource InverseBoolToVis}}">
+                                    <TextBlock Text="{Binding ActiveLyric}" Foreground="{DynamicResource ThemeTextBody}" FontSize="12.5" TextAlignment="Center" TextWrapping="Wrap" LineHeight="17"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- ================= MODE 2: EXPANDED MUSIC PLAYER & LYRICS ================= -->
+                <Grid x:Name="MusicExpandedView"
+                      Visibility="{Binding IsMusicWindowExpanded, Converter={StaticResource BoolToVis}}"
+                      Margin="18,16,18,16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Baris 0: Header (Album Art, Judul/Artis/Status, Karaoke, YT Music, Minimize, & Tombol Menyatu dengan Notch Utama) -->
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Album Art / Logo TAMANOTCH Squircle -->
+                        <Border Grid.Column="0" Width="50" Height="50" CornerRadius="13" ClipToBounds="True"
+                                Background="{DynamicResource ThemeSurfaceDeep}" BorderBrush="#36FFFFFF" BorderThickness="1.2" Margin="0,0,12,0" VerticalAlignment="Center">
+                            <Grid>
+                                <Path Data="{DynamicResource LuxuryMusicNoteGeometry}" Fill="{DynamicResource MetallicSilverBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image Source="{Binding CurrentTrack.Thumbnail}" Stretch="UniformToFill"
+                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Track Title, Artist, Session -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,8,0">
+                            <TextBlock Text="{Binding CurrentTrack.Title, FallbackValue='Tidak ada lagu'}"
+                                       Foreground="{DynamicResource ThemeText}" FontSize="15.5" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding CurrentTrack.Artist, FallbackValue='-'}"
+                                       Foreground="{DynamicResource ThemeTextBody}" FontSize="12.5" FontWeight="Medium" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
+                            <TextBlock Text="{Binding SessionStatus}"
+                                       Foreground="{DynamicResource ThemeTextSecondary}" FontSize="11" TextTrimming="CharacterEllipsis" Margin="0,1,0,0"/>
+                        </StackPanel>
+
+                        <!-- Top Actions: Update (jika ada), Karaoke (Hapus Vokal), YT Music, Minimize (▴), & Menyatu Kembali dengan Notch Utama (⇲) -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Style="{StaticResource SmallPillButton}"
+                                    Command="{Binding OpenUpdateCommand}"
+                                    Visibility="{Binding HasAvailableUpdate, Converter={StaticResource BoolToVis}}"
+                                    ToolTip="Versi baru tersedia! Klik untuk memperbarui TAMANOTCH"
+                                    Background="{DynamicResource ThemeSurfaceRaised}" Padding="6,3" Margin="0,0,4,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#x2728;" FontSize="10" Margin="0,0,3,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding VersionButtonText}"
+                                               Foreground="{DynamicResource ThemeText}" FontWeight="SemiBold" FontSize="11" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding ToggleVocalRemoverCommand}"
+                                    ToolTip="{Binding VocalRemoverTooltip}" Padding="8,4" Margin="0,0,4,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="&#x1F3A4;" FontSize="10.5" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                    <TextBlock Text="Karaoke" FontSize="11" Foreground="{DynamicResource ThemeTextBody}" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    <Ellipse Width="6" Height="6" Fill="#30D158" Margin="5,0,0,0" VerticalAlignment="Center"
+                                             Visibility="{Binding IsVocalRemoverEnabled, Converter={StaticResource BoolToVis}}"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding OpenYouTubeMusicCommand}"
+                                    ToolTip="Buka Pemutar YouTube Music" Width="26" Height="26" Padding="0" Margin="0,0,4,0">
+                                <Grid Width="14" Height="14" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Ellipse Fill="#FF0033" Width="14" Height="14"/>
+                                    <Path Data="M 0,0 L 5.5,3.5 L 0,7 Z" Fill="{DynamicResource ThemeText}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1,0,0,0"/>
+                                </Grid>
+                            </Button>
+
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding OpenSpotifyCommand}"
+                                    ToolTip="Buka Pemutar Spotify" Width="26" Height="26" Padding="0" Margin="0,0,4,0">
+                                <Path Data="{StaticResource SpotifyIconGeometry}" Fill="#1DB954" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Button>
+
+                            <!-- Tombol Minimize ke Compact -->
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding MinimizeMusicWindowCommand}"
+                                    Content="{icons:Icon ChevronUp}" ToolTip="Minimize Pemutar Musik" Padding="8,4" Margin="0,0,4,0"/>
+
+                            <!-- Tombol Menyatu dengan Notch Utama -->
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding CloseMusicWindowCommand}"
+                                    Content="{icons:Icon Dock}" ToolTip="Menyatu kembali dengan notch utama" Padding="8,4" Margin="0"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Baris 1: Lirik 3 Baris / Tombol YT Music saat belum ada lagu -->
+                    <Border Grid.Row="1" Background="{DynamicResource ThemeSurfaceDeep}" CornerRadius="10" Padding="10,8" Margin="0,4,0,8"
+                            MinHeight="68" MaxHeight="96">
+                        <Grid>
+                            <!-- State 1: Tidak ada lagu yang diputar -> Tombol YT Music -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        Visibility="{Binding HasTrack, Converter={StaticResource InverseBoolToVis}}">
+                                <Button Style="{StaticResource SmallPillButton}" Command="{Binding OpenYouTubeMusicCommand}"
+                                        ToolTip="Buka Pemutar YouTube Music" Background="{DynamicResource ThemeSurface}" BorderBrush="#4A2534" BorderThickness="1.2"
+                                        Width="38" Height="38" Padding="0" Margin="0,0,8,0" Cursor="Hand">
+                                    <Grid Width="20" Height="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Ellipse Fill="#FF0033" Width="20" Height="20"/>
+                                        <Path Data="M 0,0 L 7.5,5 L 0,10 Z" Fill="{DynamicResource ThemeText}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1.5,0,0,0"/>
+                                    </Grid>
+                                </Button>
+
+                                <Button Style="{StaticResource SmallPillButton}" Command="{Binding OpenSpotifyCommand}"
+                                        ToolTip="Buka Pemutar Spotify" Background="{DynamicResource ThemeSurface}" BorderBrush="#254A32" BorderThickness="1.2"
+                                        Width="38" Height="38" Padding="0" Cursor="Hand">
+                                    <Path Data="{StaticResource SpotifyIconGeometry}" Fill="#1DB954" Width="20" Height="20" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+
+                            <!-- State 2: Ada lagu yang diputar -> Tampilkan Lirik -->
+                            <Grid Visibility="{Binding HasTrack, Converter={StaticResource BoolToVis}}">
+                                <!-- Synced 3-Line Display -->
+                                <StackPanel VerticalAlignment="Center"
+                                            Visibility="{Binding IsLyricsSynced, Converter={StaticResource BoolToVis}}">
+                                    <TextBlock Text="{Binding PreviousLyric}" Foreground="{DynamicResource ThemeTextMuted}" FontSize="12" TextAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,0,2"/>
+                                    <TextBlock Text="{Binding ActiveLyric}" Foreground="{DynamicResource ThemeText}" FontSize="14" FontWeight="SemiBold" TextAlignment="Center" TextWrapping="Wrap" Margin="0,2"/>
+                                    <TextBlock Text="{Binding NextLyric}" Foreground="{DynamicResource ThemeTextMuted}" FontSize="12" TextAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
+                                </StackPanel>
+
+                                <!-- Unsynced / Plain Lyrics Display with ScrollViewer -->
+                                <ScrollViewer VerticalAlignment="Center" MaxHeight="80" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                              Visibility="{Binding IsLyricsSynced, Converter={StaticResource InverseBoolToVis}}">
+                                    <TextBlock Text="{Binding ActiveLyric}" Foreground="{DynamicResource ThemeTextBody}" FontSize="13" TextAlignment="Center" TextWrapping="Wrap" LineHeight="18"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!-- Baris 2: Progress Bar & Waktu -->
+                    <Grid Grid.Row="2" Margin="0,2,0,6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Slider Grid.Row="0" Minimum="0" Maximum="{Binding DurationSeconds}" Value="{Binding CurrentPositionSeconds, Mode=TwoWay}"
+                                IsMoveToPointEnabled="True" Cursor="Hand" Margin="0,0,0,2"
+                                PreviewMouseDown="ProgressBar_PreviewMouseDown" PreviewMouseUp="ProgressBar_PreviewMouseUp"/>
+                        <Grid Grid.Row="1">
+                            <TextBlock Text="{Binding FormattedTime}" Foreground="{DynamicResource ThemeTextSecondary}" FontSize="11" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding CurrentLyrics.Source, StringFormat='Sumber: {0}'}" Foreground="{DynamicResource ThemeTextMuted}" FontSize="10" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </Grid>
+
+                    <!-- Baris 3: Satu Baris (Tombol Offset di Kiri, Control Play di Tengah, Import File di Kanan) -->
+                    <Grid Grid.Row="3" Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Kiri: Offset controls -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Offset:" Foreground="{DynamicResource ThemeTextMuted}" FontSize="10.5" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding OffsetSubtractCommand}" Content="-0.5s" FontSize="10.5" Padding="6,3" Margin="1,0" ToolTip="Lirik terlambat (geser mundur)"/>
+                            <TextBlock Text="{Binding ManualOffsetSeconds, StringFormat='{}{0:0.0}s'}" Foreground="{DynamicResource ThemeText}" FontSize="10.5" VerticalAlignment="Center" Margin="3,0"/>
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding OffsetAddCommand}" Content="+0.5s" FontSize="10.5" Padding="6,3" Margin="1,0" ToolTip="Lirik terlalu cepat (geser maju)"/>
+                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding OffsetResetCommand}" Content="Reset" FontSize="10.5" Padding="6,3" Margin="1,0" ToolTip="Reset offset ke 0s"/>
+                        </StackPanel>
+
+                        <!-- Tengah: Media Controls (Previous, Play/Pause, Next) -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Button Style="{StaticResource ControlButtonStyle}" Command="{Binding PreviousCommand}" Width="30" Height="30" Padding="0" ToolTip="Sebelumnya">
+                                <Path Data="M 0 0 H 2.5 V 12 H 0 Z M 11 0 L 3 6 L 11 12 Z" Fill="{DynamicResource ThemeTextBody}" Width="10" Height="10" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button>
+                            <Button Style="{StaticResource ControlButtonStyle}" Command="{Binding TogglePlayPauseCommand}"
+                                    Width="36" Height="36" Margin="6,0" Padding="0" ToolTip="Putar / Jeda">
+                                <Border Width="34" Height="34" CornerRadius="17" Background="#FFFFFF">
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Path Data="M 0 0 L 11 7 L 0 14 Z" Fill="#000000" Margin="2,0,0,0"
+                                              Visibility="{Binding IsPlaying, Converter={StaticResource InverseBoolToVis}, FallbackValue=Visible, TargetNullValue=Visible}"/>
+                                        <Path Data="M 0 0 H 3.5 V 12 H 0 Z M 6 0 H 9.5 V 12 H 6 Z" Fill="#000000"
+                                              Visibility="{Binding IsPlaying, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed, TargetNullValue=Collapsed}"/>
+                                    </Grid>
+                                </Border>
+                            </Button>
+                            <Button Style="{StaticResource ControlButtonStyle}" Command="{Binding NextCommand}" Width="30" Height="30" Padding="0" ToolTip="Berikutnya">
+                                <Path Data="M 0 0 L 8 6 L 0 12 Z M 8.5 0 H 11 V 12 H 8.5 Z" Fill="{DynamicResource ThemeTextBody}" Width="10" Height="10" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Kanan: Import File -->
+                        <Button Grid.Column="2" Style="{StaticResource SmallPillButton}" Command="{Binding ImportLyricsCommand}"
+                                Content="Impor File (.lrc/.txt)" FontSize="10.5" Padding="8,4" Margin="0" VerticalAlignment="Center"
+                                ToolTip="Impor file lirik lokal (.lrc atau .txt)"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,30 @@
+<Window x:Class="TamaNotch.Views.ClaudeUsageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:icons="clr-namespace:TamaNotch.Helpers"
+        xmlns:helpers="clr-namespace:TamaNotch.Helpers"
+        xmlns:views="clr-namespace:TamaNotch.Views"
+        Title="TAMANOTCH - Pemakaian Claude"
+        Width="380" MinWidth="320"
+        SizeToContent="Height"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Foreground="{DynamicResource ThemeText}"
+        Topmost="{Binding Settings.AlwaysOnTop}"
+        ShowInTaskbar="False"
+        WindowStartupLocation="Manual">
+
+
+    <Grid Margin="12">
+        <Border Background="{DynamicResource ThemeSurfaceDeep}"
+                BorderBrush="{DynamicResource ThemeLine}"
+                BorderThickness="1.2"
+                CornerRadius="20"
+                MouseDown="Border_MouseDown">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" Direction="270" ShadowDepth="5" BlurRadius="18" Opacity="0.75"/>
+            </Border.Effect>
+
+            <views:ClaudeUsagePanel x:Name="Panel" CloseRequested="Panel_CloseRequested"/>
+        </Border>
+    </Grid>
+</Window>

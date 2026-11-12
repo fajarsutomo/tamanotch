@@ -153,16 +153,16 @@
 
             <!-- Quick Controls -->
             <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding ToggleRadioPlayPauseCommand}"
-                        ToolTip="Putar / Hentikan Radio" Padding="8,4">
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding ToggleRadioPlayPauseCommand}"
+                        ToolTip="Putar / Hentikan Radio">
                     <Grid>
                         <icons:IconPath Kind="ChevronRight" Width="12" Height="12" Visibility="{Binding IsRadioPlaying, Converter={StaticResource InverseBoolToVis}}"/>
                         <TextBlock Text="⏸" FontSize="10" Visibility="{Binding IsRadioPlaying, Converter={StaticResource BoolToVis}}"/>
                     </Grid>
                 </Button>
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding NextRadioStationCommand}" Content="⏭" ToolTip="Stasiun Berikutnya" Padding="7,4"/>
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding ExpandRadioWindowCommand}" Content="{icons:Icon ChevronDown}" ToolTip="Perluas Radio Online"/>
-                <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click" Content="{icons:Icon Close}" ToolTip="Sembunyikan Jendela Radio"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding NextRadioStationCommand}" Content="⏭" ToolTip="Stasiun Berikutnya"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding ExpandRadioWindowCommand}" Content="{icons:Icon ChevronDown}" ToolTip="Perluas Radio Online"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Click="CloseButton_Click" Content="{icons:Icon Close}" ToolTip="Sembunyikan Jendela Radio"/>
             </StackPanel>
         </Grid>
 
@@ -233,12 +233,12 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
-                    <Button Style="{StaticResource SmallPillButton}" Command="{Binding ToggleAddCustomRadioCommand}"
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{DynamicResource WindowControlButton}" Height="28" MinWidth="28" Command="{Binding ToggleAddCustomRadioCommand}"
                             Content="+ URL" ToolTip="Tambah URL Stream Radio Custom" Margin="0,0,3,0"/>
-                    <Button Style="{StaticResource SmallPillButton}" Command="{Binding MinimizeRadioWindowCommand}"
+                    <Button Style="{DynamicResource WindowControlButton}" Height="28" MinWidth="28" Command="{Binding MinimizeRadioWindowCommand}"
                             Content="{icons:Icon ChevronUp}" ToolTip="Perkecil ke Mini Player" Margin="0,0,3,0"/>
-                    <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click"
+                    <Button Style="{DynamicResource WindowControlButton}" Height="28" MinWidth="28" Click="CloseButton_Click"
                             Content="{icons:Icon Close}" ToolTip="Sembunyikan Jendela Radio (Siaran tetap berjalan di latar belakang)"/>
                 </StackPanel>
             </Grid>
@@ -348,7 +348,7 @@
                 <Grid Grid.Column="0" Margin="0,0,6,0">
                     <TextBox x:Name="SearchRadioBox"
                              Text="{Binding RadioSearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource RadioTextBoxStyle}">
+                             Style="{StaticResource RadioTextBoxStyle}" Padding="8,5,28,5">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Return" Command="{Binding SearchOnlineRadioCommand}"/>
                         </TextBox.InputBindings>
@@ -367,6 +367,9 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
+                    <Button Style="{DynamicResource SearchClearButton}" Tag="{Binding Text, ElementName=SearchRadioBox}"
+                            icons:ClearTextButton.Target="{Binding ElementName=SearchRadioBox}"
+                            Content="{icons:Icon Close}"/>
                 </Grid>
 
                 <Button Grid.Column="1" Style="{StaticResource SmallPillButton}"

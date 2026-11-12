@@ -1,7 +1,7 @@
 ; Inno Setup Script for TAMANOTCH
 #define MyAppName "TAMANOTCH"
 #ifndef MyAppVersion
-#define MyAppVersion "1.7.0"
+#define MyAppVersion "1.7.1"
 #endif
 #define MyAppPublisher "TAMANOTCH"
 #define MyAppURL "https://github.com/fajarsutomo/tamanotch"

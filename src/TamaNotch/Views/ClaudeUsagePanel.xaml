@@ -61,11 +61,11 @@
                 </StackPanel>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding RefreshClaudeUsageCommand}"
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button Style="{DynamicResource WindowControlButton}" Height="28" MinWidth="28" Command="{Binding RefreshClaudeUsageCommand}"
                         Content="{icons:Icon Refresh}" ToolTip="Segarkan sekarang" Margin="0,0,3,0"
                         Visibility="{Binding EnableClaudeUsage, Converter={StaticResource BoolToVis}}"/>
-                <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click"
+                <Button Style="{DynamicResource WindowControlButton}" Height="28" MinWidth="28" Click="CloseButton_Click"
                         Content="{icons:Icon Close}" ToolTip="Sembunyikan jendela"/>
             </StackPanel>
         </Grid>

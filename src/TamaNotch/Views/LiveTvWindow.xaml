@@ -271,17 +271,17 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding PreviousLiveTvChannelCommand}" Content="⏮" ToolTip="Saluran Sebelumnya" Padding="6,3"/>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding ToggleLiveTvPlayPauseCommand}" ToolTip="Putar / Jeda" Padding="7,3">
+                            <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Command="{Binding PreviousLiveTvChannelCommand}" Content="⏮" ToolTip="Saluran Sebelumnya"/>
+                            <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Command="{Binding ToggleLiveTvPlayPauseCommand}" ToolTip="Putar / Jeda">
                                 <Grid>
                                     <icons:IconPath Kind="ChevronRight" Width="12" Height="12" Visibility="{Binding IsLiveTvPlaying, Converter={StaticResource InverseBoolToVis}}"/>
                                     <TextBlock Text="⏸" FontSize="9.5" Visibility="{Binding IsLiveTvPlaying, Converter={StaticResource BoolToVis}}"/>
                                 </Grid>
                             </Button>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding NextLiveTvChannelCommand}" Content="⏭" ToolTip="Saluran Berikutnya" Padding="6,3"/>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding CycleLiveTvSourceCommand}" Content="{icons:Icon Refresh}" ToolTip="Ganti Sumber Stream Cadangan" Padding="6,3"/>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding ExpandLiveTvWindowCommand}" Content="{icons:Icon ChevronDown}" ToolTip="Perluas Jendela Live TV" Padding="7,3"/>
-                            <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click" Content="{icons:Icon Close}" ToolTip="Tutup Live TV" Padding="7,3"/>
+                            <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Command="{Binding NextLiveTvChannelCommand}" Content="⏭" ToolTip="Saluran Berikutnya"/>
+                            <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Command="{Binding CycleLiveTvSourceCommand}" Content="{icons:Icon Refresh}" ToolTip="Ganti Sumber Stream Cadangan"/>
+                            <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Command="{Binding ExpandLiveTvWindowCommand}" Content="{icons:Icon ChevronDown}" ToolTip="Perluas Jendela Live TV"/>
+                            <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Click="CloseButton_Click" Content="{icons:Icon Close}" ToolTip="Tutup Live TV"/>
                         </StackPanel>
                     </Grid>
 
@@ -339,16 +339,16 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Button x:Name="PinTopmostButton" Style="{StaticResource SmallPillButton}" Click="PinTopmostButton_Click"
-                                    Content="{icons:Icon Pin}" ToolTip="Selalu di Atas (Always on Top)" Padding="7,4"/>
-                            <Button x:Name="CinemaModeButton" Style="{StaticResource SmallPillButton}" Click="CinemaModeButton_Click"
-                                    Content="{icons:Icon Fullscreen}" ToolTip="Mode Bioskop (Sembunyikan/Tampilkan Daftar Saluran)" Padding="7,4"/>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding ToggleAddCustomLiveTvCommand}"
-                                    Content="+ URL" ToolTip="Tambah URL Stream TV Custom (.m3u8 / YouTube Live)" Padding="7,4"/>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding MinimizeLiveTvWindowCommand}"
-                                    Content="📺 PiP" ToolTip="Perkecil ke Mode Mini Picture-in-Picture (PiP)" Padding="7,4"/>
-                            <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click"
-                                    Content="{icons:Icon Close}" ToolTip="Tutup Jendela Live TV" Padding="7,4"/>
+                            <Button x:Name="PinTopmostButton" Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Click="PinTopmostButton_Click"
+                                    Content="{icons:Icon Pin}" ToolTip="Selalu di Atas (Always on Top)"/>
+                            <Button x:Name="CinemaModeButton" Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Click="CinemaModeButton_Click"
+                                    Content="{icons:Icon Fullscreen}" ToolTip="Mode Bioskop (Sembunyikan/Tampilkan Daftar Saluran)"/>
+                            <Button Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Command="{Binding ToggleAddCustomLiveTvCommand}"
+                                    Content="+ URL" ToolTip="Tambah URL Stream TV Custom (.m3u8 / YouTube Live)"/>
+                            <Button Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Command="{Binding MinimizeLiveTvWindowCommand}"
+                                    Content="📺 PiP" ToolTip="Perkecil ke Mode Mini Picture-in-Picture (PiP)"/>
+                            <Button Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Click="CloseButton_Click"
+                                    Content="{icons:Icon Close}" ToolTip="Tutup Jendela Live TV"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -526,7 +526,7 @@
                 <Grid Grid.Column="0" Margin="0,0,6,0">
                     <TextBox x:Name="SearchTvBox"
                              Text="{Binding LiveTvSearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource TvTextBoxStyle}">
+                             Style="{StaticResource TvTextBoxStyle}" Padding="8,5,28,5">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Return" Command="{Binding SearchOnlineLiveTvCommand}"/>
                         </TextBox.InputBindings>
@@ -545,6 +545,9 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
+                    <Button Style="{DynamicResource SearchClearButton}" Tag="{Binding Text, ElementName=SearchTvBox}"
+                            icons:ClearTextButton.Target="{Binding ElementName=SearchTvBox}"
+                            Content="{icons:Icon Close}"/>
                 </Grid>
 
                 <Button Grid.Column="1" Style="{StaticResource SmallPillButton}"

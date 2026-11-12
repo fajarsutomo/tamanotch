@@ -11,6 +11,15 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [1.7.1] - 2026-11-12
+
+### Diperbaiki
+- **Jendela Live TV dan Browser kini ikut tema Liquid Glass**: kedua jendela memakai `WindowChrome` yang menimpa bingkai DWM sehingga akrilik tidak pernah tampak. Di tema Glass bingkainya kini dijadikan "lembar kaca" dan dikembalikan saat tema diganti. Area video/web tetap buram karena WebView2 tidak bisa tembus pandang.
+- **Tombol kontrol jendela di kanan header seragam**: minimize, perkecil/perluas, tutup, segarkan, dan tombol sejenis di Live TV, Radio, Al-Qur'an, Waktu Sholat, Pemakaian Claude, BMKG, Browser, Jellyfin, Spotify, dan YouTube Music kini setinggi 28 px dengan sudut membulat (sebelumnya tinggi berbeda-beda karena padding tiap tombol dan berbentuk gepeng). Tombol bertulisan seperti "+ URL" melebar otomatis. Tingginya kini sama dengan ikon di header masing-masing dan rata tengah (sebelumnya rata atas).
+- **Browser di tema Glass tidak lagi menampilkan tombol minimize/maximize/close bawaan Windows** yang samar di belakang tombol sendiri (muncul sejak lapisan kaca dipasang).
+- **Tombol × di kolom pencarian Radio, Live TV, dan Al-Qur'an** untuk mengosongkan pencarian; hanya tampil saat kolom berisi.
+- **Slider "Warna kaca" kini berlaku untuk semua kaca**, bukan hanya island: jendela berlapis (Radio, Al-Qur'an, BMKG, Waktu Sholat, ...) dan jendela akrilik (Pengaturan, Browser, Live TV, ...) ikut lebih bening atau lebih pekat, langsung saat slider digeser. Pada nilai bawaan (15%) tampilannya sama seperti sebelumnya. Slider dipindah keluar dari grup "Blur latar island" agar tetap bisa diatur saat blur island mati. Kekuatan blur, penyesuaian otomatis, dan pembaruan latar tetap khusus island karena jendela lain memakai blur bawaan Windows yang tidak bisa diatur.
+
 ## [1.7.0] - 2026-11-12
 
 ### Ditambahkan

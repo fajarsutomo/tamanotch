@@ -83,12 +83,12 @@
 
             <!-- Actions (Expand, Pasang ke Notch, Close) -->
             <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding ExpandPrayerWindowCommand}" Content="{icons:Icon ChevronDown}" Foreground="{DynamicResource ThemeText}" ToolTip="Perluas Jadwal"/>
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding AttachPrayerCommand}" ToolTip="Pasang kembali ke notch utama" Margin="2,0,0,0"
+                <Button Style="{DynamicResource WindowControlButton}" Height="32" MinWidth="32" Command="{Binding ExpandPrayerWindowCommand}" Content="{icons:Icon ChevronDown}" Foreground="{DynamicResource ThemeText}" ToolTip="Perluas Jadwal"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="32" MinWidth="32" Command="{Binding AttachPrayerCommand}" ToolTip="Pasang kembali ke notch utama" Margin="2,0,0,0"
                         Visibility="{Binding IsPrayerDetached, Converter={StaticResource BoolToVis}}">
                     <icons:IconPath Kind="Dock" Width="12" Height="12" Fill="{DynamicResource ThemeText}"/>
                 </Button>
-                <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click" Content="{icons:Icon Close}" Foreground="{DynamicResource ThemeText}" ToolTip="Tutup Waktu Sholat" Margin="2,0,0,0"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="32" MinWidth="32" Click="CloseButton_Click" Content="{icons:Icon Close}" Foreground="{DynamicResource ThemeText}" ToolTip="Tutup Waktu Sholat" Margin="2,0,0,0"/>
             </StackPanel>
         </Grid>
 
@@ -124,18 +124,18 @@
                     <TextBlock Text="{Binding CurrentPrayerSchedule.HijriDate}" FontSize="11" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,3,0,0"/>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <!-- Tombol Pasang Kembali ke Notch Utama -->
-                    <Button Style="{StaticResource SmallPillButton}" Command="{Binding AttachPrayerCommand}"
+                    <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Command="{Binding AttachPrayerCommand}"
                             Visibility="{Binding IsPrayerDetached, Converter={StaticResource BoolToVis}}"
                             Content="{icons:Icon Dock}" ToolTip="Pasang kembali Waktu Sholat ke notch utama" Margin="0,0,4,0"/>
 
                     <!-- Tombol Tutup ke Compact (Minimize) -->
-                    <Button Style="{StaticResource SmallPillButton}" Command="{Binding MinimizePrayerWindowCommand}"
+                    <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Command="{Binding MinimizePrayerWindowCommand}"
                             Content="{icons:Icon ChevronUp}" ToolTip="Tutup ke Compact" Margin="0,0,4,0"/>
 
                     <!-- Tombol Tutup / Sembunyikan -->
-                    <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click"
+                    <Button Style="{DynamicResource WindowControlButton}" Height="26" MinWidth="26" Click="CloseButton_Click"
                             Content="{icons:Icon Close}" ToolTip="Tutup jendela Waktu Sholat"/>
                 </StackPanel>
             </Grid>

@@ -116,17 +116,17 @@
             </Border>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding ToggleQuranPlayPauseCommand}"
-                        ToolTip="Putar / Jeda" Padding="8,4">
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding ToggleQuranPlayPauseCommand}"
+                        ToolTip="Putar / Jeda">
                     <Grid>
                         <icons:IconPath Kind="ChevronRight" Width="12" Height="12" Visibility="{Binding IsQuranPlaying, Converter={StaticResource InverseBoolToVis}}"/>
                         <TextBlock Text="⏸" FontSize="10" Visibility="{Binding IsQuranPlaying, Converter={StaticResource BoolToVis}}"/>
                     </Grid>
                 </Button>
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding NextQuranCommand}" Content="⏭" ToolTip="Surah Berikutnya" Padding="7,4"/>
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding RandomQuranCommand}" Content="{icons:Icon Shuffle}" ToolTip="Surah Acak" Padding="7,4"/>
-                <Button Style="{StaticResource SmallPillButton}" Command="{Binding ExpandQuranWindowCommand}" Content="{icons:Icon ChevronDown}" ToolTip="Perluas"/>
-                <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click" Content="{icons:Icon Close}" ToolTip="Sembunyikan Jendela Al-Qur'an"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding NextQuranCommand}" Content="⏭" ToolTip="Surah Berikutnya"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding RandomQuranCommand}" Content="{icons:Icon Shuffle}" ToolTip="Surah Acak"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding ExpandQuranWindowCommand}" Content="{icons:Icon ChevronDown}" ToolTip="Perluas"/>
+                <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Click="CloseButton_Click" Content="{icons:Icon Close}" ToolTip="Sembunyikan Jendela Al-Qur'an"/>
             </StackPanel>
         </Grid>
 
@@ -176,10 +176,10 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
-                    <Button Style="{StaticResource SmallPillButton}" Command="{Binding MinimizeQuranWindowCommand}"
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{DynamicResource WindowControlButton}" Height="28" MinWidth="28" Command="{Binding MinimizeQuranWindowCommand}"
                             Content="{icons:Icon ChevronUp}" ToolTip="Perkecil ke Mini Player" Margin="0,0,3,0"/>
-                    <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click"
+                    <Button Style="{DynamicResource WindowControlButton}" Height="28" MinWidth="28" Click="CloseButton_Click"
                             Content="{icons:Icon Close}" ToolTip="Sembunyikan Jendela Al-Qur'an (bacaan tetap berjalan di latar belakang)"/>
                 </StackPanel>
             </Grid>
@@ -276,7 +276,7 @@
             <Grid Grid.Row="2" Margin="0,0,0,8">
                 <TextBox x:Name="SearchQuranBox"
                          Text="{Binding QuranSearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource QuranTextBoxStyle}"/>
+                         Style="{StaticResource QuranTextBoxStyle}" Padding="8,5,28,5"/>
                 <TextBlock Text="Cari surah (nama, arti, nomor, atau Arab)..."
                            Foreground="{DynamicResource ThemeTextMuted}" FontSize="11" IsHitTestVisible="False"
                            Margin="9,0,0,0" VerticalAlignment="Center">
@@ -291,6 +291,9 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
+                <Button Style="{DynamicResource SearchClearButton}" Tag="{Binding Text, ElementName=SearchQuranBox}"
+                        icons:ClearTextButton.Target="{Binding ElementName=SearchQuranBox}"
+                        Content="{icons:Icon Close}"/>
             </Grid>
 
             <!-- DAFTAR SURAH -->

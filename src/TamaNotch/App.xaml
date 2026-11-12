@@ -11,6 +11,8 @@
             <ResourceDictionary Source="Themes/Colors.Dark.xaml"/>
             <!-- Ikon Material bersama (geometri komponen island dan jendela) -->
             <ResourceDictionary Source="Themes/Icons.xaml"/>
+            <!-- Tombol kontrol jendela seragam -->
+            <ResourceDictionary Source="Themes/Controls.xaml"/>
         </ResourceDictionary.MergedDictionaries>
 
         <!-- Transparent Page Scroll Buttons (Click above/below thumb to page-scroll) -->

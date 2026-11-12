@@ -434,7 +434,7 @@
                 <Border Style="{StaticResource CategoryCard}" Tag="Tema">
                     <StackPanel IsEnabled="{Binding IsGlassTheme}">
                         <TextBlock Text="Liquid Glass Lanjutan" FontWeight="SemiBold" Foreground="{DynamicResource ThemeText}" Margin="0,0,0,4"/>
-                        <TextBlock Text="Aktif bila tema Liquid Glass dipilih. Perubahan langsung terlihat di island."
+                        <TextBlock Text="Aktif bila tema Liquid Glass dipilih. Perubahan langsung terlihat. Kekuatan blur, penyesuaian otomatis, dan pembaruan latar hanya untuk island; jendela lain memakai blur bawaan Windows yang kekuatannya tetap."
                                    TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,10"/>
 
                         <CheckBox Content="Blur latar island" IsChecked="{Binding GlassIslandBlur}" Margin="0,0,0,2"/>
@@ -453,19 +453,6 @@
                             <Slider Minimum="1" Maximum="10" Value="{Binding GlassBlurStrength}"
                                     TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="2" Margin="0,2,0,10"/>
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Warna kaca island (kepekatan):" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="1" Text="{Binding GlassTintPercentText}" FontWeight="Bold" Foreground="{DynamicResource ThemeText}"/>
-                            </Grid>
-                            <Slider Minimum="0" Maximum="80" Value="{Binding GlassTintPercent}"
-                                    TickFrequency="5" IsSnapToTickEnabled="True" SmallChange="5" LargeChange="10" Margin="0,2,0,4"/>
-                            <TextBlock Text="Makin kecil makin bening. Tombol dan pil di dalam island tidak terpengaruh."
-                                       TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource ThemeTextMuted}" Margin="0,0,0,8"/>
-
                             <CheckBox Content="Sesuaikan otomatis dengan terang latar" IsChecked="{Binding GlassAdaptiveTint}" Margin="0,0,0,2"/>
                             <TextBlock Text="Kaca menebal di atas latar terang (mis. halaman web putih) agar teks putih tetap terbaca."
                                        TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource ThemeTextMuted}" Margin="22,0,0,10"/>
@@ -483,6 +470,19 @@
                             <TextBlock Text="Lebih cepat = latar video/gulir lebih mengikuti, tetapi sedikit lebih banyak CPU."
                                        TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource ThemeTextMuted}" Margin="0,0,0,10"/>
                         </StackPanel>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Warna kaca (island dan semua jendela):" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding GlassTintPercentText}" FontWeight="Bold" Foreground="{DynamicResource ThemeText}"/>
+                        </Grid>
+                        <Slider Minimum="0" Maximum="80" Value="{Binding GlassTintPercent}"
+                                TickFrequency="5" IsSnapToTickEnabled="True" SmallChange="5" LargeChange="10" Margin="0,2,0,4"/>
+                        <TextBlock Text="Makin kecil makin bening. Berlaku untuk island dan semua jendela (Radio, Al-Qur'an, Pengaturan, Browser, ...); tombol dan pil di dalamnya tidak terpengaruh."
+                                   TextWrapping="Wrap" FontSize="11" Foreground="{DynamicResource ThemeTextMuted}" Margin="0,0,0,8"/>
 
                         <CheckBox Content="Blur jendela lain (Radio, Al-Qur'an, BMKG, Pengaturan, ...)" IsChecked="{Binding GlassWindowBlur}" Margin="0,0,0,2"/>
                         <TextBlock Text="Memakai blur bawaan Windows; jendela tetap terlihat saat berbagi layar."

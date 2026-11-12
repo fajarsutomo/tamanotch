@@ -175,6 +175,8 @@ public static class GlassBackdrop
                 }
             }
 
+            if (Shape is Border glass) glass.Background = GlassStyle.Fill; // ikut slider "Warna kaca"
+
             SetCorner(hwnd, CornerRound);
             SetBorderColor(hwnd, DwmColorNone); // garis bingkai DWM diganti tepi kaca sendiri
             SetAccent(hwnd, AccentState.EnableBlurBehind);
@@ -211,18 +213,42 @@ public static class GlassBackdrop
     /// </summary>
     public static class GlassStyle
     {
-        public static readonly System.Windows.Media.Brush Fill = Freeze(new LinearGradientBrush
+        /// <summary>
+        /// Pengali kepekatan dari slider "Warna kaca": 1 pada bawaan (15%), 0,5 pada 0% (paling bening), ~3 pada 80%.
+        /// </summary>
+        public static double TintScale(int tintPercent)
+            => (Math.Clamp(tintPercent, GlassOptions.MinTint, GlassOptions.MaxTint) + 15) / 30.0;
+
+        internal static byte ScaleAlpha(byte alpha, double scale) => (byte)Math.Clamp(Math.Round(alpha * scale), 0, 0xF0);
+
+        private static int _fillTint = -1;
+        private static System.Windows.Media.Brush? _fill;
+
+        /// <summary>Isi kaca jendela berlapis; mengikuti slider "Warna kaca" di Pengaturan Glass.</summary>
+        public static System.Windows.Media.Brush Fill
         {
-            StartPoint = new System.Windows.Point(0, 0),
-            EndPoint = new System.Windows.Point(0, 1),
-            GradientStops =
+            get
             {
-                new GradientStop(System.Windows.Media.Color.FromArgb(0x70, 0x5A, 0x5A, 0x60), 0.0),
-                new GradientStop(System.Windows.Media.Color.FromArgb(0x52, 0x2E, 0x2E, 0x33), 0.10),
-                new GradientStop(System.Windows.Media.Color.FromArgb(0x4A, 0x1C, 0x1C, 0x20), 0.55),
-                new GradientStop(System.Windows.Media.Color.FromArgb(0x57, 0x16, 0x16, 0x19), 1.0)
+                if (_fill == null || _fillTint != GlassOptions.TintPercent)
+                {
+                    var k = TintScale(GlassOptions.TintPercent);
+                    _fillTint = GlassOptions.TintPercent;
+                    _fill = Freeze(new LinearGradientBrush
+                    {
+                        StartPoint = new System.Windows.Point(0, 0),
+                        EndPoint = new System.Windows.Point(0, 1),
+                        GradientStops =
+                        {
+                            new GradientStop(System.Windows.Media.Color.FromArgb(ScaleAlpha(0x70, k), 0x5A, 0x5A, 0x60), 0.0),
+                            new GradientStop(System.Windows.Media.Color.FromArgb(ScaleAlpha(0x52, k), 0x2E, 0x2E, 0x33), 0.10),
+                            new GradientStop(System.Windows.Media.Color.FromArgb(ScaleAlpha(0x4A, k), 0x1C, 0x1C, 0x20), 0.55),
+                            new GradientStop(System.Windows.Media.Color.FromArgb(ScaleAlpha(0x57, k), 0x16, 0x16, 0x19), 1.0)
+                        }
+                    });
+                }
+                return _fill;
             }
-        });
+        }
 
         public static readonly System.Windows.Media.Brush Rim = Freeze(new LinearGradientBrush
         {
@@ -322,21 +348,49 @@ public static class GlassBackdrop
         private static readonly List<Window> Windows = new();
         private static readonly Dictionary<Window, System.Windows.Media.Color> OriginalColors = new();
         private static readonly Dictionary<Window, object> OriginalBackgrounds = new();
+        private static readonly Dictionary<Window, Thickness> OriginalFrames = new();
 
         /// <summary>
         /// Lapisan di atas akrilik: akrilik Windows mengikuti mode terang sistem, sedangkan teks tema Glass putih.
         /// Gradasi: sedikit lebih terang di tepi atas (pantulan cahaya) lalu grafit netral yang cukup bening.
         /// </summary>
-        private static readonly System.Windows.Media.Brush GlassTint = CreateTint();
+        private static int _tintPercent = -1;
+        private static System.Windows.Media.Brush? _tint;
 
-        private static System.Windows.Media.Brush CreateTint()
+        private static System.Windows.Media.Brush GlassTint
+        {
+            get
+            {
+                if (_tint == null || _tintPercent != GlassOptions.TintPercent)
+                {
+                    _tintPercent = GlassOptions.TintPercent;
+                    _tint = CreateTint(GlassStyle.TintScale(_tintPercent));
+                }
+                return _tint;
+            }
+        }
+
+        private static System.Windows.Media.Brush CreateTint(double k)
         {
             var brush = new LinearGradientBrush { StartPoint = new System.Windows.Point(0, 0), EndPoint = new System.Windows.Point(0, 1) };
-            brush.GradientStops.Add(new GradientStop(System.Windows.Media.Color.FromArgb(0x8A, 0x3A, 0x3A, 0x40), 0.0));
-            brush.GradientStops.Add(new GradientStop(System.Windows.Media.Color.FromArgb(0x7A, 0x1E, 0x1E, 0x22), 0.12));
-            brush.GradientStops.Add(new GradientStop(System.Windows.Media.Color.FromArgb(0x76, 0x16, 0x16, 0x19), 1.0));
+            brush.GradientStops.Add(new GradientStop(System.Windows.Media.Color.FromArgb(GlassStyle.ScaleAlpha(0x8A, k), 0x3A, 0x3A, 0x40), 0.0));
+            brush.GradientStops.Add(new GradientStop(System.Windows.Media.Color.FromArgb(GlassStyle.ScaleAlpha(0x7A, k), 0x1E, 0x1E, 0x22), 0.12));
+            brush.GradientStops.Add(new GradientStop(System.Windows.Media.Color.FromArgb(GlassStyle.ScaleAlpha(0x76, k), 0x16, 0x16, 0x19), 1.0));
             brush.Freeze();
             return brush;
+        }
+
+        private const int GwlStyle = -16;
+        private const int WsSysMenu = 0x00080000;
+
+        private static void SetSysMenu(IntPtr hwnd, bool on)
+        {
+            var style = NativeMethods.GetWindowLong(hwnd, GwlStyle);
+            var updated = on ? style | WsSysMenu : style & ~WsSysMenu;
+            if (updated == style) return;
+            NativeMethods.SetWindowLong(hwnd, GwlStyle, updated);
+            // SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED
+            NativeMethods.SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0, 0x0001 | 0x0002 | 0x0004 | 0x0010 | 0x0020);
         }
 
         private static bool Supported => Environment.OSVersion.Version.Build >= 22621;
@@ -345,7 +399,7 @@ public static class GlassBackdrop
         {
             if (!Supported || Windows.Contains(window)) return;
             Windows.Add(window);
-            window.Closed += (_, _) => { Windows.Remove(window); OriginalColors.Remove(window); OriginalBackgrounds.Remove(window); };
+            window.Closed += (_, _) => { Windows.Remove(window); OriginalColors.Remove(window); OriginalBackgrounds.Remove(window); OriginalFrames.Remove(window); };
             Apply(window);
         }
 
@@ -367,6 +421,16 @@ public static class GlassBackdrop
                     if (!OriginalBackgrounds.ContainsKey(window)) OriginalBackgrounds[window] = window.ReadLocalValue(System.Windows.Controls.Control.BackgroundProperty);
                     window.Background = GlassTint;
                     target.BackgroundColor = Colors.Transparent;
+                    // WindowChrome (Live TV, Browser, dll) mengatur bingkai DWM sendiri dan menimpa DwmExtendFrame di bawah;
+                    // tanpa "lembar kaca" (-1) akrilik tidak pernah tampak.
+                    if (System.Windows.Shell.WindowChrome.GetWindowChrome(window) is { } chrome && !chrome.IsFrozen)
+                    {
+                        if (!OriginalFrames.ContainsKey(window)) OriginalFrames[window] = chrome.GlassFrameThickness;
+                        chrome.GlassFrameThickness = new Thickness(-1);
+                        // Lembar kaca membuat DWM menggambar tombol caption bawaan (min/max/close) di belakang tombol kita;
+                        // tanpa WS_SYSMENU tombol bawaan itu tidak digambar.
+                        SetSysMenu(hwnd, false);
+                    }
                     var margins = new NativeMethods.Margins { Left = -1, Right = -1, Top = -1, Bottom = -1 };
                     NativeMethods.DwmExtendFrameIntoClientArea(hwnd, ref margins);
                     int dark = 1, backdrop = BackdropAcrylic;
@@ -383,6 +447,11 @@ public static class GlassBackdrop
                     NativeMethods.DwmExtendFrameIntoClientArea(hwnd, ref margins);
                     target.BackgroundColor = original;
                     OriginalColors.Remove(window);
+                    if (OriginalFrames.Remove(window, out var frame) && System.Windows.Shell.WindowChrome.GetWindowChrome(window) is { IsFrozen: false } chrome2)
+                    {
+                        chrome2.GlassFrameThickness = frame;
+                        SetSysMenu(hwnd, true);
+                    }
                     if (OriginalBackgrounds.Remove(window, out var background))
                     {
                         if (background == DependencyProperty.UnsetValue) window.ClearValue(System.Windows.Controls.Control.BackgroundProperty);
@@ -428,6 +497,15 @@ public static class GlassBackdrop
 
         [DllImport("user32.dll")]
         public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
+        [DllImport("user32.dll", EntryPoint = "GetWindowLongW")]
+        public static extern int GetWindowLong(IntPtr hwnd, int index);
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowLongW")]
+        public static extern int SetWindowLong(IntPtr hwnd, int index, int value);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetWindowPos(IntPtr hwnd, IntPtr after, int x, int y, int cx, int cy, uint flags);
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref Margins margins);

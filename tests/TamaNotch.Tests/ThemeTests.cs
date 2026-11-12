@@ -167,6 +167,21 @@ public class ThemeTests
         }
     }
 
+    [Fact]
+    public void WindowControlButton_IsDefinedOnce_AndUsedByHeaderCloseButtons()
+    {
+        var controls = File.ReadAllText(Path.Combine(SrcDir(), "Themes", "Controls.xaml"));
+        Assert.Contains("x:Key=\"WindowControlButton\"", controls);
+        Assert.Contains("Value=\"28\"", controls);
+
+        foreach (var name in new[] { "LiveTvWindow", "BmkgWindow", "RadioPanel", "QuranPanel", "PrayerPanel", "ClaudeUsagePanel" })
+        {
+            var text = File.ReadAllText(Path.Combine(SrcDir(), "Views", name + ".xaml"));
+            Assert.Contains("WindowControlButton", text);
+            Assert.DoesNotMatch(@"SmallPillButton\}""[^>]*Click=""CloseButton_Click""", text);
+        }
+    }
+
     private static IEnumerable<string> XamlFiles()
 
         => Directory.EnumerateFiles(SrcDir(), "*.xaml", SearchOption.AllDirectories)

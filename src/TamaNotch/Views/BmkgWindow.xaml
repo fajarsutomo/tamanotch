@@ -252,9 +252,9 @@
 
                     <!-- Quick Controls -->
                     <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button Style="{StaticResource SmallPillButton}" Command="{Binding RefreshBmkgCommand}" Content="{icons:Icon Refresh}" ToolTip="Muat Ulang Data BMKG" Padding="7,4"/>
-                        <Button Style="{StaticResource SmallPillButton}" Command="{Binding ExpandBmkgWindowCommand}" Content="{icons:Icon ChevronDown}" ToolTip="Perluas Jendela BMKG"/>
-                        <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click" Content="{icons:Icon Close}" ToolTip="Tutup Jendela BMKG"/>
+                        <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding RefreshBmkgCommand}" Content="{icons:Icon Refresh}" ToolTip="Muat Ulang Data BMKG"/>
+                        <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Command="{Binding ExpandBmkgWindowCommand}" Content="{icons:Icon ChevronDown}" ToolTip="Perluas Jendela BMKG"/>
+                        <Button Style="{DynamicResource WindowControlButton}" Height="34" MinWidth="34" Click="CloseButton_Click" Content="{icons:Icon Close}" ToolTip="Tutup Jendela BMKG"/>
                     </StackPanel>
                 </Grid>
 
@@ -304,27 +304,27 @@
                             <TextBlock Text="{Binding BmkgStatusMessage}" FontSize="10.5" Foreground="#A6ACCD" Margin="0,3,0,0" TextTrimming="CharacterEllipsis"/>
                         </StackPanel>
 
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding RefreshBmkgCommand}"
-                                    ToolTip="Perbarui Data Cuaca &amp; Gempa BMKG Sekarang" Margin="0,0,3,0" Padding="7,4">
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Command="{Binding RefreshBmkgCommand}"
+                                    ToolTip="Perbarui Data Cuaca &amp; Gempa BMKG Sekarang" Margin="0,0,3,0">
                                 <icons:IconPath Kind="Refresh" Width="12" Height="12" Fill="#7DD3FC"/>
                             </Button>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding TestBmkgAlertCommand}"
-                                    ToolTip="Simulasi Banner Peringatan Gempa di Notch" Margin="0,0,3,0" Padding="7,4">
+                            <Button Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Command="{Binding TestBmkgAlertCommand}"
+                                    ToolTip="Simulasi Banner Peringatan Gempa di Notch" Margin="0,0,3,0">
                                 <Path Data="M 12,3 A 6,6 0 0 1 18,9 V 14 L 20,16 V 17 H 4 V 16 L 6,14 V 9 A 6,6 0 0 1 12,3 Z M 10,19 A 2,2 0 0 0 14,19"
                                       Stroke="#FFD43B" StrokeThickness="1.8" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
                                       Width="12" Height="12" Stretch="Uniform"/>
                             </Button>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding OpenSettingsCommand}"
-                                    ToolTip="Buka Pengaturan TAMANOTCH" Margin="0,0,3,0" Padding="7,4">
+                            <Button Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Command="{Binding OpenSettingsCommand}"
+                                    ToolTip="Buka Pengaturan TAMANOTCH" Margin="0,0,3,0">
                                 <icons:IconPath Kind="Settings" Width="12" Height="12" Fill="{DynamicResource ThemeText}"/>
                             </Button>
-                            <Button Style="{StaticResource SmallPillButton}" Command="{Binding MinimizeBmkgWindowCommand}"
-                                    ToolTip="Kecilkan ke Mode Compact" Margin="0,0,3,0" Padding="7,4">
+                            <Button Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Command="{Binding MinimizeBmkgWindowCommand}"
+                                    ToolTip="Kecilkan ke Mode Compact" Margin="0,0,3,0">
                                 <icons:IconPath Kind="ChevronUp" Width="12" Height="12" Fill="{DynamicResource ThemeText}"/>
                             </Button>
-                            <Button Style="{StaticResource SmallPillButton}" Click="CloseButton_Click"
-                                    ToolTip="Tutup Jendela Cuaca &amp; Gempa BMKG" Padding="7,4">
+                            <Button Style="{DynamicResource WindowControlButton}" Height="30" MinWidth="30" Click="CloseButton_Click"
+                                    ToolTip="Tutup Jendela Cuaca &amp; Gempa BMKG">
                                 <icons:IconPath Kind="Close" Width="12" Height="12" Fill="#FF8787"/>
                             </Button>
                         </StackPanel>

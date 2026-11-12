@@ -89,4 +89,25 @@ public class GlassAndMediaTests
         Assert.Equal(0, IslandGlass.AverageLuminance(black, w, h, stride), 3);
         Assert.Equal(1, IslandGlass.AverageLuminance(white, w, h, stride), 3);
     }
+
+    [Fact]
+    public void WindowGlass_FollowsTheTintSlider()
+    {
+        Assert.Equal(1.0, GlassBackdrop.GlassStyle.TintScale(GlassOptions.DefaultTint), 3);   // bawaan: tampilan lama
+        Assert.Equal(0.5, GlassBackdrop.GlassStyle.TintScale(0), 3);                          // paling bening
+        Assert.True(GlassBackdrop.GlassStyle.TintScale(80) > 3);                              // paling pekat
+
+        GlassOptions.Load(new TamaNotch.Models.AppSettings { GlassTintPercent = 0 });
+        try
+        {
+            var clear = ((System.Windows.Media.LinearGradientBrush)GlassBackdrop.GlassStyle.Fill).GradientStops[2].Color.A;
+            GlassOptions.Load(new TamaNotch.Models.AppSettings { GlassTintPercent = 60 });
+            var dense = ((System.Windows.Media.LinearGradientBrush)GlassBackdrop.GlassStyle.Fill).GradientStops[2].Color.A;
+            Assert.True(dense > clear);
+        }
+        finally
+        {
+            GlassOptions.Load(new TamaNotch.Models.AppSettings());
+        }
+    }
 }

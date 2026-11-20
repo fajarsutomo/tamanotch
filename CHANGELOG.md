@@ -11,6 +11,11 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [1.8.0] - 2026-11-20
+
+### Ditambahkan
+- **Pemutaran dilanjutkan setelah adzan (Auto-Resume)**: musik, radio, Live TV, dan Al-Qur'an yang dijeda Auto-Pause saat waktu sholat tiba kini diputar lagi begitu audio adzan berakhir (selesai, dihentikan, atau batas durasi kustom tercapai). Al-Qur'an dijeda alih-alih dihentikan sehingga lanjut dari posisi yang sama; radio dan Live TV menyambung lagi ke stasiun/saluran yang sama. Bila adzan tidak bersuara (suara pengingat mati, chime, atau file tidak ditemukan), pemutaran dilanjutkan setelah 20 detik. Tidak ada yang dilanjutkan bila pengguna sudah memutar sesuatu sendiri selama adzan. Bisa dimatikan di Pengaturan > Waktu Sholat ("Lanjutkan pemutaran setelah adzan selesai"), aktif secara bawaan.
+
 ## [1.7.1] - 2026-11-12
 
 ### Diperbaiki

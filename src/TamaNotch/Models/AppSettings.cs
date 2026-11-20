@@ -113,6 +113,8 @@ public class AppSettings
     public int RemindAfterMinutes { get; set; } = 15;
     public bool PrayerSoundAlert { get; set; } = true;
     public bool PrayerAutoPauseMusic { get; set; } = true;
+    /// <summary>Setelah adzan selesai, putar lagi musik/radio/Live TV/Al-Qur'an yang dijeda Auto-Pause.</summary>
+    public bool PrayerAutoResumeAfterAdhan { get; set; } = true;
 
     // Puasa: pengingat sahur dan berbuka, pengingat minum diam selama berpuasa.
     public bool EnableFasting { get; set; } = false;

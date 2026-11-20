@@ -123,6 +123,20 @@ public partial class SettingsViewModel
         }
     }
 
+    public bool PrayerAutoResumeAfterAdhan
+    {
+        get => Settings.PrayerAutoResumeAfterAdhan;
+        set
+        {
+            if (Settings.PrayerAutoResumeAfterAdhan != value)
+            {
+                Settings.PrayerAutoResumeAfterAdhan = value;
+                _settingsService.Save();
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public bool ShowPrayerInCompactNotch
     {
         get => Settings.ShowPrayerInCompactNotch;

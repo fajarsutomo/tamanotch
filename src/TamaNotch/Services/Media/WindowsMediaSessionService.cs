@@ -27,6 +27,8 @@ public interface IMediaSessionService : IDisposable
     void SelectSession(string sessionId);
     Task TogglePlayPauseAsync();
     Task PauseAsync();
+    /// <summary>Putar (bukan toggle) sesi aktif. Bawaan: toggle, untuk implementasi yang tidak punya perintah putar.</summary>
+    Task PlayAsync() => TogglePlayPauseAsync();
     Task PreviousAsync();
     Task NextAsync();
     Task SeekAsync(TimeSpan position);
@@ -448,6 +450,18 @@ public class WindowsMediaSessionService : IMediaSessionService
             try
             {
                 await _currentSession.TryPauseAsync();
+            }
+            catch { }
+        }
+    }
+
+    public async Task PlayAsync()
+    {
+        if (_currentSession != null)
+        {
+            try
+            {
+                await _currentSession.TryPlayAsync();
             }
             catch { }
         }

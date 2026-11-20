@@ -456,6 +456,7 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
             OnPropertyChanged(nameof(IsAdhanPaused));
             OnPropertyChanged(nameof(AdhanPlayButtonIcon));
             OnPropertyChanged(nameof(AdhanPlayPauseButtonIcon));
+            OnAdhanAudioStateChanged();
         };
 
         ToggleComponentsMenuCommand = new RelayCommand(() => IsComponentsMenuOpen = !IsComponentsMenuOpen);

@@ -337,21 +337,103 @@ public ICommand TogglePrayerPanelCommand { get; }
 
         if (evt.AutoPauseRequested)
         {
+            var interrupted = new AdhanInterruption();
             if (IsPlaying)
             {
+                interrupted.Music = true;
                 _ = _mediaService.PauseAsync();
             }
             if (IsRadioPlaying || IsRadioBuffering)
             {
+                interrupted.Radio = _radioService.CurrentStation;
                 _radioService.Stop();
             }
             if (IsLiveTvPlaying || IsLiveTvBuffering)
             {
+                interrupted.LiveTv = _liveTvService.CurrentChannel;
                 _liveTvService.Stop();
             }
-            StopQuranForOtherPlayback();
+            if (IsQuranPlaying)
+            {
+                // Dijeda (bukan dihentikan) agar lanjut dari ayat yang sama setelah adzan.
+                interrupted.QuranPaused = _quranService.CurrentSurah;
+                _quranService.TogglePlayPause();
+            }
+            else if (IsQuranLoading)
+            {
+                interrupted.QuranReload = _quranService.CurrentSurah;
+                _quranService.Stop();
+            }
+
+            if (Settings.PrayerAutoResumeAfterAdhan && interrupted.HasAny)
+            {
+                _adhanInterruption = interrupted;
+                // Tanpa audio adzan (suara mati, chime, atau file tidak ada) tidak ada akhir yang bisa ditunggu.
+                if (!PrayerAudioHelper.IsPlaying) StartAdhanResumeFallback(AdhanResumeWithoutAudioDelay);
+            }
         }
 
+    }
+
+    // --- Lanjutkan pemutaran setelah adzan selesai ---
+
+    private sealed class AdhanInterruption
+    {
+        public bool Music { get; set; }
+        public Models.RadioStation? Radio { get; set; }
+        public Models.LiveTvChannel? LiveTv { get; set; }
+        public Models.QuranSurah? QuranPaused { get; set; }
+        public Models.QuranSurah? QuranReload { get; set; }
+        public bool HasAny => Music || Radio != null || LiveTv != null || QuranPaused != null || QuranReload != null;
+    }
+
+    private static readonly TimeSpan AdhanResumeWithoutAudioDelay = TimeSpan.FromSeconds(20);
+
+    private AdhanInterruption? _adhanInterruption;
+
+    private DispatcherTimer? _adhanResumeTimer;
+
+    private void StartAdhanResumeFallback(TimeSpan after)
+    {
+        _adhanResumeTimer?.Stop();
+        _adhanResumeTimer = new DispatcherTimer { Interval = after };
+        _adhanResumeTimer.Tick += (s, e) => ResumePlaybackAfterAdhan();
+        _adhanResumeTimer.Start();
+    }
+
+    /// <summary>Dipanggil saat status audio adzan berubah; audio berhenti (selesai, dihentikan, gagal) = lanjutkan.</summary>
+    private void OnAdhanAudioStateChanged()
+    {
+        if (_adhanInterruption != null && !PrayerAudioHelper.IsPlaying) ResumePlaybackAfterAdhan();
+    }
+
+    /// <summary>
+    /// Putar lagi apa yang dijeda adzan. Bila pengguna sudah memutar sesuatu sendiri selama adzan, pilihannya dihormati
+    /// dan tidak ada yang dilanjutkan.
+    /// </summary>
+    public void ResumePlaybackAfterAdhan()
+    {
+        _adhanResumeTimer?.Stop();
+        _adhanResumeTimer = null;
+
+        var resume = _adhanInterruption;
+        _adhanInterruption = null;
+        if (resume == null || IsAudioActive || IsRadioBuffering || IsLiveTvBuffering) return;
+
+        if (resume.Music) _ = _mediaService.PlayAsync();
+        if (resume.Radio != null) _radioService.PlayStation(resume.Radio);
+        if (resume.LiveTv != null) _liveTvService.PlayChannel(resume.LiveTv);
+
+        if (resume.QuranPaused != null
+            && _quranService.PlaybackState == QuranPlaybackState.Paused
+            && ReferenceEquals(_quranService.CurrentSurah, resume.QuranPaused))
+        {
+            _quranService.TogglePlayPause();
+        }
+        else if (resume.QuranPaused != null || resume.QuranReload != null)
+        {
+            _quranService.PlaySurah((resume.QuranPaused ?? resume.QuranReload)!);
+        }
     }
 
     private static readonly TimeSpan PrayerShownDuration = TimeSpan.FromSeconds(20);

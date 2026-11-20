@@ -1068,6 +1068,11 @@
                                               IsChecked="{Binding PrayerAutoPauseMusic}" Margin="0,4"/>
                                     <TextBlock Text="Otomatis menghentikan lagu saat adzan tiba sehingga Anda dapat langsung mendengarkan adzan dan sholat." 
                                                FontSize="10.5" Foreground="{DynamicResource ThemeTextMuted}" Margin="22,0,0,6" TextWrapping="Wrap"/>
+
+                                    <CheckBox Content="Lanjutkan pemutaran setelah adzan selesai (Auto-Resume)"
+                                              IsChecked="{Binding PrayerAutoResumeAfterAdhan}" IsEnabled="{Binding PrayerAutoPauseMusic}" Margin="0,4"/>
+                                    <TextBlock Text="Musik, radio, Live TV, atau Al-Qur'an yang dijeda adzan diputar lagi begitu adzan berakhir. Tidak berlaku bila Anda sudah memutar sesuatu sendiri selama adzan."
+                                               FontSize="10.5" Foreground="{DynamicResource ThemeTextMuted}" Margin="22,0,0,6" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </Border>
 

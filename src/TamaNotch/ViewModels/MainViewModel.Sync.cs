@@ -134,6 +134,98 @@ public partial class MainViewModel
         _cloudSyncPollingTimer.Start();
     }
 
+    // --- Pembaruan otomatis di latar belakang ---
+
+    private static readonly TimeSpan UpdateCheckInterval = TimeSpan.FromHours(6);
+
+    private static readonly TimeSpan AutoInstallPollInterval = TimeSpan.FromMinutes(1);
+
+    private DispatcherTimer? _updateCheckTimer;
+
+    private DispatcherTimer? _autoInstallTimer;
+
+    private string? _pendingInstallerPath;
+
+    /// <summary>Cek pertama 3 detik setelah start, lalu tiap 6 jam (aplikasi bisa berjalan berhari-hari).</summary>
+    private void StartAutoUpdateChecks()
+    {
+        if (System.Windows.Application.Current?.Dispatcher == null) return;
+
+        _updateCheckTimer?.Stop();
+        _updateCheckTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+        _updateCheckTimer.Tick += async (s, e) =>
+        {
+            _updateCheckTimer.Interval = UpdateCheckInterval;
+            await CheckForUpdatesInBackgroundAsync();
+        };
+        _updateCheckTimer.Start();
+    }
+
+    private async Task CheckForUpdatesInBackgroundAsync()
+    {
+        if (!Settings.AutoCheckUpdates || _isCheckingOrInstallingUpdate || _pendingInstallerPath != null) return;
+
+        try
+        {
+            var update = await _updateService.CheckForUpdatesAsync();
+            if (update == null || !update.IsNewerVersion) return;
+
+            AvailableUpdateInfo = update;
+            AvailableUpdateVersion = $"v{update.Version.TrimStart('v', 'V')}";
+            HasAvailableUpdate = true;
+
+            if (!Settings.AutoInstallUpdates || string.IsNullOrWhiteSpace(update.DownloadUrl)) return;
+
+            _isCheckingOrInstallingUpdate = true;
+            try
+            {
+                _pendingInstallerPath = await _updateService.DownloadUpdateAsync(update.DownloadUrl);
+            }
+            finally
+            {
+                _isCheckingOrInstallingUpdate = false;
+            }
+
+            _autoInstallTimer?.Stop();
+            _autoInstallTimer = new DispatcherTimer { Interval = AutoInstallPollInterval };
+            _autoInstallTimer.Tick += (s, e) => TryAutoInstallPendingUpdate();
+            _autoInstallTimer.Start();
+        }
+        catch
+        {
+            // Jaringan/unduhan gagal: dicoba lagi pada cek berikutnya.
+            _pendingInstallerPath = null;
+        }
+    }
+
+    private void TryAutoInstallPendingUpdate()
+    {
+        var installerPath = _pendingInstallerPath;
+        if (installerPath == null || !Settings.AutoInstallUpdates || _isCheckingOrInstallingUpdate)
+        {
+            if (!Settings.AutoInstallUpdates) _autoInstallTimer?.Stop();
+            return;
+        }
+
+        bool playbackActive = IsAudioActive || IsRadioBuffering || IsLiveTvBuffering || IsQuranLoading;
+        bool adhanActive = PrayerAudioHelper.IsPlaying || _adhanInterruption != null;
+        if (!UpdateInstallPolicy.IsGoodMomentToInstall(playbackActive, adhanActive, !IsCompactMode, UserIdleHelper.GetIdleTime()))
+            return;
+
+        _autoInstallTimer?.Stop();
+        _isCheckingOrInstallingUpdate = true;
+        try
+        {
+            _updateService.LaunchInstallerAndExit(installerPath);
+        }
+        catch
+        {
+            // File installer hilang (mis. folder Temp dibersihkan): unduh ulang pada cek berikutnya.
+            _pendingInstallerPath = null;
+            _isCheckingOrInstallingUpdate = false;
+        }
+    }
+
     public async Task CheckAndInstallUpdateAsync()
     {
         if (_isCheckingOrInstallingUpdate) return;

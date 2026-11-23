@@ -51,6 +51,8 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilen
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+; Pembaruan dari dalam aplikasi berjalan /VERYSILENT: buka lagi TAMANOTCH setelah selesai (lihat UpdateService)
+Filename: "{app}\{#MyAppExeName}"; Flags: nowait; Check: IsRelaunchRequested
 
 [UninstallRun]
 ; Kill process if running before uninstallation
@@ -66,6 +68,19 @@ Type: filesandordirs; Name: "{app}"
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueName: "TAMANOTCH"; Flags: dontcreatekey uninsdeletevalue
 
 [Code]
+function IsRelaunchRequested: Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 1 to ParamCount do
+    if CompareText(ParamStr(I), '/RELAUNCH') = 0 then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;
+
 procedure SHChangeNotify(wEventId: Integer; uFlags: Cardinal; dwItem1, dwItem2: Integer);
   external 'SHChangeNotify@shell32.dll stdcall';
 

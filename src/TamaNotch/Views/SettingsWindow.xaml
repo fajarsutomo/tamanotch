@@ -331,7 +331,11 @@
                                     Background="{DynamicResource ThemeSurfaceRaised}" Foreground="{DynamicResource ThemeText}" BorderThickness="0" Padding="12,6" Cursor="Hand" VerticalAlignment="Center"/>
                         </Grid>
 
-                        <CheckBox Content="Periksa pembaruan otomatis saat aplikasi dijalankan" IsChecked="{Binding AutoCheckUpdates}"/>
+                        <CheckBox Content="Periksa pembaruan otomatis (saat aplikasi dijalankan dan tiap 6 jam)" IsChecked="{Binding AutoCheckUpdates}"/>
+                        <CheckBox Content="Pasang pembaruan otomatis di latar belakang (Silent Update)" IsChecked="{Binding AutoInstallUpdates}"
+                                  IsEnabled="{Binding AutoCheckUpdates}" Margin="0,4,0,0"/>
+                        <TextBlock Text="Pembaruan diunduh diam-diam lalu dipasang tanpa jendela installer saat tidak ada yang diputar, adzan tidak berjalan, dan PC tidak disentuh selama 5 menit. TAMANOTCH terbuka lagi sendiri setelahnya."
+                                   FontSize="10.5" Foreground="{DynamicResource ThemeTextMuted}" Margin="22,0,0,4" TextWrapping="Wrap"/>
 
                         <!-- Status Text -->
                         <TextBlock Text="{Binding UpdateStatus}" Foreground="{DynamicResource ThemeTextBody}" FontSize="11.5" Margin="0,4,0,0" TextWrapping="Wrap"

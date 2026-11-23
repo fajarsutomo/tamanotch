@@ -24,6 +24,20 @@ public partial class SettingsViewModel
         }
     }
 
+    public bool AutoInstallUpdates
+    {
+        get => Settings.AutoInstallUpdates;
+        set
+        {
+            if (Settings.AutoInstallUpdates != value)
+            {
+                Settings.AutoInstallUpdates = value;
+                _settingsService.Save();
+                OnPropertyChanged();
+            }
+        }
+    }
+
     public string CustomUpdateUrl
     {
         get => Settings.CustomUpdateUrl;

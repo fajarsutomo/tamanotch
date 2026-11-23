@@ -829,26 +829,6 @@ ExpandPrayerWindowCommand = new RelayCommand(() => IsPrayerWindowCompact = false
             });
         }
 
-        if (Settings.AutoCheckUpdates)
-        {
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await Task.Delay(3000);
-                    var update = await _updateService.CheckForUpdatesAsync();
-                    if (update != null && update.IsNewerVersion)
-                    {
-                        System.Windows.Application.Current?.Dispatcher?.Invoke(() =>
-                        {
-                            AvailableUpdateInfo = update;
-                            AvailableUpdateVersion = $"v{update.Version}";
-                            HasAvailableUpdate = true;
-                        });
-                    }
-                }
-                catch { }
-            });
-        }
+        StartAutoUpdateChecks();
     }
 }

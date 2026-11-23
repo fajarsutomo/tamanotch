@@ -11,6 +11,12 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [1.9.0] - 2026-11-23
+
+### Ditambahkan
+- **Silent update**: pembaruan kini dipasang tanpa wizard Inno Setup. Installer dijalankan dengan `/VERYSILENT /SUPPRESSMSGBOXES /CLOSEAPPLICATIONS`, menutup TAMANOTCH sendiri, lalu membukanya lagi setelah selesai (penanda `/RELAUNCH` dibaca skrip installer; pemasangan manual dari file setup tetap memakai wizard seperti biasa). Berlaku untuk tombol "Update Sekarang" di Pengaturan maupun tombol pembaruan di island. Log pemasangan ditulis ke `%TEMP%\TAMANOTCH_Update\install.log`.
+- **Pasang pembaruan otomatis di latar belakang** (Pengaturan > Pembaruan, aktif secara bawaan): versi baru diunduh diam-diam lalu dipasang saat tidak ada musik/radio/Live TV/Al-Qur'an yang diputar, adzan tidak berjalan, island tertutup, dan PC tidak disentuh selama 5 menit. Pemeriksaan pembaruan kini juga diulang tiap 6 jam, bukan hanya saat aplikasi dijalankan.
+
 ## [1.8.0] - 2026-11-20
 
 ### Ditambahkan

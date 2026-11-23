@@ -257,6 +257,17 @@ public class UpdateService : IUpdateService, IDisposable
         return destinationPath;
     }
 
+    /// <summary>
+    /// Argumen Inno Setup untuk pembaruan tanpa wizard: tanpa dialog, aplikasi yang berjalan ditutup otomatis, dan
+    /// <c>/RELAUNCH</c> (dibaca skrip installer) membuka TAMANOTCH lagi setelah selesai.
+    /// </summary>
+    public static string BuildSilentInstallerArguments(string? logPath = null)
+    {
+        var args = "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /RELAUNCH";
+        if (!string.IsNullOrWhiteSpace(logPath)) args += $" /LOG=\"{logPath}\"";
+        return args;
+    }
+
     public void LaunchInstallerAndExit(string installerPath)
     {
         if (!File.Exists(installerPath))
@@ -265,6 +276,7 @@ public class UpdateService : IUpdateService, IDisposable
         var psi = new ProcessStartInfo
         {
             FileName = installerPath,
+            Arguments = BuildSilentInstallerArguments(Path.Combine(Path.GetTempPath(), "TAMANOTCH_Update", "install.log")),
             UseShellExecute = true
         };
 

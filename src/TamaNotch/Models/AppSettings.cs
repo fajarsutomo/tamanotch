@@ -79,6 +79,8 @@ public class AppSettings
 
     // Auto-Update Settings
     public bool AutoCheckUpdates { get; set; } = true;
+    /// <summary>Unduh pembaruan di latar belakang dan pasang tanpa wizard saat TAMANOTCH sedang tidak dipakai.</summary>
+    public bool AutoInstallUpdates { get; set; } = true;
     public string CustomUpdateUrl { get; set; } = string.Empty;
     public DateTime? LastUpdateCheck { get; set; }
     public string IgnoredUpdateVersion { get; set; } = string.Empty;

@@ -73,5 +73,5 @@ BMKG (cuaca dan gempa), LRCLIB (lirik), Radio-Browser (stasiun radio), Quran.com
 
 - Berlisensi [MIT](LICENSE).
 - Ikon antarmuka berasal dari [Material Design Icons](https://github.com/Templarian/MaterialDesign) / Google Material Icons, lisensi Apache-2.0.
-- Dikembangkan berdasarkan **DRANOTCH v1.8.4** oleh [dningratx](https://github.com/dningratx/dranotch) (MIT). Hak cipta kode asli tetap milik penulis aslinya; modifikasi TAMANOTCH oleh Fajar Sutomo.
+- Dikembangkan berdasarkan **DRANOTCH v1.8.5** oleh [dningratx](https://github.com/dningratx/dranotch) (MIT). Hak cipta kode asli tetap milik penulis aslinya; modifikasi TAMANOTCH oleh Fajar Sutomo.
 - Riwayat perubahan ada di [CHANGELOG.md](CHANGELOG.md).

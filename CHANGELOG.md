@@ -11,6 +11,11 @@ TAMANOTCH memakai versi `x.y` dengan aturan yang sama sebelum dan sesudah rilis:
 
 Angka pertama: `0` selama belum ada rilis (`0.x.y`, versi pengembangan, dimulai dari `0.1.0`); aturan x/y di atas berlaku juga selama pengembangan. Rilis pertama dengan installer (Inno Setup) memakai `1.0.0`, lalu berlanjut sebagai `1.x.y`. Versi dasar DRANOTCH hanya dicatat sebagai atribusi (lihat README dan LICENSE).
 
+## [Belum dirilis]
+
+### Diubah
+- Atribusi asal fork kini DRANOTCH v1.8.5 (README, LICENSE). Tag DRANOTCH lama di repo diberi awalan `upstream-` (mis. `upstream-v1.6.0`) agar tidak tertukar dengan tag TAMANOTCH; tag `vX.Y.Z` tanpa awalan selalu milik TAMANOTCH. Versi cadangan di halaman unduhan (`docs/index.html`) diganti dari v1.8.4 ke v1.9.0.
+
 ## [1.9.0] - 2026-11-23
 
 ### Ditambahkan

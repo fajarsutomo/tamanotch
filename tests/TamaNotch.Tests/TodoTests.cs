@@ -1050,6 +1050,18 @@ public class TodoTests
         Assert.Equal("Tugas Direvisi", vm.TaskText);
     }
 
+    /// <summary>Auto-sync berjalan di thread pool; tunggu sampai terjadi alih-alih jeda tetap yang rapuh saat tes paralel.</summary>
+    private static bool WaitUntil(Func<bool> condition, int timeoutMs = 5000)
+    {
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        while (!condition())
+        {
+            if (sw.ElapsedMilliseconds > timeoutMs) return false;
+            Thread.Sleep(25);
+        }
+        return true;
+    }
+
     [Fact]
     public void MainViewModel_AutoSync_TriggeredOnAddEditAndDelete()
     {
@@ -1079,8 +1091,7 @@ public class TodoTests
                 vm.NewTodoTitle = "Tugas Baru";
                 vm.AddTodoCommand.Execute(null);
 
-                Thread.Sleep(850);
-                Assert.True(syncService.UploadCallCount > initialCalls, "Upload should be called on Add");
+                Assert.True(WaitUntil(() => syncService.UploadCallCount > initialCalls), "Upload should be called on Add");
                 int afterAdd = syncService.UploadCallCount;
 
                 // 2. EDIT / UPDATE
@@ -1089,16 +1100,14 @@ public class TodoTests
                 addedItem.EditText = "Tugas Diedit";
                 addedItem.SaveEdit();
 
-                Thread.Sleep(850);
-                Assert.True(syncService.UploadCallCount > afterAdd, "Upload should be called on Edit");
+                Assert.True(WaitUntil(() => syncService.UploadCallCount > afterAdd), "Upload should be called on Edit");
                 int afterEdit = syncService.UploadCallCount;
 
                 // 3. DELETE
                 var deletedId = addedItem.Id;
                 addedItem.DeleteCommand.Execute(null);
 
-                Thread.Sleep(850);
-                Assert.True(syncService.UploadCallCount > afterEdit, "Upload should be called on Delete");
+                Assert.True(WaitUntil(() => syncService.UploadCallCount > afterEdit), "Upload should be called on Delete");
                 Assert.Contains(deletedId, todoService.GetDeletedIds());
             }
             catch (Exception ex)
